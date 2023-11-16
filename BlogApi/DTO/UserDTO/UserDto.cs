@@ -9,6 +9,7 @@ namespace BlogApi.DTO;
 public class UserDto
 {
     public Guid id { get; set; }
+    public DateTime createTime { get; set; }
     [MinLength(1)] [Required] public String fullName { get; set; }
     [MinLength(6)] [Required] public String password { get; set; }
     [MinLength(1)] [Required] public String email { get; set; }
@@ -27,6 +28,7 @@ public class UserDto
     public UserDto(UserEntity userEntity)
     {
         id = userEntity.Id;
+        createTime = userEntity.CreateTime;
         fullName = userEntity.FullName;
         password = userEntity.Password;
         email = userEntity.Email;

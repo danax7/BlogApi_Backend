@@ -8,6 +8,7 @@ namespace BlogApi.Entity;
 public class UserEntity
 {
     public Guid Id { get; set; }
+    public DateTime CreateTime { get; set; }
     [MinLength(1)] [Required] public String FullName { get; set; }
     [MinLength(6)] [Required] public String Password { get; set; }
     [MinLength(1)] [Required] public String Email { get; set; }
