@@ -21,4 +21,28 @@ public class PostDto
     [Required] [DefaultValue(false)] public bool hasLike { get; set; }
     [Required] [DefaultValue(0)] public int commentsCount { get; set; }
     public List<TagDto.TagDto> tags { get; set; }
+
+    public PostDto(PostEntity postEntity)
+    {
+        id = postEntity.id;
+        createTime = postEntity.createTime;
+        title = postEntity.title;
+        description = postEntity.description;
+        readingTime = postEntity.readingTime;
+        image = postEntity.image;
+        authorId = postEntity.authorId;
+        author = postEntity.author;
+        communityId = postEntity.communityId;
+        communityName = postEntity.communityName;
+        addressId = postEntity.addressId;
+        likes = postEntity.likes;
+        hasLike = postEntity.hasLike;
+        commentsCount = postEntity.commentsCount;
+        tags = postEntity.tags;
+    }
+    
+    public PostDto()
+    {
+        
+    }
 }
