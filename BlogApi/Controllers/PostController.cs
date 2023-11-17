@@ -7,6 +7,7 @@ using BlogApi.DTO;
 using BlogApi.DTO.CommentDTO;
 using BlogApi.DTO.TagDto;
 using BlogApi.Entity;
+using BlogApi.Service.Interface;
 
 namespace BlogApi.Controllers
 {
@@ -14,6 +15,12 @@ namespace BlogApi.Controllers
     [Route("api/post")]
     public class PostController : ControllerBase
     {
+        private readonly IPostService _postService;
+        
+        public PostController(IPostService postService)
+        {
+            _postService = postService;
+        }
         [HttpGet]
         public async Task<ActionResult<PostDto>> GetPostList(
             [FromQuery] string[] tags,
@@ -80,48 +87,52 @@ namespace BlogApi.Controllers
              var postId = Guid.NewGuid();
             return Ok(postId);
         }
-
         [HttpGet("{id}")]
-        public async Task<ActionResult<PostFullDto>> GetPostDetail(Guid id)
+        public async Task<PostDto> GetPostById(Guid id)
         {
-              var postDetail = new PostFullDto
-            {
-                id = id,
-                createTime = DateTime.Now,
-                title = "Sample Post",
-                description = "This is a sample post description.",
-                readingTime = 5,
-                image = "sample-image.jpg",
-                authorId = Guid.NewGuid().ToString(),
-                author = "Sample Author",
-                communityId = Guid.NewGuid().ToString(),
-                communityName = "Sample Community",
-                addressId = Guid.NewGuid(),
-                likes = 0,
-                hasLike = false,
-                commentsCount = 0,
-                tags = new List<TagDto>
-                {
-                    new TagDto
-                    {
-                        id = Guid.NewGuid(),
-                        createTime = DateTime.Now,
-                        name = "история"
-                    },
-                    new TagDto
-                    {
-                        id = Guid.NewGuid(),
-                        createTime = DateTime.Now,
-                        name = "еда"
-                    },
-                
-                },
-                comments = new List<CommentEntity>()
-                
-            };
-
-            return Ok(postDetail);
+            return await _postService.GetPostById(id);
         }
+        //[HttpGet("{id}")]
+        // public async Task<ActionResult<PostFullDto>> GetPostDetail(Guid id)
+        // {
+        //       var postDetail = new PostFullDto
+        //     {
+        //         id = id,
+        //         createTime = DateTime.Now,
+        //         title = "Sample Post",
+        //         description = "This is a sample post description.",
+        //         readingTime = 5,
+        //         image = "sample-image.jpg",
+        //         authorId = Guid.NewGuid().ToString(),
+        //         author = "Sample Author",
+        //         communityId = Guid.NewGuid().ToString(),
+        //         communityName = "Sample Community",
+        //         addressId = Guid.NewGuid(),
+        //         likes = 0,
+        //         hasLike = false,
+        //         commentsCount = 0,
+        //         tags = new List<TagDto>
+        //         {
+        //             new TagDto
+        //             {
+        //                 id = Guid.NewGuid(),
+        //                 createTime = DateTime.Now,
+        //                 name = "история"
+        //             },
+        //             new TagDto
+        //             {
+        //                 id = Guid.NewGuid(),
+        //                 createTime = DateTime.Now,
+        //                 name = "еда"
+        //             },
+        //         
+        //         },
+        //         comments = new List<CommentEntity>()
+        //         
+        //     };
+        //
+        //     return Ok(postDetail);
+        // }
 
         [HttpPost("{postId}/like")]
         public async Task<ActionResult> AddLike(Guid postId)
