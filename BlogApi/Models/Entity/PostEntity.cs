@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using BlogApi.DTO.CommentDTO;
 using BlogApi.DTO.TagDto;
 
 namespace BlogApi.Entity;
@@ -21,6 +22,8 @@ public class PostEntity
     [Required] public int commentsCount { get; set; }
     //TODO: Check tags
     public List<TagDto> tags { get; set; }
+    
+    public List<CommentDto> comments { get; set; }
  
     
 }

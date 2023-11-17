@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using BlogApi.DTO.CommentDTO;
 using BlogApi.Entity;
 
 namespace BlogApi.DTO.PostDTO;
@@ -25,5 +26,31 @@ public class PostFullDto
     public List<TagDto.TagDto> tags { get; set; }
 
     //TODO: Check comments
-    [Required] public List<CommentEntity> comments { get; set; }
+    [Required] public List<CommentDto> comments { get; set; }
+    
+    public PostFullDto(PostEntity postEntity)
+    {
+        id = postEntity.id;
+        createTime = postEntity.createTime;
+        title = postEntity.title;
+        description = postEntity.description;
+        readingTime = postEntity.readingTime;
+        image = postEntity.image;
+        authorId = postEntity.authorId;
+        author = postEntity.author;
+        communityId = postEntity.communityId;
+        communityName = postEntity.communityName;
+        addressId = postEntity.addressId;
+        likes = postEntity.likes;
+        hasLike = postEntity.hasLike;
+        commentsCount = postEntity.commentsCount;
+        tags = postEntity.tags;
+        comments = postEntity.comments;
+    }
+    
+    public PostFullDto()
+    {
+        
+    }
+    
 }

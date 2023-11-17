@@ -30,14 +30,14 @@ public class PostServiceImpl : IPostService
  
     }
 
-    public async Task<PostDto> GetPostById(Guid id)
+    public async Task<PostFullDto> GetPostById(Guid id)
     {
         var post = await _postRepository.GetPostById(id);
         if (post == null)
         {
             throw new NotFoundException("Post not found");
         }
-        return new PostDto(post);
+        return new PostFullDto(post);
     }
 
     // public async Task<Boolean> CheckIfUserCanRatePost(Guid idPost, Guid idUser)

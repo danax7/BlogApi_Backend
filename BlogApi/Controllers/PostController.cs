@@ -88,7 +88,7 @@ namespace BlogApi.Controllers
             return Ok(postId);
         }
         [HttpGet("{id}")]
-        public async Task<PostDto> GetPostById(Guid id)
+        public async Task<PostFullDto> GetPostById(Guid id)
         {
             return await _postService.GetPostById(id);
         }
