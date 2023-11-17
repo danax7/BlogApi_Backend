@@ -20,5 +20,5 @@ public class PostDto
     [Required] public int likes { get; set; }
     [Required] [DefaultValue(false)] public bool hasLike { get; set; }
     [Required] [DefaultValue(0)] public int commentsCount { get; set; }
-    public List<TagEntity> tags { get; set; }
+    public List<TagDto.TagDto> tags { get; set; }
 }

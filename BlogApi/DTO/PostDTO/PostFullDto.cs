@@ -22,7 +22,7 @@ public class PostFullDto
     [Required] public int commentsCount { get; set; }
 
     //TODO: Check tags
-    public List<TagEntity> tags { get; set; }
+    public List<TagDto.TagDto> tags { get; set; }
 
     //TODO: Check comments
     [Required] public List<CommentEntity> comments { get; set; }

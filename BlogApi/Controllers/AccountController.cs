@@ -17,7 +17,7 @@ namespace BlogApi.Controllers
                 accessToken = "your_access_token",
             };
 
-            return token;
+            return null;
         }
 
         [HttpPost("login")]
