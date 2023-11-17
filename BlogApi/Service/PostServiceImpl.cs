@@ -1,5 +1,6 @@
 using BlogApi.DTO;
 using BlogApi.DTO.PostDTO;
+using BlogApi.Exception;
 using BlogApi.Service.Interface;
 
 namespace BlogApi.Service;

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using BlogApi.DTO.TagDto;
 
 namespace BlogApi.Entity;
 
@@ -18,7 +19,8 @@ public class PostEntity
     [Required] public int likes { get; set; }
     [Required] public bool hasLike { get; set; }
     [Required] public int commentsCount { get; set; }
-    //TODO: Add tags
-    // public ICollection<TagEntity> Tags { get; set; }
+    //TODO: Check tags
+    public List<TagDto> tags { get; set; }
+ 
     
 }
