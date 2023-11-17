@@ -12,5 +12,4 @@ public class PostFilterDto
     public SortType? sorting { get; set; }
     public bool? onlyMyCommunities { get; set; }
     public int page { get; set; }
-    
 }

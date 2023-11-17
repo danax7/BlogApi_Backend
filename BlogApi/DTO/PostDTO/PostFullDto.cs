@@ -18,9 +18,12 @@ public class PostFullDto
     public Guid addressId { get; set; }
     [Required] public int likes { get; set; }
     [Required] public bool hasLike { get; set; }
+
     [Required] public int commentsCount { get; set; }
+
     //TODO: Check tags
     public List<TagEntity> tags { get; set; }
+
     //TODO: Check comments
     [Required] public List<CommentEntity> comments { get; set; }
 }
