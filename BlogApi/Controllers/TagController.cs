@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using BlogApi.Services.Interface;
 
 namespace BlogApi.Controllers
 {
@@ -10,27 +11,15 @@ namespace BlogApi.Controllers
     [Route("api/tag")]
     public class TagController : ControllerBase
     {
+        private readonly ITagService _tagService;
         [HttpGet]
-        public async Task<ActionResult<List<TagDto>>> GetTagList()
+        [HttpGet]
+        public async Task<List<TagDto>> GetTags()
         {
-             var tagList = new List<TagDto>
-            {
-                new TagDto
-                {
-                    id = Guid.NewGuid(),
-                    createTime = DateTime.Now,
-                    name = "история"
-                },
-                new TagDto
-                {
-                    id = Guid.NewGuid(),
-                    createTime = DateTime.Now,
-                    name = "еда"
-                },
-                
-            };
-
-            return Ok(tagList);
+            var tags = await _tagService.GetTags();
+            var tagDtos = tags.Select(tagEntity => new TagDto(tagEntity)).ToList();
+            return tagDtos;
         }
+        
     }
 }

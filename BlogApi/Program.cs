@@ -4,6 +4,8 @@ using BlogApi.Repository;
 using BlogApi.Repository.Interface;
 using BlogApi.Service;
 using BlogApi.Service.Interface;
+using BlogApi.Services;
+using BlogApi.Services.Interface;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +19,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IPostRepository, PostRepositoryImpl>();
 builder.Services.AddScoped<IPostService, PostServiceImpl>();
+
+builder.Services.AddScoped<ITagRepository, TagRepositoryImpl>();
+builder.Services.AddScoped<ITagService, TagServiceImpl>();
 
 var connectionPsql = builder.Configuration.GetConnectionString("Postgres");
 builder.Services.AddDbContext<BlogDbContext>(options => options.UseNpgsql(connectionPsql));
