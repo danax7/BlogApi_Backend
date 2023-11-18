@@ -20,6 +20,14 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IPostRepository, PostRepositoryImpl>();
 builder.Services.AddScoped<IPostService, PostServiceImpl>();
 
+builder.Services.AddScoped<IUserRepository, UserRepositoryImpl>();
+builder.Services.AddScoped<IUserService, UserServiceImpl>();
+
+builder.Services.AddScoped<IAuthService, AuthServiceImpl>();
+
+builder.Services.AddScoped<ITokenRepository, TokenRepositoryImpl>();
+builder.Services.AddScoped<ITokenService, TokenServiceImpl>();
+
 builder.Services.AddScoped<ITagRepository, TagRepositoryImpl>();
 builder.Services.AddScoped<ITagService, TagServiceImpl>();
 
