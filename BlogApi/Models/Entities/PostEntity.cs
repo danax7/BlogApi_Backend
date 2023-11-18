@@ -21,9 +21,9 @@ public class PostEntity
     [Required] public bool hasLike { get; set; }
     [Required] public int commentsCount { get; set; }
     //TODO: Check tags
-    public List<TagDto> tags { get; set; }
+    public List<TagEntity> tags { get; set; }
     
-    public List<CommentDto> comments { get; set; }
+    public List<CommentEntity> comments { get; set; }
  
     
 }

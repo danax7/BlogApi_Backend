@@ -20,16 +20,16 @@ public class PostServiceImpl : IPostService
 
     public async Task<PostPagedListDto> GetPosts(PostFilterDto postFilterDto)
     {
-       return null;
-    }
-
-    public async Task<PostDto> CreatePost(CreatePostDto postCreateDto)
-    {
-      
+        var count = await _postRepository.GetPostCount(postFilterDto);
+        if (count == 0)
+        {
+            throw new NotFoundException("Posts not found");
+        }
+        
+        var posts = await _postRepository.GetPosts(postFilterDto, postFilterDto.page, count);
         return null;
- 
     }
-
+    
     public async Task<PostFullDto> GetPostById(Guid id)
     {
         var post = await _postRepository.GetPostById(id);
@@ -39,6 +39,15 @@ public class PostServiceImpl : IPostService
         }
         return new PostFullDto(post);
     }
+    
+    public async Task<PostDto> CreatePost(CreatePostDto postCreateDto)
+    {
+      
+        return null;
+ 
+    }
+
+  
 
     // public async Task<Boolean> CheckIfUserCanRatePost(Guid idPost, Guid idUser)
     // {

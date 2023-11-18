@@ -26,7 +26,7 @@ namespace BlogApi.Controllers
         [HttpGet]
         public async Task<PostPagedListDto> GetPosts(
             [FromQuery] TagEntity[] tags,
-            [FromQuery] string author,
+            [FromQuery] string? author,
             [FromQuery] int? minReadingTime,
             [FromQuery] int? maxReadingTime,
             [FromQuery] SortType sorting,
