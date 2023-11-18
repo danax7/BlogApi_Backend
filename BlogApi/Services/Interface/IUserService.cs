@@ -6,8 +6,8 @@ namespace BlogApi.Repository.Interface;
 
 public interface IUserService
 {
-    Task CreateProfile(UserRegisterDto userRegisterDto);
-    Task<ClaimsIdentity> GetIdentity(LoginCredentialsDto userLoginDto);
-    Task<UserDto> GetUserProfile(Guid userId);
-    Task UpdateUserProfile(Guid userId, UserEditDto userEditDto);
+    Task CreateUser(UserRegisterDto userRegisterDto);
+    // Task<ClaimsIdentity> GetIdentity(LoginCredentialsDto userLoginDto);
+    // Task<UserDto> GetUserProfile(Guid userId);
+    // Task UpdateUserProfile(Guid userId, UserEditDto userEditDto);
 }

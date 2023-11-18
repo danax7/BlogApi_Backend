@@ -2,6 +2,8 @@ using BlogApi.DTO;
 using BlogApi.DTO.AuthDTO;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using BlogApi.Repository.Interface;
+using BlogApi.Services.Interface;
 
 namespace BlogApi.Controllers
 {
@@ -9,15 +11,20 @@ namespace BlogApi.Controllers
     [Route("api/account")]
     public class AccountController : ControllerBase
     {
+        private readonly IAuthService _authService;
+        private readonly IUserService _userService;
+
+        public AccountController(IAuthService authService, IUserService userService)
+        {
+            _authService = authService;
+            _userService = userService;
+        }
+
+
         [HttpPost("register")]
         public async Task<TokenDto> RegisterUser([FromBody] UserRegisterDto userRegisterDto)
         {
-           var token = new TokenDto
-            {
-                accessToken = "your_access_token",
-            };
-
-            return null;
+            return await _authService.RegisterUser(userRegisterDto);
         }
 
         [HttpPost("login")]
@@ -35,19 +42,14 @@ namespace BlogApi.Controllers
         [HttpPost("logout")]
         public async Task<IActionResult> LogoutUser()
         {
-            
-
             return Ok("User logged out successfully.");
         }
 
         [HttpGet("profile")]
         public async Task<IActionResult> GetProfile()
         {
-         
-
             var userProfile = new UserDto
             {
-               
             };
 
             return Ok(userProfile);
@@ -56,8 +58,6 @@ namespace BlogApi.Controllers
         [HttpPut("profile")]
         public async Task<IActionResult> UpdateProfile([FromBody] UserEditDto userProfileDto)
         {
-           
-
             return Ok("User profile updated successfully.");
         }
     }
