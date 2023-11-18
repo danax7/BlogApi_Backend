@@ -7,8 +7,8 @@ public class PostFilterDto
 {
     public TagEntity[]? tags { get; set; }
     public string author { get; set; }
-    public Int32? min { get; set; }
-    public Int32? max { get; set; }
+    public Int32? minReadingTime { get; set; }
+    public Int32? maxReadingTime { get; set; }
     public SortType? sorting { get; set; }
     public bool? onlyMyCommunities { get; set; }
     public int page { get; set; }
