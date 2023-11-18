@@ -6,19 +6,16 @@ namespace BlogApi.Repository;
 
 public class TagRepositoryImpl : ITagRepository
 {
-    private readonly BlogDbContext _blogContext;
+    private readonly BlogDbContext _сontext;
     
     public TagRepositoryImpl(BlogDbContext blogContext)
     {
-        _blogContext = blogContext;
+        _сontext = blogContext;
     }
     
     public async Task<List<TagEntity>> GetTags()
     {
-        return await _blogContext.Tags.ToListAsync();
+        return await _сontext.Tags.ToListAsync();
     }
-    
-    
-    
     
 }

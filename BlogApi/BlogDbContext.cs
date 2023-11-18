@@ -16,4 +16,16 @@ public class BlogDbContext : DbContext
         Database.EnsureCreated();
     }
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        // modelBuilder.Entity<PostEntity>()
+        //     .HasMany(p => p.tags)
+        //     .WithMany(t => t.posts)
+        //     .UsingEntity(j => j.ToTable("PostTag"));
+        
+        modelBuilder.Entity<TagEntity>(entity =>
+        {
+            entity.ToTable("Tags");
+        });
+        }
 }

@@ -12,7 +12,11 @@ namespace BlogApi.Controllers
     public class TagController : ControllerBase
     {
         private readonly ITagService _tagService;
-        [HttpGet]
+        
+        public TagController(ITagService tagService)
+        {
+            _tagService = tagService;
+        }
         [HttpGet]
         public async Task<List<TagDto>> GetTags()
         {
