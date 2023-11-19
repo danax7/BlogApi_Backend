@@ -1,9 +1,12 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using BlogApi.DTO;
 using BlogApi.DTO.AuthDTO;
 using BlogApi.Entity;
 using BlogApi.Repository.Interface;
 using BlogApi.Services.Interface;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BlogApi.Services;
 
@@ -37,9 +40,34 @@ public class AuthServiceImpl : IAuthService
             password = newUser.Password
         };
 
-        return null;
-        // return await LoginUser(loginCredentials);
+        // return null;
+        return await LoginUser(loginCredentials);
     }
+    
+    public async Task<TokenDto> LoginUser(LoginCredentialsDto userLoginDto)
+    {
+        var identity = await _userService.GetIdentity(userLoginDto);
+        
+        var now = DateTime.UtcNow;
+
+        var accessJwt = new JwtSecurityToken(
+            issuer: JwtConfigs.Issuer,
+            audience: JwtConfigs.Audience,
+            notBefore: now,
+            claims: identity.Claims,
+            expires: now.AddMinutes(JwtConfigs.AccessLifetime),
+            signingCredentials: new SigningCredentials(JwtConfigs.GetSymmetricSecurityAccessKey(),
+                SecurityAlgorithms.HmacSha256));
+        
+        var accessToken = new JwtSecurityTokenHandler().WriteToken(accessJwt);
+        
+        return new TokenDto
+        {
+            accessToken = accessToken,
+        };
+    }
+    
+    
     
     
 }

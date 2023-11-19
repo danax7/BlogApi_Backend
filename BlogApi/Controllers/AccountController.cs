@@ -2,8 +2,10 @@ using BlogApi.DTO;
 using BlogApi.DTO.AuthDTO;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using BlogApi.Helpers;
 using BlogApi.Repository.Interface;
 using BlogApi.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BlogApi.Controllers
 {
@@ -28,26 +30,25 @@ namespace BlogApi.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<TokenDto> LoginUser([FromBody] UserDto userLoginDto)
+        public async Task<TokenDto> LoginUser([FromBody] LoginCredentialsDto userLoginDto)
         {
-            var token = new TokenDto
-            {
-                accessToken = "your_access_token",
-                // ex = 3600 //
-            };
-
-            return token;
+            return await _authService.LoginUser(userLoginDto);
         }
 
         [HttpPost("logout")]
+        [Authorize(Policy = "ValidateToken")]
         public async Task<IActionResult> LogoutUser()
         {
-            return Ok("User logged out successfully.");
+            Console.WriteLine(User.Identity.Name);
+            var userId = Converter.GetId(User);
+            return Ok($"User logged out successfully. With id: {userId}");
         }
 
         [HttpGet("profile")]
+        [Authorize(Policy = "ValidateToken")]
         public async Task<IActionResult> GetProfile()
         {
+            var userId = Converter.GetId(User);
             var userProfile = new UserDto
             {
             };
@@ -56,8 +57,10 @@ namespace BlogApi.Controllers
         }
 
         [HttpPut("profile")]
+        [Authorize(Policy = "ValidateToken")]
         public async Task<IActionResult> UpdateProfile([FromBody] UserEditDto userProfileDto)
         {
+            var userId = Converter.GetId(User);
             return Ok("User profile updated successfully.");
         }
     }

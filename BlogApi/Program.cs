@@ -6,7 +6,10 @@ using BlogApi.Service;
 using BlogApi.Service.Interface;
 using BlogApi.Services;
 using BlogApi.Services.Interface;
+using BlogApi.ValidateToken;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,10 +34,22 @@ builder.Services.AddScoped<ITokenService, TokenServiceImpl>();
 builder.Services.AddScoped<ITagRepository, TagRepositoryImpl>();
 builder.Services.AddScoped<ITagService, TagServiceImpl>();
 
+builder.Services.AddScoped<IAuthorizationHandler, ValidateAccessTokenRequirementHandler>();
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(
+        "ValidateToken",
+        policy => policy.Requirements.Add(new ValidateAccessTokenRequirement()));
+});
+
 var connectionPsql = builder.Configuration.GetConnectionString("Postgres");
 builder.Services.AddDbContext<BlogDbContext>(options => options.UseNpgsql(connectionPsql));
 builder.Services.AddTransient<BlogDbContext>();
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var app = builder.Build();
 

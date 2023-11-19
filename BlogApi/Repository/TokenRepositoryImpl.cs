@@ -23,9 +23,5 @@ public class TokenRepositoryImpl : ITokenRepository
     {
         return await _context.AccessTokens.FirstOrDefaultAsync(x => x.token == token);
     }
-    
-    
-
-
-    
+   
 }

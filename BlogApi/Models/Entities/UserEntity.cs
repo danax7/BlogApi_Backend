@@ -23,6 +23,7 @@ public class UserEntity
     public UserEntity(UserRegisterDto userRegisterDto)
     {
         Id = Guid.NewGuid();
+        CreateTime = DateTime.Now;
         FullName = userRegisterDto.fullName;
         Password = userRegisterDto.password;
         Email = userRegisterDto.email;
