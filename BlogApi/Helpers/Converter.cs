@@ -15,7 +15,13 @@ public class Converter
         return input.ToLower().Trim();
     }
 
-
+    public static String GetTokenFromContext(HttpContext httpContext)
+    {
+        var headerDictionary = httpContext.Request.Headers;
+        var token = headerDictionary["Authorization"];
+        return GetToken(token);
+    }
+    
     public static String GetTokenFromContext(AuthorizationHandlerContext context)
     {
         var headerDictionary = context.Resource as DefaultHttpContext;
@@ -28,6 +34,7 @@ public class Converter
         var token = GetToken(context.Request.Headers["Authorization"]);
         var handler = new JwtSecurityTokenHandler();
         var jwtSecurityToken = handler.ReadJwtToken(token);
+        
         var claims = jwtSecurityToken.Claims;
         foreach (var claim in claims)
         {
@@ -36,7 +43,7 @@ public class Converter
                 return Guid.Parse(claim.Value);
             }
         }
-
+    
         throw new InvalidCredentialException("Cannot parse user id");
     }
 

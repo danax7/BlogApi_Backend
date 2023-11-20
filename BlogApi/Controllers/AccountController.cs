@@ -39,9 +39,12 @@ namespace BlogApi.Controllers
         [Authorize(Policy = "ValidateToken")]
         public async Task<IActionResult> LogoutUser()
         {
-            Console.WriteLine(User.Identity.Name);
-            var userId = Converter.GetId(HttpContext);
-            return Ok($"User logged out successfully. With id: {userId}");
+            // Console.WriteLine(User.Identity.Name);
+            var token = Converter.GetTokenFromContext(HttpContext);
+            Console.WriteLine(token);
+            await _authService.LogoutUser(token);
+            return Ok($"User logged out successfully");
+            
         }
 
         [HttpGet("profile")]

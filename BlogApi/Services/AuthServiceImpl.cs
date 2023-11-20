@@ -3,6 +3,7 @@ using System.Security.Claims;
 using BlogApi.DTO;
 using BlogApi.DTO.AuthDTO;
 using BlogApi.Entity;
+using BlogApi.Helpers;
 using BlogApi.Repository.Interface;
 using BlogApi.Services.Interface;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -67,7 +68,10 @@ public class AuthServiceImpl : IAuthService
         };
     }
     
-    
+    public async Task LogoutUser(String token)
+    {
+        await _tokenService.BlockAccessToken(token);
+    }
     
     
 }
