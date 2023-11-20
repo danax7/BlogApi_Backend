@@ -40,7 +40,7 @@ namespace BlogApi.Controllers
         public async Task<IActionResult> LogoutUser()
         {
             Console.WriteLine(User.Identity.Name);
-            var userId = Converter.GetId(User);
+            var userId = Converter.GetId(HttpContext);
             return Ok($"User logged out successfully. With id: {userId}");
         }
 
@@ -48,7 +48,7 @@ namespace BlogApi.Controllers
         [Authorize(Policy = "ValidateToken")]
         public async Task<IActionResult> GetProfile()
         {
-            var userId = Converter.GetId(User);
+            var userId = Converter.GetId(HttpContext);
             var userProfile = new UserDto
             {
             };
@@ -60,7 +60,7 @@ namespace BlogApi.Controllers
         [Authorize(Policy = "ValidateToken")]
         public async Task<IActionResult> UpdateProfile([FromBody] UserEditDto userProfileDto)
         {
-            var userId = Converter.GetId(User);
+            var userId = Converter.GetId(HttpContext);
             return Ok("User profile updated successfully.");
         }
     }

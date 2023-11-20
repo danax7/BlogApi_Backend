@@ -23,11 +23,18 @@ public class Converter
         return GetToken(token);
     }
 
-    public static Guid GetId(ClaimsPrincipal user)
+    public static Guid GetId(HttpContext context)
     {
-        if (Guid.TryParse(user.Identity?.Name, out Guid id))
+        var token = GetToken(context.Request.Headers["Authorization"]);
+        var handler = new JwtSecurityTokenHandler();
+        var jwtSecurityToken = handler.ReadJwtToken(token);
+        var claims = jwtSecurityToken.Claims;
+        foreach (var claim in claims)
         {
-            return id;
+            if (claim.Type == ClaimsIdentity.DefaultNameClaimType)
+            {
+                return Guid.Parse(claim.Value);
+            }
         }
 
         throw new InvalidCredentialException("Cannot parse user id");
