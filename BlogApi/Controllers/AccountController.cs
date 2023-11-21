@@ -49,14 +49,11 @@ namespace BlogApi.Controllers
 
         [HttpGet("profile")]
         [Authorize(Policy = "ValidateToken")]
-        public async Task<IActionResult> GetProfile()
+        public async Task<UserDto> GetProfile()
         {
             var userId = Converter.GetId(HttpContext);
-            var userProfile = new UserDto
-            {
-            };
-
-            return Ok(userProfile);
+            Console.WriteLine("USER ID" + userId);
+            return await _userService.GetUserProfile(userId);
         }
 
         [HttpPut("profile")]

@@ -1,4 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Authentication;
 using System.Security.Claims;
 using BlogApi.DTO;
 using BlogApi.DTO.AuthDTO;
@@ -41,16 +42,17 @@ public class AuthServiceImpl : IAuthService
             password = newUser.Password
         };
 
-        // return null;
+   
         return await LoginUser(loginCredentials);
+        
     }
     
     public async Task<TokenDto> LoginUser(LoginCredentialsDto userLoginDto)
     {
         var identity = await _userService.GetIdentity(userLoginDto);
-        
+        //
         var now = DateTime.UtcNow;
-
+    
         var accessJwt = new JwtSecurityToken(
             issuer: JwtConfigs.Issuer,
             audience: JwtConfigs.Audience,
@@ -67,6 +69,8 @@ public class AuthServiceImpl : IAuthService
             accessToken = accessToken,
         };
     }
+    
+
     
     public async Task LogoutUser(String token)
     {

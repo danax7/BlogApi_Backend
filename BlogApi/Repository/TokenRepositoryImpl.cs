@@ -15,13 +15,13 @@ public class TokenRepositoryImpl : ITokenRepository
 
     public async Task CreateToken(AccessTokenEntity accessTokenEntity)
     {
-        await _context.AccessTokens.AddAsync(accessTokenEntity);
+        await _context.BlackTokenList.AddAsync(accessTokenEntity);
         await _context.SaveChangesAsync();
     }
 
     public async Task<AccessTokenEntity?> GetToken(String token)
     {
-        return await _context.AccessTokens.FirstOrDefaultAsync(x => x.token == token);
+        return await _context.BlackTokenList.FirstOrDefaultAsync(x => x.token == token);
     }
    
 }

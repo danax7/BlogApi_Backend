@@ -28,7 +28,7 @@ public class Converter
         var token = headerDictionary?.Request.Headers["Authorization"];
         return GetToken(token);
     }
-
+    
     public static Guid GetId(HttpContext context)
     {
         var token = GetToken(context.Request.Headers["Authorization"]);

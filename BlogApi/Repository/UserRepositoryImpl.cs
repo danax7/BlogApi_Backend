@@ -30,4 +30,10 @@ public class UserRepositoryImpl : IUserRepository
         return await _blogContext.Users.FirstOrDefaultAsync(user => user.Email == email);
     }
     
+    public Task<UserEntity?> GetUserById(Guid userId)
+    {
+        return _blogContext.Users.FirstOrDefaultAsync(user => user.Id == userId);
+       
+    }
+    
 }

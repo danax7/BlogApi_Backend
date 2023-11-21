@@ -20,6 +20,22 @@ public class UserDto
     public Gender gender { get; set; }
 
     public String phoneNumber { get; set; }
+    
+    public UserDto()
+    {
+    }
+
+    public UserDto(UserEntity userEntity)
+    {
+        id = userEntity.Id;
+        createTime = userEntity.CreateTime;
+        fullName = userEntity.FullName;
+        password = userEntity.Password;
+        email = userEntity.Email;
+        birthDate = userEntity.BirthDate;
+        gender = userEntity.Gender;
+        phoneNumber = userEntity.PhoneNumber;
+    }
 
    
 }
