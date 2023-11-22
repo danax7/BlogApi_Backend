@@ -9,7 +9,7 @@ using BlogApi.Services.Interface;
 using BlogApi.ValidateToken;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +30,10 @@ builder.Services.AddScoped<IAuthService, AuthServiceImpl>();
 
 builder.Services.AddScoped<ITokenRepository, TokenRepositoryImpl>();
 builder.Services.AddScoped<ITokenService, TokenServiceImpl>();
+
+builder.Services.AddScoped<IAuthorService, AuthorServiceImpl>();
+builder.Services.AddScoped<IAuthorRepository, AuthorRepositoryImpl>();
+
 
 builder.Services.AddScoped<ITagRepository, TagRepositoryImpl>();
 builder.Services.AddScoped<ITagService, TagServiceImpl>();

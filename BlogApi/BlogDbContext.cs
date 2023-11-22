@@ -10,6 +10,8 @@ public class BlogDbContext : DbContext
     public DbSet<TagEntity> Tags { get; set; }
     public DbSet<AccessTokenEntity> BlackTokenList { get; set; }
     
+    public DbSet<AuthorEntity> Authors { get; set; }
+    
     
     public BlogDbContext(DbContextOptions<BlogDbContext> options) : base(options)
     {

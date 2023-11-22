@@ -19,6 +19,8 @@ public class UserEntity
     public Gender Gender { get; set; }
 
     public String PhoneNumber { get; set; }
+    
+    
 
     public UserEntity(UserRegisterDto userRegisterDto)
     {
