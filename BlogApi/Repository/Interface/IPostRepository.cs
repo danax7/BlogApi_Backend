@@ -9,5 +9,6 @@ public interface IPostRepository
     Task<PostEntity?> GetPostById(Guid id);
     Task<Int32> GetPostCount(PostFilterDto postFilterDto);
     //TODO: set LikePost
-    
+
+    // Task<List<PostEntity>> GetCommunityPostList(Guid id, PostFilterDto postFilterDto);
 }

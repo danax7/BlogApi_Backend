@@ -20,6 +20,7 @@ public class UserEntity
 
     public String PhoneNumber { get; set; }
     
+    public ICollection<UserCommunityEntity> UserCommunities { get; set; }
     
 
     public UserEntity(UserRegisterDto userRegisterDto)
@@ -32,6 +33,7 @@ public class UserEntity
         BirthDate = userRegisterDto.birthDate;
         Gender = userRegisterDto.gender;
         PhoneNumber = userRegisterDto.phoneNumber;
+        
     }
     
     public UserEntity UpdateUser(UserEditDto userEditDto)

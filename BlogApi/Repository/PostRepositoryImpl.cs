@@ -86,4 +86,31 @@ public class PostRepositoryImpl : IPostRepository
 
         return query.Skip(start).Take(count).ToListAsync();
     }
+
+    // public Task<List<PostEntity>> GetCommunityPostList(Guid id, PostFilterDto postFilterDto)
+    // {
+    //     var query = _context.Posts.AsQueryable();
+    //
+    //     if (postFilterDto.tags != null && postFilterDto.tags.Any())
+    //     {
+    //         query = query.Where(post => post.tags.Any(tag => postFilterDto.tags.Contains(tag)));
+    //     }
+    //
+    //     if (postFilterDto.author != null)
+    //     {
+    //         query = query.Where(post => postFilterDto.author == post.author);
+    //     }
+    //
+    //     if (postFilterDto.minReadingTime != null)
+    //     {
+    //         query = query.Where(post => postFilterDto.minReadingTime <= post.readingTime);
+    //     }
+    //
+    //     if (postFilterDto.maxReadingTime != null)
+    //     {
+    //         query = query.Where(post => postFilterDto.maxReadingTime >= post.readingTime);
+    //     }
+    //     //TODO: Check GetCommunityPostList
+    //     return null;
+    // }
 }

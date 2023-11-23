@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using BlogApi.Entity;
+using BlogApi.Entity.Enums;
 
 namespace BlogApi.DTO.CommunityDto;
 
@@ -11,4 +13,23 @@ public class CommunityFullDto
     [Required] public bool isClosed { get; set; }
     [Required] public Int32 subscribersCount { get; set; }
     [Required] public List<UserDto> administrators { get; set; }
+    
+    
+    public CommunityFullDto()
+    {
+    }
+    
+    public CommunityFullDto(CommunityEntity communityEntity)
+    {
+        id = communityEntity.id;
+        createTime = communityEntity.createTime;
+        name = communityEntity.name;
+        description = communityEntity.description;
+        isClosed = communityEntity.isClosed;
+        subscribersCount = communityEntity.subscribersCount;
+        administrators = communityEntity.UserCommunities
+            .Where(userCommunity => userCommunity.Role == CommunityRole.Administrator)
+            .Select(userCommunity => new UserDto(userCommunity.User))
+            .ToList();
+    }
 }

@@ -20,7 +20,10 @@ public class AuthorServiceImpl : IAuthorService
     {
         var authors = await _authorRepository.GetAuthorList();
         var authorDtos = authors.Select(author => new AuthorDto(author)).ToList();
-        
+        if (authorDtos.Count == 0)
+        {
+            throw new System.Exception("Authors not found");
+        }
         return authorDtos;
     }
     
