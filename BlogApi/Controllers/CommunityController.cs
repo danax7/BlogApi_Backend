@@ -81,16 +81,35 @@ namespace BlogApi.Controllers
         
         [HttpPost("{id}/subscribe")]
         [Authorize(Policy = "ValidateToken")]
-        public async Task Subscribe(Guid id)
+        public async Task<IActionResult> Subscribe(Guid id)
         {
-            // await _communityService.Subscribe(id);
+            var userId = Converter.GetId(HttpContext);
+            try
+            {
+                await _communityService.Subscribe(userId, id);
+                return Ok("Successfully subscribed.");
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest($"Failed to subscribe: {ex.Message}");
+            }
         }
         
         [HttpDelete("{id}/unsubscribe")]
         [Authorize(Policy = "ValidateToken")]
-        public async Task Unsubscribe(Guid id)
+        public async Task<IActionResult> Unsubscribe(Guid id)
         {
-            // await _communityService.Unsubscribe(id);
+            var userId = Converter.GetId(HttpContext);
+
+            try
+            {
+                await _communityService.Unsubscribe(userId, id);
+                return Ok("Successfully unsubscribed.");
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest($"Failed to unsubscribe: {ex.Message}");
+            }
         }
     }
 }

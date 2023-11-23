@@ -12,6 +12,6 @@ public interface ICommunityService
     //Task<List<PostDto>> GetCommunityPostList(Guid id, PostFilterDto postFilterDto);
     // Task CreatePost(Guid id, CreatePostDto postCreateDto);
     // Task<CommunityRole> GetCommunityRoleList(Guid id);
-    // Task Subscribe(Guid id);
-    // Task Unsubscribe(Guid id);
+    Task Subscribe(Guid userId, Guid communityId);
+    Task Unsubscribe(Guid id, Guid communityId);
 }

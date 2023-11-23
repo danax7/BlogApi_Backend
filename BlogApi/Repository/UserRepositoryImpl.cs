@@ -36,4 +36,10 @@ public class UserRepositoryImpl : IUserRepository
        
     }
     
+    public Task UpdateUser(UserEntity userEntity)
+    {
+        _blogContext.Users.Update(userEntity);
+        return _blogContext.SaveChangesAsync();
+    }
+    
 }
