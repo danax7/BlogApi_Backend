@@ -60,4 +60,18 @@ public class UserServiceImpl : IUserService
 
         return userDto;
     }
+    
+    public async Task UpdateUserProfile(Guid userId, UserEditDto userEditDto)
+    {
+        var user = await _userRepository.GetUserById(userId);
+
+        if (user == null)
+        {
+            throw new NotFoundException($"User with id {userId} not found");
+        }
+
+        user.UpdateUser(userEditDto);
+
+        await _userRepository.UpdateUser(user);
+    }
 }

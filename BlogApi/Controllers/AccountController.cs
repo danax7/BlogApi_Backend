@@ -57,10 +57,10 @@ namespace BlogApi.Controllers
 
         [HttpPut("profile")]
         [Authorize(Policy = "ValidateToken")]
-        public async Task<IActionResult> UpdateProfile([FromBody] UserEditDto userProfileDto)
+        public async Task UpdateUserProfile([FromBody] UserEditDto userEditDto)
         {
-            var userId = Converter.GetId(HttpContext);
-            return Ok("User profile updated successfully.");
+            var id = Converter.GetId(HttpContext);
+            await _userService.UpdateUserProfile(id, userEditDto);
         }
     }
 }

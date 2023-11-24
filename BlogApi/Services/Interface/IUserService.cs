@@ -10,5 +10,5 @@ public interface IUserService
     Task<ClaimsIdentity> GetIdentity(LoginCredentialsDto userLoginDto);
 
     Task<UserDto> GetUserProfile(Guid userId);
-    // Task UpdateUserProfile(Guid userId, UserEditDto userEditDto);
+    Task UpdateUserProfile(Guid userId, UserEditDto userEditDto);
 }
