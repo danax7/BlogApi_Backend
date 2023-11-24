@@ -5,5 +5,4 @@ namespace BlogApi.Services.Interface;
 public interface ITagService
 {
     Task<List<TagEntity>> GetTags();
-    
 }

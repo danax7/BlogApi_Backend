@@ -19,13 +19,11 @@ public class PostEntity
     public Guid addressId { get; set; }
     [Required] public int likes { get; set; }
     [Required] public bool hasLike { get; set; }
+
     [Required] public int commentsCount { get; set; }
+
     //TODO: Check tags
     public List<TagEntity> tags { get; set; }
-    
+
     public List<CommentEntity> comments { get; set; }
-    
-    
- 
-    
 }

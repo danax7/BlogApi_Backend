@@ -13,12 +13,12 @@ public class CommunityFullDto
     [Required] public bool isClosed { get; set; }
     [Required] public Int32 subscribersCount { get; set; }
     [Required] public List<UserDto> administrators { get; set; }
-    
-    
+
+
     public CommunityFullDto()
     {
     }
-    
+
     public CommunityFullDto(CommunityEntity communityEntity)
     {
         id = communityEntity.id;

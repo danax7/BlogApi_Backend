@@ -9,7 +9,7 @@ public class JwtConfigs
     public static string Audience { get; private set; }
     private static string AccessKey { get; }
     public static int AccessLifetime { get; private set; }
-    
+
     static JwtConfigs()
     {
         IConfigurationRoot configuration = new ConfigurationBuilder()
@@ -21,12 +21,10 @@ public class JwtConfigs
         Audience = configuration.GetValue<string>("Jwt:Audience");
         AccessKey = configuration.GetValue<string>("Jwt:AccessKey");
         AccessLifetime = configuration.GetValue<int>("Jwt:AccessLifetime");
-       
     }
 
     public static SymmetricSecurityKey GetSymmetricSecurityAccessKey()
     {
         return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(AccessKey));
     }
-    
 }

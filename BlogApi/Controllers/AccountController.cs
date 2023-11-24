@@ -44,7 +44,6 @@ namespace BlogApi.Controllers
             Console.WriteLine(token);
             await _authService.LogoutUser(token);
             return Ok($"User logged out successfully");
-            
         }
 
         [HttpGet("profile")]

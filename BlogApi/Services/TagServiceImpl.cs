@@ -17,6 +17,4 @@ public class TagServiceImpl : ITagService
     {
         return await _tagRepository.GetTags();
     }
-    
-    
 }

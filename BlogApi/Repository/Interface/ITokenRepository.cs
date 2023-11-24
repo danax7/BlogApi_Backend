@@ -6,5 +6,4 @@ public interface ITokenRepository
 {
     Task CreateToken(AccessTokenEntity accessTokenEntity);
     Task<AccessTokenEntity?> GetToken(String token);
-  
 }

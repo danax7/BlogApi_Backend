@@ -11,12 +11,11 @@ namespace BlogApi.Services.Interface;
 public class UserServiceImpl : IUserService
 {
     private readonly IUserRepository _userRepository;
- 
+
 
     public UserServiceImpl(IUserRepository userRepository, ITokenRepository tokenRepository)
     {
         _userRepository = userRepository;
-  
     }
 
     public async Task CreateUser(UserRegisterDto userRegisterDto)
@@ -47,7 +46,7 @@ public class UserServiceImpl : IUserService
             ClaimsIdentity.DefaultNameClaimType,
             ClaimsIdentity.DefaultRoleClaimType);
     }
-    
+
     public async Task<UserDto> GetUserProfile(Guid userId)
     {
         var user = await _userRepository.GetUserById(userId);

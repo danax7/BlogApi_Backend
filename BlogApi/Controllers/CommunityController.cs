@@ -27,7 +27,7 @@ namespace BlogApi.Controllers
             return await _communityService.GetCommunityList();
         }
 
-        
+
         [HttpGet("my")]
         [Authorize(Policy = "ValidateToken")]
         public async Task<List<CommunityUserDto>> GetMyCommunityList()
@@ -63,7 +63,7 @@ namespace BlogApi.Controllers
             //return await _communityService.GetCommunityPostList(id, postFilterDto);
             return null;
         }
-        
+
         [HttpPost("{id}/post")]
         [Authorize(Policy = "ValidateToken")]
         public async Task CreatePost(Guid id, CreatePostDto postCreateDto)
@@ -71,14 +71,15 @@ namespace BlogApi.Controllers
             // await _communityService.CreatePost(id, postCreateDto);
             Ok("Post created successfully");
         }
-        
-        // [HttpGet("{id}/role")]
-        // [Authorize(Policy = "ValidateToken")]
-        // public async Task<CommunityRole> GetGreatestUserCommunityRole(Guid id)
-        // {
-        //      return await _communityService.GetCommunityRoleList(id);
-        // }
-        
+
+        [HttpGet("{id}/role")]
+        [Authorize(Policy = "ValidateToken")]
+        public async Task<CommunityRole> GetGreatestUserCommunityRole(Guid communityId)
+        {
+            var userId = Converter.GetId(HttpContext);
+            return await _communityService.GetGreatestUserCommunityRole(userId, communityId);
+        }
+
         [HttpPost("{id}/subscribe")]
         [Authorize(Policy = "ValidateToken")]
         public async Task<IActionResult> Subscribe(Guid id)
@@ -94,7 +95,7 @@ namespace BlogApi.Controllers
                 return BadRequest($"Failed to subscribe: {ex.Message}");
             }
         }
-        
+
         [HttpDelete("{id}/unsubscribe")]
         [Authorize(Policy = "ValidateToken")]
         public async Task<IActionResult> Unsubscribe(Guid id)

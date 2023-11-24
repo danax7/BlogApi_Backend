@@ -24,21 +24,21 @@ public class AuthorServiceImpl : IAuthorService
         {
             throw new System.Exception("Authors not found");
         }
+
         return authorDtos;
     }
-    
+
     public async Task<AuthorEntity> GetAuthorById(Guid authorId)
     {
         var author = await _authorRepository.GetAuthorById(authorId);
         return author;
-    } 
-    
+    }
+
     public async Task CreateAuthor(Guid userId)
     {
         var user = await _userService.GetUserProfile(userId);
         var author = new AuthorEntity(user);
-        
+
         await _authorRepository.CreateAuthor(author);
     }
-    
 }

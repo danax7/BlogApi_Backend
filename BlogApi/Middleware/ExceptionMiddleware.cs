@@ -4,13 +4,12 @@ using BlogApi.Exception;
 using Microsoft.AspNetCore.Http.Extensions;
 
 
-
 namespace FoodDeliveryApplication.Service;
 
 public class ExceptionMiddleware
 {
     private readonly RequestDelegate _next;
-  
+
     public ExceptionMiddleware(RequestDelegate next)
     {
         _next = next;
@@ -22,7 +21,7 @@ public class ExceptionMiddleware
         {
             await _next(context);
         }
-    
+
         catch (NotAuthorizedException e)
         {
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
@@ -33,8 +32,8 @@ public class ExceptionMiddleware
             context.Response.StatusCode = StatusCodes.Status404NotFound;
             MakeResponse("error", e.Message, context);
         }
-      
-       
+
+
         catch (System.Exception e)
         {
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;

@@ -4,7 +4,6 @@ namespace BlogApi.Entity;
 
 public class CommentEntity
 {
-    
     [Required] public string id { get; set; }
     [Required] public string createTime { get; set; }
     [Required] [MinLength(1)] public string content { get; set; }

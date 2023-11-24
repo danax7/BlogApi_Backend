@@ -13,7 +13,7 @@ public class AuthorDto
     public Int32 posts { get; set; }
     public Int32 likes { get; set; }
     public DateTime created { get; set; }
-    
+
     public AuthorDto()
     {
     }
@@ -26,7 +26,5 @@ public class AuthorDto
         posts = authorEntity.Posts.Count;
         likes = authorEntity.Posts.Sum(post => post.likes);
         created = authorEntity.Created;
-
     }
-
 }

@@ -10,6 +10,6 @@ public class CommunityEntity
     [Required] public string description { get; set; }
     [Required] public bool isClosed { get; set; }
     [Required] public Int32 subscribersCount { get; set; }
-    
+
     public ICollection<UserCommunityEntity> UserCommunities { get; set; }
 }

@@ -44,7 +44,7 @@ namespace BlogApi.Controllers
                 onlyMyCommunities = onlyMyCommunities,
                 page = page
             };
-            
+
             return await _postService.GetPosts(PostFilterDto);
         }
 

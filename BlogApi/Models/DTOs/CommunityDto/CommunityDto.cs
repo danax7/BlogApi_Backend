@@ -11,12 +11,12 @@ public class CommunityDto
     public string description { get; set; }
     [Required] public bool isClosed { get; set; }
     [Required] public Int32 subscribersCount { get; set; }
-    
-    
+
+
     public CommunityDto()
     {
     }
-    
+
     public CommunityDto(CommunityEntity communityEntity)
     {
         id = communityEntity.id;

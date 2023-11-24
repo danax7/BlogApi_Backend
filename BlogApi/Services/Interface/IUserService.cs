@@ -8,6 +8,7 @@ public interface IUserService
 {
     Task CreateUser(UserRegisterDto userRegisterDto);
     Task<ClaimsIdentity> GetIdentity(LoginCredentialsDto userLoginDto);
+
     Task<UserDto> GetUserProfile(Guid userId);
     // Task UpdateUserProfile(Guid userId, UserEditDto userEditDto);
 }

@@ -13,7 +13,7 @@ public class CommentDto
     [Required] public Guid authorId { get; set; }
     [Required] [MinLength(1)] public string author { get; set; }
     public Int32 subComments { get; set; }
-    
+
     public CommentDto(CommentEntity commentEntity)
     {
         id = commentEntity.id;
@@ -25,5 +25,4 @@ public class CommentDto
         author = commentEntity.author;
         subComments = commentEntity.subComments;
     }
-    
 }

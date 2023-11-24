@@ -5,6 +5,7 @@ using BlogApi.Entity.Enums;
 using BlogApi.Repository.Interface;
 using BlogApi.Services.Interface;
 using System.Linq;
+using BlogApi.Exception;
 
 namespace BlogApi.Services;
 
@@ -50,6 +51,24 @@ public class CommunityServiceImpl : ICommunityService
     //     return null;
     //     //TODO: check
     // }
+    public async Task<CommunityRole> GetGreatestUserCommunityRole(Guid userId, Guid communityId)
+    {
+        var user = await _userRepository.GetUserById(userId);
+        var community = await _communityRepository.GetCommunity(communityId);
+
+        if (user == null || community == null)
+        {
+            throw new NotFoundException("User or community not found.");
+        }
+
+        var userCommunity = user.UserCommunities.FirstOrDefault(uc => uc.CommunityId == communityId);
+        if (userCommunity == null)
+        {
+            throw new NotFoundException("User is not associated with the community.");
+        }
+
+        return userCommunity.Role;
+    }
 
     public async Task Subscribe(Guid userId, Guid communityId)
     {
@@ -58,12 +77,13 @@ public class CommunityServiceImpl : ICommunityService
 
         if (user == null || community == null)
         {
-            throw new System.Exception("User or community not found.");
+            throw new NotFoundException("User or community not found.");
         }
 
         if (!user.UserCommunities.Any(uc => uc.CommunityId == communityId))
         {
-            user.UserCommunities.Add(new UserCommunityEntity { UserId = userId, CommunityId = communityId, Role = CommunityRole.Subscriber });
+            user.UserCommunities.Add(new UserCommunityEntity
+                { UserId = userId, CommunityId = communityId, Role = CommunityRole.Subscriber });
             await _userRepository.UpdateUser(user);
         }
     }
@@ -75,16 +95,14 @@ public class CommunityServiceImpl : ICommunityService
 
         if (user == null || community == null)
         {
-            throw new System.Exception("User or community not found.");
+            throw new NotFoundException("User or community not found.");
         }
 
-      
         var userCommunity = user.UserCommunities.FirstOrDefault(uc => uc.CommunityId == communityId);
         if (userCommunity != null)
         {
             user.UserCommunities.Remove(userCommunity);
             await _userRepository.UpdateUser(user);
         }
-      
     }
 }

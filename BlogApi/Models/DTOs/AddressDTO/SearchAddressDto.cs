@@ -10,6 +10,4 @@ public class SearchAddressDto
     public String text { get; set; }
     [Required] public GarAddressLevel objectLevel { get; set; }
     public String objectLevelText { get; set; }
-
-   
 }

@@ -10,7 +10,8 @@ public class ValidateAccessTokenRequirementHandler : AuthorizationHandler<Valida
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly ITokenRepository _tokenRepository;
 
-    public ValidateAccessTokenRequirementHandler(IHttpContextAccessor httpContextAccessor, ITokenRepository tokenRepository)
+    public ValidateAccessTokenRequirementHandler(IHttpContextAccessor httpContextAccessor,
+        ITokenRepository tokenRepository)
     {
         _httpContextAccessor = httpContextAccessor;
         _tokenRepository = tokenRepository;

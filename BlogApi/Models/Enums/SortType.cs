@@ -5,8 +5,8 @@ namespace BlogApi.Entity.Enums;
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum SortType
 {
-    CreateDesc, 
-    CreateAsc, 
-    LikeAsc, 
+    CreateDesc,
+    CreateAsc,
+    LikeAsc,
     LikeDesc
 }

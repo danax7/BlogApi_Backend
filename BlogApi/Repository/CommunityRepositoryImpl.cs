@@ -36,7 +36,7 @@ public class CommunityRepositoryImpl : ICommunityRepository
     {
         return await _context.Communities.FirstOrDefaultAsync(c => c.id == Id);
     }
-    
+
     // public async Task<List<PostEntity>> GetCommunityPostList(Guid id, PostFilterDto postFilterDto)
     // {
     //     var posts = await _context.Posts

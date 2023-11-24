@@ -20,7 +20,7 @@ public class UserDto
     public Gender gender { get; set; }
 
     public String phoneNumber { get; set; }
-    
+
     public UserDto()
     {
     }
@@ -36,6 +36,4 @@ public class UserDto
         gender = userEntity.Gender;
         phoneNumber = userEntity.PhoneNumber;
     }
-
-   
 }

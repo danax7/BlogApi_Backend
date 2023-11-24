@@ -11,13 +11,13 @@ public class AuthorEntity
     public Gender Gender { get; set; }
     public List<PostEntity> Posts { get; set; }
     //TODO: Need to add UserEntity to AuthorEntity and add AuthorEntity to UserEntity
-    
+
     public UserEntity User { get; set; }
     public DateTime Created { get; set; }
-    
+
     //public UserEntity User { get; set; }
-  
-    
+
+
     public AuthorEntity()
     {
     }

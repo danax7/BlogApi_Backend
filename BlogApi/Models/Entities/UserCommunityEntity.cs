@@ -9,6 +9,6 @@ public class UserCommunityEntity
 
     public Guid CommunityId { get; set; }
     public CommunityEntity Community { get; set; }
-    
+
     public CommunityRole Role { get; set; }
 }

@@ -9,5 +9,4 @@ public interface ITagRepository
     Task<List<TagEntity>> GetTags();
     // Task UpdateTag(TagEntity tagEntity);
     // Task DeleteTag(TagEntity tagEntity);
-    
 }

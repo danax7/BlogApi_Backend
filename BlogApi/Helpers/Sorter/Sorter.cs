@@ -24,6 +24,7 @@ public class Sorter
         {
             return sortStrategy.ApplySorting(query);
         }
+
         return query.OrderByDescending(post => post.createTime);
     }
 }

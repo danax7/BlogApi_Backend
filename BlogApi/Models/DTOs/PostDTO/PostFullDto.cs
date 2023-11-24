@@ -27,7 +27,7 @@ public class PostFullDto
 
     //TODO: Check comments
     [Required] public List<CommentDto> comments { get; set; }
-    
+
     public PostFullDto(PostEntity postEntity)
     {
         id = postEntity.id;
@@ -47,10 +47,8 @@ public class PostFullDto
         tags = postEntity.tags.ConvertAll(tagEntity => new TagDto.TagDto(tagEntity));
         comments = postEntity.comments.ConvertAll(commentEntity => new CommentDto(commentEntity));
     }
-    
+
     public PostFullDto()
     {
-        
     }
-    
 }
