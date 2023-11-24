@@ -1,4 +1,5 @@
 using BlogApi.Entity;
+using BlogApi.Exception;
 using BlogApi.Repository.Interface;
 using BlogApi.Services.Interface;
 
@@ -17,4 +18,15 @@ public class TagServiceImpl : ITagService
     {
         return await _tagRepository.GetTags();
     }
+    
+    public async Task<TagEntity> GetTagById(Guid id)
+    {
+        var tag = await _tagRepository.GetTagById(id);
+        if (tag == null)
+        {
+            throw new NotFoundException("Tag not found");
+        }
+        return tag;
+    }
+    
 }

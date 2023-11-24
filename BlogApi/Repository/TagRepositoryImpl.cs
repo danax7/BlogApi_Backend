@@ -17,4 +17,9 @@ public class TagRepositoryImpl : ITagRepository
     {
         return await _сontext.Tags.ToListAsync();
     }
+    
+    public async Task<TagEntity> GetTagById(Guid id)
+    {
+        return await _сontext.Tags.FirstOrDefaultAsync(tag => tag.Id == id);
+    }
 }

@@ -31,10 +31,11 @@ namespace BlogApi.Controllers
             [FromQuery] int? maxReadingTime,
             [FromQuery] SortType sorting,
             [FromQuery] bool onlyMyCommunities = false,
-            [FromQuery] int page = 1)
+            [FromQuery] int page = 1,
+            [FromQuery] int size = 5)
 
         {
-            var PostFilterDto = new PostFilterDto
+            var postFilterDto = new PostFilterDto
             {
                 tags = tags,
                 author = author,
@@ -42,10 +43,11 @@ namespace BlogApi.Controllers
                 maxReadingTime = maxReadingTime,
                 sorting = sorting,
                 onlyMyCommunities = onlyMyCommunities,
-                page = page
+                page = page,
+                size = size
             };
 
-            return await _postService.GetPosts(PostFilterDto);
+            return await _postService.GetPosts(postFilterDto);
         }
 
         // [HttpGet]
