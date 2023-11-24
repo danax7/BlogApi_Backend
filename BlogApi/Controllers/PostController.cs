@@ -8,7 +8,9 @@ using BlogApi.DTO.CommentDTO;
 using BlogApi.DTO.TagDto;
 using BlogApi.Entity;
 using BlogApi.Entity.Enums;
+using BlogApi.Helpers;
 using BlogApi.Service.Interface;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BlogApi.Controllers
 {
@@ -111,9 +113,13 @@ namespace BlogApi.Controllers
         // }
 
         [HttpPost]
+        [Authorize(Policy = "ValidateToken")]
         public async Task<ActionResult<Guid>> CreatePost([FromBody] CreatePostDto createPostDto)
         {
-            var postId = Guid.NewGuid();
+            var userId = Converter.GetId(HttpContext);
+            var tagGuids = createPostDto.tagIds.Select(Guid.Parse).ToList();
+            var postId = await _postService.CreatePost(createPostDto, tagGuids, userId);
+
             return Ok(postId);
         }
 

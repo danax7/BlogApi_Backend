@@ -86,6 +86,13 @@ public class PostRepositoryImpl : IPostRepository
 
         return query.Skip(start).Take(count).ToListAsync();
     }
+    
+    public async Task<Guid> CreatePost(PostEntity postEntity)
+    {
+        await _context.Posts.AddAsync(postEntity);
+        await _context.SaveChangesAsync();
+        return postEntity.id;
+    }
 
     // public Task<List<PostEntity>> GetCommunityPostList(Guid id, PostFilterDto postFilterDto)
     // {

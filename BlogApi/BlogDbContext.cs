@@ -39,6 +39,11 @@ public class BlogDbContext : DbContext
             .HasOne(uc => uc.Community)
             .WithMany(c => c.UserCommunities)
             .HasForeignKey(uc => uc.CommunityId);
+        
+        modelBuilder.Entity<AuthorEntity>()
+            .HasOne(a => a.User)
+            .WithOne(u => u.Author)
+            .HasForeignKey<AuthorEntity>(a => a.Id);
 
         modelBuilder.Entity<TagEntity>(entity => { entity.ToTable("Tags"); });
     }

@@ -1,33 +1,33 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using BlogApi.DTO;
-using BlogApi.Entity.Enums;
+using BlogApi.DTO.AuthorDTO;
 
-namespace BlogApi.Entity;
-
-public class AuthorEntity
+namespace BlogApi.Entity
 {
-    public Guid Id { get; set; }
-    public string FullName { get; set; }
-    public DateTime BirthDate { get; set; }
-    public Gender Gender { get; set; }
-    public List<PostEntity> Posts { get; set; }
-    //TODO: Need to add UserEntity to AuthorEntity and add AuthorEntity to UserEntity
-
-    public UserEntity User { get; set; }
-    public DateTime Created { get; set; }
-
-    //public UserEntity User { get; set; }
-
-
-    public AuthorEntity()
+    public class AuthorEntity
     {
-    }
+        [Required] public Guid Id { get; set; }
+        [Required] public string FullName { get; set; }
+        [Required] public DateTime BirthDate { get; set; }
 
-    public AuthorEntity(UserDto user)
-    {
-        Id = Guid.NewGuid();
-        FullName = user.fullName;
-        BirthDate = user.birthDate;
-        Gender = user.gender;
-        Created = DateTime.Now;
+        public UserEntity User { get; set; }
+        public DateTime Created { get; set; }
+
+        public List<PostEntity>? Posts { get; set; }
+
+        public AuthorEntity(UserEntity user)
+        {
+            Id = user.Id;
+            FullName = user.FullName;
+            BirthDate = user.BirthDate;
+            User = user;
+            Created = DateTime.Now;
+        }
+
+        public AuthorEntity()
+        {
+        }
     }
 }

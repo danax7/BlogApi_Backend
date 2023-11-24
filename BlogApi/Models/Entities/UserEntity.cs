@@ -22,6 +22,8 @@ public class UserEntity
 
     public ICollection<UserCommunityEntity> UserCommunities { get; set; }
 
+    public AuthorEntity? Author { get; set; } 
+    
 
     public UserEntity(UserRegisterDto userRegisterDto)
     {
@@ -34,7 +36,7 @@ public class UserEntity
         Gender = userRegisterDto.gender;
         PhoneNumber = userRegisterDto.phoneNumber;
     }
-
+    
     public UserEntity UpdateUser(UserEditDto userEditDto)
     {
         FullName = userEditDto.fullName;
@@ -43,7 +45,9 @@ public class UserEntity
         PhoneNumber = userEditDto.phoneNumber;
         return this;
     }
-
+   
+   
+    
     public UserEntity()
     {
     }

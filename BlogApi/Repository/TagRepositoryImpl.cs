@@ -22,4 +22,9 @@ public class TagRepositoryImpl : ITagRepository
     {
         return await _сontext.Tags.FirstOrDefaultAsync(tag => tag.Id == id);
     }
+    
+    public async Task<List<TagEntity>> GetTagsByIds(List<Guid> ids)
+    {
+        return await _сontext.Tags.Where(tag => ids.Contains(tag.Id)).ToListAsync();
+    }
 }

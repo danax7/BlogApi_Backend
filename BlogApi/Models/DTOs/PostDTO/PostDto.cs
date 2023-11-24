@@ -12,7 +12,7 @@ public class PostDto
     [Required] [MinLength(1)] public string description { get; set; }
     [Required] public int readingTime { get; set; }
     public string image { get; set; }
-    [Required] public string authorId { get; set; }
+    [Required] public Guid authorId { get; set; }
     [Required] [MinLength(1)] public string author { get; set; }
     public string communityId { get; set; }
     public string communityName { get; set; }

@@ -18,7 +18,6 @@ public class TokenServiceImpl : ITokenService
     public async Task BlockAccessToken(string token)
     {
         var handler = new JwtSecurityTokenHandler();
-        //TODO: Check if this is the correct way to get the expiry date
         var expiredDate = handler.ReadToken(token).ValidTo;
 
         var tokenEntity = new AccessTokenEntity

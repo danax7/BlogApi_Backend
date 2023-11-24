@@ -8,12 +8,12 @@ namespace BlogApi.Services;
 public class AuthorServiceImpl : IAuthorService
 {
     private readonly IAuthorRepository _authorRepository;
-    private readonly IUserService _userService;
+    private readonly IUserRepository _userRepository;
 
-    public AuthorServiceImpl(IAuthorRepository authorRepository, IUserService userService)
+    public AuthorServiceImpl(IAuthorRepository authorRepository, IUserRepository userRepository)
     {
         _authorRepository = authorRepository;
-        _userService = userService;
+        _userRepository = userRepository;
     }
 
     public async Task<List<AuthorDto>> GetAuthorList()
@@ -36,7 +36,7 @@ public class AuthorServiceImpl : IAuthorService
 
     public async Task CreateAuthor(Guid userId)
     {
-        var user = await _userService.GetUserProfile(userId);
+        var user = await _userRepository.GetUserById(userId);
         var author = new AuthorEntity(user);
 
         await _authorRepository.CreateAuthor(author);

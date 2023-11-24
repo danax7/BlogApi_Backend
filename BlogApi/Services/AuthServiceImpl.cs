@@ -28,11 +28,7 @@ public class AuthServiceImpl : IAuthService
 
     public async Task<TokenDto> RegisterUser(UserRegisterDto userRegisterDto)
     {
-        // var user = await _userService.GetUserByEmail(userRegisterDto.email);
-        // if (user != null)
-        // {
-        //     throw new System.Exception("User already exists.");
-        // }
+
         var newUser = new UserEntity(userRegisterDto);
         await _userService.CreateUser(userRegisterDto);
 
