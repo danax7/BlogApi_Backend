@@ -32,7 +32,11 @@ public class ExceptionMiddleware
             context.Response.StatusCode = StatusCodes.Status404NotFound;
             MakeResponse("error", e.Message, context);
         }
-
+        catch (BadRequestException e)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            MakeResponse("error", e.Message, context);
+        }
 
         catch (System.Exception e)
         {

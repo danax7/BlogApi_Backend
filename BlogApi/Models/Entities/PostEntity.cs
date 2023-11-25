@@ -23,7 +23,7 @@ public class PostEntity
     [Required] public int commentsCount { get; set; }
 
     //TODO: Check tags
-    public List<TagEntity> tags { get; set; }
+    public List<Guid> tags { get; set; }
 
-    public List<CommentEntity> comments { get; set; }
+    // public List<CommentEntity> comments { get; set; }
 }

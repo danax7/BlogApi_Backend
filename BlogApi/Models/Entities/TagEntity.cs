@@ -1,21 +1,25 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using BlogApi.DTO.TagDto;
 
 namespace BlogApi.Entity
 {
     public class TagEntity
     {
-        [Required] public Guid Id { get; set; }
+        [Key]
+        public Guid Id { get; set; }
 
-        [Required] public DateTime CreateTime { get; set; }
+        [Required]
+        public DateTime CreateTime { get; set; }
 
-        [Required] public string Name { get; set; }
+        [Required]
+        public string Name { get; set; }
 
-        public TagEntity(Guid id, DateTime createTime, string name)
+        // public List<PostEntity> Posts { get; set; }
+
+        public TagEntity(DateTime createTime, string name)
         {
-            Id = id;
+            Id = Guid.NewGuid();
             CreateTime = createTime;
             Name = name;
         }

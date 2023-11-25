@@ -22,11 +22,12 @@ public class PostFullDto
 
     [Required] public int commentsCount { get; set; }
 
+    public List<Guid> tags { get; set; }
     //TODO: Check tags
-    public List<TagDto.TagDto> tags { get; set; }
-
-    //TODO: Check comments
-    [Required] public List<CommentDto> comments { get; set; }
+    // public List<TagDto.TagDto> tags { get; set; }
+    //
+    // //TODO: Check comments
+    // [Required] public List<CommentDto> comments { get; set; }
 
     public PostFullDto(PostEntity postEntity)
     {
@@ -44,8 +45,11 @@ public class PostFullDto
         likes = postEntity.likes;
         hasLike = postEntity.hasLike;
         commentsCount = postEntity.commentsCount;
-        tags = postEntity.tags.ConvertAll(tagEntity => new TagDto.TagDto(tagEntity));
-        comments = postEntity.comments.ConvertAll(commentEntity => new CommentDto(commentEntity));
+        //Добавить теги
+        tags = postEntity.tags;
+        // tags = postEntity.tags.ConvertAll(tagEntity => new TagDto.TagDto(tagEntity));
+        // comments = postEntity.comments.ConvertAll(commentEntity => new CommentDto(commentEntity));
+        //TODO: Check tags
     }
 
     public PostFullDto()

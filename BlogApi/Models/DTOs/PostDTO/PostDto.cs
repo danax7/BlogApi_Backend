@@ -38,7 +38,7 @@ public class PostDto
         likes = postEntity.likes;
         hasLike = postEntity.hasLike;
         commentsCount = postEntity.commentsCount;
-        tags = postEntity.tags.ConvertAll(tagEntity => new TagDto.TagDto(tagEntity));
+        tags = new List<TagDto.TagDto>();
     }
 
     public PostDto()

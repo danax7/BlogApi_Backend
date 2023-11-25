@@ -10,10 +10,12 @@ public class BlogDbContext : DbContext
     public DbSet<UserCommunityEntity> UserCommunities { get; set; }
     public DbSet<PostEntity> Posts { get; set; }
     public DbSet<TagEntity> Tags { get; set; }
+    public DbSet<PostTagsEntity> PostTags { get; set; }
     public DbSet<AccessTokenEntity> BlackTokenList { get; set; }
 
     public DbSet<AuthorEntity> Authors { get; set; }
 
+    
 
     public BlogDbContext(DbContextOptions<BlogDbContext> options) : base(options)
     {
@@ -40,13 +42,15 @@ public class BlogDbContext : DbContext
             .WithMany(c => c.UserCommunities)
             .HasForeignKey(uc => uc.CommunityId);
         
-        //Связь один к одному с у автора с юзером
         modelBuilder.Entity<UserEntity>()
             .HasOne(a => a.Author)
             .WithOne(u => u.User)
             .HasForeignKey<AuthorEntity>(a => a.UserId)
             .IsRequired(false);
-
-        modelBuilder.Entity<TagEntity>(entity => { entity.ToTable("Tags"); });
+        
+        modelBuilder.Entity<PostTagsEntity>()
+            .HasKey(pt => new { pt.PostId, pt.TagId });
+        
+        
     }
 }

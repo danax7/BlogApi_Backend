@@ -43,34 +43,34 @@ namespace BlogApi.Controllers
             return await _communityService.GetCommunity(id);
         }
 
-        [HttpGet("{id}/post")]
-        [Authorize(Policy = "ValidateToken")]
-        public async Task<List<PostDto>> GetCommunityPostList(
-            Guid id,
-            [FromQuery] TagEntity[] tags,
-            [FromQuery] SortType sorting,
-            [FromQuery] int page = 1,
-            [FromQuery] int size = 5)
-        {
-            var postFilterDto = new PostFilterDto
-            {
-                tags = tags,
-                sorting = sorting,
-                page = page,
-                size = size,
-            };
+        // [HttpGet("{id}/post")]
+        // [Authorize(Policy = "ValidateToken")]
+        // public async Task<List<PostDto>> GetCommunityPostList(
+        //     Guid id,
+        //     [FromQuery] TagEntity[] tags,
+        //     [FromQuery] SortType sorting,
+        //     [FromQuery] int page = 1,
+        //     [FromQuery] int size = 5)
+        // {
+        //     var postFilterDto = new PostFilterDto
+        //     {
+        //         tags = tags,
+        //         sorting = sorting,
+        //         page = page,
+        //         size = size,
+        //     };
+        //
+        //     //return await _communityService.GetCommunityPostList(id, postFilterDto);
+        //     return null;
+        // }
 
-            //return await _communityService.GetCommunityPostList(id, postFilterDto);
-            return null;
-        }
-
-        [HttpPost("{id}/post")]
-        [Authorize(Policy = "ValidateToken")]
-        public async Task CreatePost(Guid id, CreatePostDto postCreateDto)
-        {
-            // await _communityService.CreatePost(id, postCreateDto);
-            Ok("Post created successfully");
-        }
+        // [HttpPost("{id}/post")]
+        // [Authorize(Policy = "ValidateToken")]
+        // public async Task CreatePost(Guid id, CreatePostDto postCreateDto)
+        // {
+        //     // await _communityService.CreatePost(id, postCreateDto);
+        //     Ok("Post created successfully");
+        // }
         
 
         [HttpGet("{id}/role")]

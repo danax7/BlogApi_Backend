@@ -2,6 +2,7 @@ using BlogApi.DTO;
 using BlogApi.DTO.PostDTO;
 using BlogApi.Entity;
 using BlogApi.Exception;
+using BlogApi.Helpers;
 using BlogApi.Repository.Interface;
 using BlogApi.Service.Interface;
 
@@ -33,9 +34,24 @@ public class PostServiceImpl : IPostService
         {
             throw new NotFoundException("Posts not found");
         }
-
-        var posts = await _postRepository.GetPosts(postFilterDto, postFilterDto.page, count);
-        return null;
+        var maxPageSize = 10;
+        var PageInfoEntity = PageInfoCalculator.GetPageInfoDto(maxPageSize, postFilterDto.page, count);
+        var skipCount = (postFilterDto.page - 1) * maxPageSize;
+        if (postFilterDto.page > PageInfoEntity.count || postFilterDto.page < 1)
+        {
+            throw new BadRequestException("Page out of range");
+        }
+        
+        var posts = await _postRepository.GetPosts(postFilterDto, skipCount, count);
+        var postsDto = posts.Select(post => new PostDto(post)).ToArray();
+        
+        var postPagedListDto = new PostPagedListDto
+        {
+            posts = postsDto,
+            pagination = PageInfoEntity,
+        };
+        
+        return postPagedListDto;
     }
 
     public async Task<PostFullDto> GetPostById(Guid id)
@@ -66,16 +82,19 @@ public class PostServiceImpl : IPostService
     
         var postEntity = new PostEntity
         {
+            createTime = DateTime.Now,
             title = createPostDto.title,
             description = createPostDto.description,
             readingTime = createPostDto.readTime,
             image = createPostDto.image,
             authorId = author.Id,  
             author = author.FullName,
+            tags = tagIds
         };
         Console.WriteLine(postEntity.authorId);
         // var tags = await _tagRepository.GetTagsByIds(tagIds);
         // postEntity.tags = tags;
+        //TODO: Add tags
         
         var postId = await _postRepository.CreatePost(postEntity);
 
