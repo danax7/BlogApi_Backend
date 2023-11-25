@@ -52,29 +52,30 @@ public class PostServiceImpl : IPostService
     public async Task<Guid> CreatePost(CreatePostDto createPostDto, List<Guid> tagIds, Guid userId)
     {
         var user = await _userRepository.GetUserById(userId);
-        
-        if (user.Author == null)
+        var author = await _authorRepository.GetAuthorByUserId(userId);
+    
+        if (author == null)
         {
-       
-            var author = new AuthorEntity(user);
-            await _authorRepository.CreateAuthor(author);
-            
-            user.Author = author;
+            var newAuthor = new AuthorEntity(user);
+            await _authorRepository.CreateAuthor(newAuthor);
+
+            user.Author = newAuthor; 
             await _userRepository.UpdateUser(user);
+            author = newAuthor; 
         }
-        
+    
         var postEntity = new PostEntity
         {
             title = createPostDto.title,
             description = createPostDto.description,
             readingTime = createPostDto.readTime,
             image = createPostDto.image,
-            authorId = user.Author.Id,
-            author = user.Author.FullName,
+            authorId = author.Id,  
+            author = author.FullName,
         };
-        
-        var tags = await _tagRepository.GetTagsByIds(tagIds);
-        postEntity.tags = tags;
+        Console.WriteLine(postEntity.authorId);
+        // var tags = await _tagRepository.GetTagsByIds(tagIds);
+        // postEntity.tags = tags;
         
         var postId = await _postRepository.CreatePost(postEntity);
 

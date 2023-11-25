@@ -1,4 +1,5 @@
 using BlogApi.Entity;
+using BlogApi.Exception;
 using BlogApi.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,8 +25,19 @@ public class AuthorRepositoryImpl : IAuthorRepository
         var author = await _context.Authors.FirstOrDefaultAsync(author => author.Id == authorId);
         if (author == null)
         {
-            throw new System.Exception("Author not found");
+            throw new NotFoundException("Author not found");
         }
+
+        return author;
+    }
+    
+    public async Task<AuthorEntity> GetAuthorByUserId(Guid userId)
+    {
+        var author = await _context.Authors.FirstOrDefaultAsync(author => author.UserId == userId);
+        // if (author == null)
+        // {
+        //     throw new NotFoundException("Author not found");
+        // }
 
         return author;
     }

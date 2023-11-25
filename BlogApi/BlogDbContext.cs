@@ -40,10 +40,12 @@ public class BlogDbContext : DbContext
             .WithMany(c => c.UserCommunities)
             .HasForeignKey(uc => uc.CommunityId);
         
-        modelBuilder.Entity<AuthorEntity>()
-            .HasOne(a => a.User)
-            .WithOne(u => u.Author)
-            .HasForeignKey<AuthorEntity>(a => a.Id);
+        //Связь один к одному с у автора с юзером
+        modelBuilder.Entity<UserEntity>()
+            .HasOne(a => a.Author)
+            .WithOne(u => u.User)
+            .HasForeignKey<AuthorEntity>(a => a.UserId)
+            .IsRequired(false);
 
         modelBuilder.Entity<TagEntity>(entity => { entity.ToTable("Tags"); });
     }
