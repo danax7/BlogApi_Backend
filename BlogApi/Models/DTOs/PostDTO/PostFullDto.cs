@@ -45,9 +45,8 @@ public class PostFullDto
         likes = postEntity.likes;
         hasLike = postEntity.hasLike;
         commentsCount = postEntity.commentsCount;
-        //Добавить теги
-        tags = postEntity.tags;
-        // tags = postEntity.tags.ConvertAll(tagEntity => new TagDto.TagDto(tagEntity));
+        tags = postEntity.tags.ConvertAll(tagEntity => tagEntity.Id);
+        
         // comments = postEntity.comments.ConvertAll(commentEntity => new CommentDto(commentEntity));
         //TODO: Check tags
     }

@@ -15,13 +15,17 @@ namespace BlogApi.Entity
         [Required]
         public string Name { get; set; }
 
-        // public List<PostEntity> Posts { get; set; }
+        public List<PostEntity> Posts { get; set; }
 
         public TagEntity(DateTime createTime, string name)
         {
             Id = Guid.NewGuid();
             CreateTime = createTime;
             Name = name;
+        }
+        
+        public TagEntity()
+        {
         }
     }
 }

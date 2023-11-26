@@ -89,7 +89,7 @@ public class PostServiceImpl : IPostService
             image = createPostDto.image,
             authorId = author.Id,  
             author = author.FullName,
-            tags = tagIds
+            tags = await _tagRepository.GetTagsByIds(tagIds)
         };
         Console.WriteLine(postEntity.authorId);
         // var tags = await _tagRepository.GetTagsByIds(tagIds);
