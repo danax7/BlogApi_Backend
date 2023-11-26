@@ -12,4 +12,8 @@ public class PostTagsEntity
         PostId = postId;
         TagId = tagId;
     }
+    
+    public PostTagsEntity()
+    {
+    }
 }

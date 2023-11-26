@@ -89,14 +89,14 @@ public class PostRepositoryImpl : IPostRepository
     
     public async Task<Guid> CreatePost(PostEntity postEntity)
     {
-        await _context.Posts.AddAsync(postEntity);
+        _context.Posts.Add(postEntity);
 
         foreach (var tag in postEntity.tags)
         {
             _context.Attach(tag);
             _context.PostTags.Add(new PostTagsEntity(postEntity.id, tag.Id));
         }
-
+        
         await _context.SaveChangesAsync();
         return postEntity.id;
     }

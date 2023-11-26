@@ -92,8 +92,8 @@ public class PostServiceImpl : IPostService
             tags = await _tagRepository.GetTagsByIds(tagIds)
         };
         Console.WriteLine(postEntity.authorId);
-        // var tags = await _tagRepository.GetTagsByIds(tagIds);
-        // postEntity.tags = tags;
+        var tags = await _tagRepository.GetTagsByIds(tagIds);
+        postEntity.tags = tags;
         //TODO: Add tags
         
         var postId = await _postRepository.CreatePost(postEntity);
