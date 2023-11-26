@@ -71,7 +71,7 @@ namespace BlogApi.Controllers
         //     // await _communityService.CreatePost(id, postCreateDto);
         //     Ok("Post created successfully");
         // }
-        
+
 
         [HttpGet("{id}/role")]
         [Authorize(Policy = "ValidateToken")]

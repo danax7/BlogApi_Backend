@@ -12,6 +12,6 @@ namespace BlogApi.DTO.PostDTO
         public string addressId { get; set; }
 
         // [Required] [MaxLength(1)] public List<string> tags { get; set; }
-        [Required][MinLength(1)] public List<string> tags { get; set; }
+        [Required] [MinLength(1)] public List<string> tags { get; set; }
     }
 }

@@ -23,9 +23,7 @@ public class PostFullDto
     [Required] public int commentsCount { get; set; }
 
     public List<Guid> tags { get; set; }
-    //TODO: Check tags
-    // public List<TagDto.TagDto> tags { get; set; }
-    //
+    //Пофиксить вывод PostFullDto
     // //TODO: Check comments
     // [Required] public List<CommentDto> comments { get; set; }
 
@@ -39,14 +37,14 @@ public class PostFullDto
         image = postEntity.image;
         authorId = postEntity.authorId;
         author = postEntity.author;
-        communityId = postEntity.communityId;
-        communityName = postEntity.communityName;
+        communityId = postEntity.communityId ?? "";
+        communityName = postEntity.communityName ?? "";
         addressId = postEntity.addressId;
         likes = postEntity.likesCount;
         hasLike = postEntity.hasLike;
         commentsCount = postEntity.commentsCount;
         tags = postEntity.tags.ConvertAll(tagEntity => tagEntity.Id);
-        
+
         // comments = postEntity.comments.ConvertAll(commentEntity => new CommentDto(commentEntity));
         //TODO: Check tags
     }

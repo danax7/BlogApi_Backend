@@ -28,7 +28,6 @@ public class AuthServiceImpl : IAuthService
 
     public async Task<TokenDto> RegisterUser(UserRegisterDto userRegisterDto)
     {
-
         var newUser = new UserEntity(userRegisterDto);
         await _userService.CreateUser(userRegisterDto);
 

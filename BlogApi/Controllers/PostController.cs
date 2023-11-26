@@ -63,6 +63,7 @@ namespace BlogApi.Controllers
             {
                 return NotFound("Tags not found");
             }
+
             var postId = await _postService.CreatePost(createPostDto, tagGuids, userId);
 
             return Ok(postId);
@@ -73,13 +74,13 @@ namespace BlogApi.Controllers
         {
             return await _postService.GetPostById(id);
         }
-        
+
         [HttpPost("{postId}/like")]
         public async Task<ActionResult> AddLike(Guid postId)
         {
             var userId = Converter.GetId(HttpContext);
             await _postService.AddLike(postId, userId);
-            return Ok();
+            return Ok("Like added successfully");
         }
 
         [HttpDelete("{postId}/like")]
@@ -87,7 +88,7 @@ namespace BlogApi.Controllers
         {
             var userId = Converter.GetId(HttpContext);
             await _postService.RemoveLike(postId, userId);
-            return Ok();
+            return Ok("Like removed successfully");
         }
     }
 }

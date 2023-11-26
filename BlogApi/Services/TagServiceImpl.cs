@@ -18,7 +18,7 @@ public class TagServiceImpl : ITagService
     {
         return await _tagRepository.GetTags();
     }
-    
+
     public async Task<TagEntity> GetTagById(Guid id)
     {
         var tag = await _tagRepository.GetTagById(id);
@@ -26,7 +26,7 @@ public class TagServiceImpl : ITagService
         {
             throw new NotFoundException("Tag not found");
         }
+
         return tag;
     }
-    
 }

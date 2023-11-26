@@ -29,7 +29,6 @@ builder.Services.AddSwaggerGen(c =>
         Type = SecuritySchemeType.Http,
         Scheme = "bearer",
     });
-    
 });
 
 builder.Services.AddScoped<IPostRepository, PostRepositoryImpl>();

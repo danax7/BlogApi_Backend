@@ -12,9 +12,8 @@ public class LikeEntity
         UserId = userId;
         PostId = postId;
     }
-    
+
     public LikeEntity()
     {
-        
     }
 }

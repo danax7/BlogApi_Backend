@@ -20,19 +20,19 @@ public class SortingStrategies
         }
     }
 
-    // public class LikeAscSortStrategy : ISortStrategy
-    // {
-    //     public IOrderedQueryable<PostEntity> ApplySorting(IQueryable<PostEntity> query)
-    //     {
-    //         return query.OrderBy(post => post.likes);
-    //     }
-    // }
-    //
-    // public class LikeDescSortStrategy : ISortStrategy
-    // {
-    //     public IOrderedQueryable<PostEntity> ApplySorting(IQueryable<PostEntity> query)
-    //     {
-    //         return query.OrderByDescending(post => post.likes);
-    //     }
-    // }
+    public class LikeAscSortStrategy : ISortStrategy
+    {
+        public IOrderedQueryable<PostEntity> ApplySorting(IQueryable<PostEntity> query)
+        {
+            return query.OrderBy(post => post.likesCount);
+        }
+    }
+
+    public class LikeDescSortStrategy : ISortStrategy
+    {
+        public IOrderedQueryable<PostEntity> ApplySorting(IQueryable<PostEntity> query)
+        {
+            return query.OrderByDescending(post => post.likesCount);
+        }
+    }
 }

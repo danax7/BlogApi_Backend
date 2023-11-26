@@ -8,6 +8,7 @@ namespace BlogApi.Entity;
 public class UserEntity
 {
     public Guid Id { get; set; }
+
     // public Guid? AuthorId { get; set; }
     public DateTime CreateTime { get; set; }
     [MinLength(1)] [Required] public String FullName { get; set; }
@@ -26,7 +27,7 @@ public class UserEntity
     public AuthorEntity? Author { get; set; }
 
     // public List<PostEntity?> Posts { get; set; }
-    
+
 
     public UserEntity(UserRegisterDto userRegisterDto)
     {
@@ -39,19 +40,18 @@ public class UserEntity
         Gender = userRegisterDto.gender;
         PhoneNumber = userRegisterDto.phoneNumber;
     }
-    
+
     public UserEntity UpdateUser(UserEditDto userEditDto)
     {
         FullName = userEditDto.fullName;
         BirthDate = userEditDto.birthDate;
         Gender = userEditDto.gender;
         PhoneNumber = userEditDto.phoneNumber;
-        
+
         return this;
     }
-   
-   
-    
+
+
     public UserEntity()
     {
     }

@@ -10,7 +10,7 @@ public class PageInfoCalculator
         var takeCount = Math.Min(maxPageSize, PostCount - skipCount);
         var pageCount = (int)Math.Ceiling((double)PostCount / maxPageSize);
         pageCount = pageCount == 0 ? 1 : pageCount;
-        
+
         return new PageInfoDto
         {
             size = takeCount,

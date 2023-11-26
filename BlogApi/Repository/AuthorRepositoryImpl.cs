@@ -30,7 +30,7 @@ public class AuthorRepositoryImpl : IAuthorRepository
 
         return author;
     }
-    
+
     public async Task<AuthorEntity> GetAuthorByUserId(Guid userId)
     {
         var author = await _context.Authors.FirstOrDefaultAsync(author => author.UserId == userId);

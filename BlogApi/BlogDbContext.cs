@@ -16,7 +16,6 @@ public class BlogDbContext : DbContext
 
     public DbSet<AuthorEntity> Authors { get; set; }
 
-    
 
     public BlogDbContext(DbContextOptions<BlogDbContext> options) : base(options)
     {
@@ -42,19 +41,17 @@ public class BlogDbContext : DbContext
             .HasOne(uc => uc.Community)
             .WithMany(c => c.UserCommunities)
             .HasForeignKey(uc => uc.CommunityId);
-        
+
         modelBuilder.Entity<UserEntity>()
             .HasOne(a => a.Author)
             .WithOne(u => u.User)
             .HasForeignKey<AuthorEntity>(a => a.UserId)
             .IsRequired(false);
-        
+
         modelBuilder.Entity<PostTagsEntity>()
             .HasKey(pt => new { pt.PostId, pt.TagId });
-        
+
         modelBuilder.Entity<LikeEntity>()
             .HasKey(l => new { l.UserId, l.PostId });
-        
-        
     }
 }

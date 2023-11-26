@@ -87,7 +87,7 @@ public class PostRepositoryImpl : IPostRepository
 
         return query.Skip(start).Take(count).ToListAsync();
     }
-    
+
     public async Task<Guid> CreatePost(PostEntity postEntity)
     {
         _context.Posts.Add(postEntity);
@@ -97,11 +97,11 @@ public class PostRepositoryImpl : IPostRepository
             _context.Attach(tag);
             _context.PostTags.Add(new PostTagsEntity(postEntity.id, tag.Id));
         }
-        
+
         await _context.SaveChangesAsync();
         return postEntity.id;
     }
-    
+
     public async Task LikePost(Guid postId, Guid userId)
     {
         var post = await _context.Posts.FirstOrDefaultAsync(p => p.id == postId);
@@ -115,14 +115,16 @@ public class PostRepositoryImpl : IPostRepository
         {
             throw new NotFoundException("User not found");
         }
-        
+
         var postLike = await _context.Likes.FirstOrDefaultAsync(pl => pl.PostId == postId && pl.UserId == userId);
         if (postLike != null)
         {
             throw new BadRequestException("Post already liked");
         }
 
+
         _context.Likes.Add(new LikeEntity(userId, postId));
+        post.likesCount++;
         await _context.SaveChangesAsync();
     }
 
@@ -147,8 +149,7 @@ public class PostRepositoryImpl : IPostRepository
         }
 
         _context.Likes.Remove(postLike);
+        post.likesCount--;
         await _context.SaveChangesAsync();
     }
-
-
 }

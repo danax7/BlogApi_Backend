@@ -18,7 +18,7 @@ public class PostServiceImpl : IPostService
 
     public PostServiceImpl(IPostRepository postRepository,
         ITagRepository tagRepository,
-        IAuthorRepository authorRepository, 
+        IAuthorRepository authorRepository,
         IUserRepository userRepository)
     {
         _postRepository = postRepository;
@@ -34,6 +34,7 @@ public class PostServiceImpl : IPostService
         {
             throw new NotFoundException("Posts not found");
         }
+
         var maxPageSize = 10;
         var PageInfoEntity = PageInfoCalculator.GetPageInfoDto(maxPageSize, postFilterDto.page, count);
         var skipCount = (postFilterDto.page - 1) * maxPageSize;
@@ -41,16 +42,16 @@ public class PostServiceImpl : IPostService
         {
             throw new BadRequestException("Page out of range");
         }
-        
+
         var posts = await _postRepository.GetPosts(postFilterDto, skipCount, count);
         var postsDto = posts.Select(post => new PostDto(post)).ToArray();
-        
+
         var postPagedListDto = new PostPagedListDto
         {
             posts = postsDto,
             pagination = PageInfoEntity,
         };
-        
+
         return postPagedListDto;
     }
 
@@ -69,17 +70,17 @@ public class PostServiceImpl : IPostService
     {
         var user = await _userRepository.GetUserById(userId);
         var author = await _authorRepository.GetAuthorByUserId(userId);
-    
+
         if (author == null)
         {
             var newAuthor = new AuthorEntity(user);
             await _authorRepository.CreateAuthor(newAuthor);
 
-            user.Author = newAuthor; 
+            user.Author = newAuthor;
             await _userRepository.UpdateUser(user);
-            author = newAuthor; 
+            author = newAuthor;
         }
-    
+
         var postEntity = new PostEntity
         {
             createTime = DateTime.Now,
@@ -87,7 +88,7 @@ public class PostServiceImpl : IPostService
             description = createPostDto.description,
             readingTime = createPostDto.readTime,
             image = createPostDto.image,
-            authorId = author.Id,  
+            authorId = author.Id,
             author = author.FullName,
             tags = await _tagRepository.GetTagsByIds(tagIds)
         };
@@ -95,7 +96,7 @@ public class PostServiceImpl : IPostService
         var tags = await _tagRepository.GetTagsByIds(tagIds);
         postEntity.tags = tags;
         //TODO: Add tags
-        
+
         var postId = await _postRepository.CreatePost(postEntity);
 
         return postId;
@@ -109,15 +110,16 @@ public class PostServiceImpl : IPostService
         {
             throw new NotFoundException("Post not found");
         }
-    
+
         var user = await _userRepository.GetUserById(idUser);
         if (user == null)
         {
             throw new NotFoundException("User not found");
         }
+
         await _postRepository.LikePost(idPost, idUser);
     }
-    
+
     public async Task RemoveLike(Guid idPost, Guid idUser)
     {
         var post = await _postRepository.GetPostById(idPost);
@@ -125,13 +127,13 @@ public class PostServiceImpl : IPostService
         {
             throw new NotFoundException("Post not found");
         }
-    
+
         var user = await _userRepository.GetUserById(idUser);
         if (user == null)
         {
             throw new NotFoundException("User not found");
         }
-    
+
         await _postRepository.DeletePostLike(idPost, idUser);
     }
 }
