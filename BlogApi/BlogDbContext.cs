@@ -9,6 +9,7 @@ public class BlogDbContext : DbContext
     public DbSet<CommunityEntity> Communities { get; set; }
     public DbSet<UserCommunityEntity> UserCommunities { get; set; }
     public DbSet<PostEntity> Posts { get; set; }
+    public DbSet<LikeEntity> Likes { get; set; }
     public DbSet<TagEntity> Tags { get; set; }
     public DbSet<PostTagsEntity> PostTags { get; set; }
     public DbSet<AccessTokenEntity> BlackTokenList { get; set; }
@@ -50,6 +51,9 @@ public class BlogDbContext : DbContext
         
         modelBuilder.Entity<PostTagsEntity>()
             .HasKey(pt => new { pt.PostId, pt.TagId });
+        
+        modelBuilder.Entity<LikeEntity>()
+            .HasKey(l => new { l.UserId, l.PostId });
         
         
     }

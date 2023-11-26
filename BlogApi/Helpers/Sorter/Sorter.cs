@@ -13,8 +13,8 @@ public class Sorter
         {
             { SortType.CreateDesc, new SortingStrategies.CreateDescSortStrategy() },
             { SortType.CreateAsc, new SortingStrategies.CreateAscSortStrategy() },
-            { SortType.LikeAsc, new SortingStrategies.LikeAscSortStrategy() },
-            { SortType.LikeDesc, new SortingStrategies.LikeDescSortStrategy() }
+            // { SortType.LikeAsc, new SortingStrategies.LikeAscSortStrategy() },
+            // { SortType.LikeDesc, new SortingStrategies.LikeDescSortStrategy() }
         };
     }
 

@@ -10,6 +10,6 @@ public interface IPostService
 
     Task<PostFullDto> GetPostById(Guid id);
     // Task<Boolean> CheckIfUserCanRatePost(Guid idPost, Guid idUser);
-    // Task LikePost(Guid idPost, Guid idUser);
-    // Task deleteLikePost(Guid idPost, Guid idUser);
+    Task AddLike(Guid PostId, Guid UserId);
+    Task RemoveLike(Guid PostId, Guid UserId);
 }

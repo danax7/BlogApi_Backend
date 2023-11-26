@@ -102,38 +102,36 @@ public class PostServiceImpl : IPostService
     }
 
 
-   
-    // public async Task LikePost(Guid idPost, Guid idUser)
-    // {
-    //     var post = await _postRepository.GetPostById(idPost);
-    //     if (post == null)
-    //     {
-    //         throw new NotFoundException("Post not found");
-    //     }
-    //
-    //     var user = await _userRepository.GetUserById(idUser);
-    //     if (user == null)
-    //     {
-    //         throw new NotFoundException("User not found");
-    //     }
-    //
-    //     await _postRepository.LikePost(idPost, idUser);
-    // }
-    //
-    // public async Task deleteLikePost(Guid idPost, Guid idUser)
-    // {
-    //     var post = await _postRepository.GetPostById(idPost);
-    //     if (post == null)
-    //     {
-    //         throw new NotFoundException("Post not found");
-    //     }
-    //
-    //     var user = await _userRepository.GetUserById(idUser);
-    //     if (user == null)
-    //     {
-    //         throw new NotFoundException("User not found");
-    //     }
-    //
-    //     await _postRepository.deleteLikePost(idPost, idUser);
-    // }
+    public async Task AddLike(Guid idPost, Guid idUser)
+    {
+        var post = await _postRepository.GetPostById(idPost);
+        if (post == null)
+        {
+            throw new NotFoundException("Post not found");
+        }
+    
+        var user = await _userRepository.GetUserById(idUser);
+        if (user == null)
+        {
+            throw new NotFoundException("User not found");
+        }
+        await _postRepository.LikePost(idPost, idUser);
+    }
+    
+    public async Task RemoveLike(Guid idPost, Guid idUser)
+    {
+        var post = await _postRepository.GetPostById(idPost);
+        if (post == null)
+        {
+            throw new NotFoundException("Post not found");
+        }
+    
+        var user = await _userRepository.GetUserById(idUser);
+        if (user == null)
+        {
+            throw new NotFoundException("User not found");
+        }
+    
+        await _postRepository.DeletePostLike(idPost, idUser);
+    }
 }

@@ -23,7 +23,9 @@ public class UserEntity
 
     public ICollection<UserCommunityEntity> UserCommunities { get; set; }
 
-    public AuthorEntity? Author { get; set; } 
+    public AuthorEntity? Author { get; set; }
+
+    // public List<PostEntity?> Posts { get; set; }
     
 
     public UserEntity(UserRegisterDto userRegisterDto)
@@ -44,6 +46,7 @@ public class UserEntity
         BirthDate = userEditDto.birthDate;
         Gender = userEditDto.gender;
         PhoneNumber = userEditDto.phoneNumber;
+        
         return this;
     }
    

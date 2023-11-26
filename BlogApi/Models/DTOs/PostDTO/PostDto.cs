@@ -35,7 +35,7 @@ public class PostDto
         communityId = postEntity.communityId;
         communityName = postEntity.communityName;
         addressId = postEntity.addressId;
-        likes = postEntity.likes;
+        likes = postEntity.likesCount;
         hasLike = postEntity.hasLike;
         commentsCount = postEntity.commentsCount;
         tags = new List<TagDto.TagDto>();

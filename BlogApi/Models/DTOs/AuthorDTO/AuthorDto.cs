@@ -24,7 +24,7 @@ public class AuthorDto
         fullName = authorEntity.FullName;
         birthDate = authorEntity.BirthDate;
         posts = authorEntity.Posts.Count;
-        likes = authorEntity.Posts.Sum(post => post.likes);
+        likes = authorEntity.Posts.Sum(post => post.likesCount);
         created = authorEntity.Created;
     }
 }

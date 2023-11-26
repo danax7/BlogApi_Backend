@@ -42,7 +42,7 @@ public class PostFullDto
         communityId = postEntity.communityId;
         communityName = postEntity.communityName;
         addressId = postEntity.addressId;
-        likes = postEntity.likes;
+        likes = postEntity.likesCount;
         hasLike = postEntity.hasLike;
         commentsCount = postEntity.commentsCount;
         tags = postEntity.tags.ConvertAll(tagEntity => tagEntity.Id);

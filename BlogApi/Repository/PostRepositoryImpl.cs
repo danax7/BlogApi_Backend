@@ -1,5 +1,6 @@
 using BlogApi.DTO.PostDTO;
 using BlogApi.Entity;
+using BlogApi.Exception;
 using BlogApi.Helpers;
 using BlogApi.Helpers.Sorter;
 using BlogApi.Repository.Interface;
@@ -99,6 +100,54 @@ public class PostRepositoryImpl : IPostRepository
         
         await _context.SaveChangesAsync();
         return postEntity.id;
+    }
+    
+    public async Task LikePost(Guid postId, Guid userId)
+    {
+        var post = await _context.Posts.FirstOrDefaultAsync(p => p.id == postId);
+        if (post == null)
+        {
+            throw new NotFoundException("Post not found");
+        }
+
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        if (user == null)
+        {
+            throw new NotFoundException("User not found");
+        }
+        
+        var postLike = await _context.Likes.FirstOrDefaultAsync(pl => pl.PostId == postId && pl.UserId == userId);
+        if (postLike != null)
+        {
+            throw new BadRequestException("Post already liked");
+        }
+
+        _context.Likes.Add(new LikeEntity(userId, postId));
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task DeletePostLike(Guid postId, Guid userId)
+    {
+        var post = await _context.Posts.FirstOrDefaultAsync(p => p.id == postId);
+        if (post == null)
+        {
+            throw new NotFoundException("Post not found");
+        }
+
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        if (user == null)
+        {
+            throw new NotFoundException("User not found");
+        }
+
+        var postLike = await _context.Likes.FirstOrDefaultAsync(pl => pl.PostId == postId && pl.UserId == userId);
+        if (postLike == null)
+        {
+            throw new BadRequestException("Post not liked");
+        }
+
+        _context.Likes.Remove(postLike);
+        await _context.SaveChangesAsync();
     }
 
 
