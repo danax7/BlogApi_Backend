@@ -117,6 +117,10 @@ public class PostServiceImpl : IPostService
             throw new NotFoundException("User not found");
         }
 
+        var author = await _authorRepository.GetAuthorById(post.authorId);
+        author.AddLike();
+        
+        await _authorRepository.UpdateAuthor(author);
         await _postRepository.LikePost(idPost, idUser);
     }
 
@@ -134,6 +138,10 @@ public class PostServiceImpl : IPostService
             throw new NotFoundException("User not found");
         }
 
+        var author = await _authorRepository.GetAuthorById(post.authorId);
+        author.RemoveLike();
+        
+        await _authorRepository.UpdateAuthor(author);
         await _postRepository.DeletePostLike(idPost, idUser);
     }
 }

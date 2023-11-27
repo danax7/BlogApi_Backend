@@ -9,5 +9,5 @@ public interface IAuthorService
     public Task<AuthorEntity> GetAuthorById(Guid authorId);
 
     public Task CreateAuthor(Guid userId);
-    //public Task<AuthorDto> UpdateAuthor(Guid authorId, AuthorUpdateDto authorUpdateDto);
+    public Task UpdateAuthor(AuthorEntity author);
 }
