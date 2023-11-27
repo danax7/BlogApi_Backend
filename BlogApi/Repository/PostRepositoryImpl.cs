@@ -46,7 +46,9 @@ public class PostRepositoryImpl : IPostRepository
 
     public Task<PostEntity?> GetPostById(Guid id)
     {
-        return _context.Posts.FirstOrDefaultAsync(post => post.id == id);
+        return _context.Posts
+            .Include(post => post.tags)
+            .FirstOrDefaultAsync(post => post.id == id);
     }
 
     public Task<List<PostEntity>> GetPosts(PostFilterDto postFilterDto, int start, int count)
@@ -150,6 +152,12 @@ public class PostRepositoryImpl : IPostRepository
 
         _context.Likes.Remove(postLike);
         post.likesCount--;
+        await _context.SaveChangesAsync();
+    }
+    
+    public async Task UpdatePost(PostEntity post)
+    {
+        _context.Entry(post).State = EntityState.Modified;
         await _context.SaveChangesAsync();
     }
 }

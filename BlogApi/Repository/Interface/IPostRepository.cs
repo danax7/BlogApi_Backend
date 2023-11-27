@@ -11,7 +11,7 @@ public interface IPostRepository
     Task<Guid> CreatePost(PostEntity postEntity);
     Task LikePost(Guid postId, Guid userId);
     Task DeletePostLike(Guid postId, Guid userId);
-    //TODO: set LikePost
+    Task UpdatePost(PostEntity postEntity);
 
     // Task<List<PostEntity>> GetCommunityPostList(Guid id, PostFilterDto postFilterDto);
 }

@@ -98,11 +98,13 @@ public class PostServiceImpl : IPostService
         {
             throw new NotFoundException("One or more tags not found");
         }
-        postEntity.tags = tags;
-        //TODO: Add tags
         author.IncrementPostCount();
         await _authorRepository.UpdateAuthor(author);
+        postEntity.tags = tags;
+        
         var postId = await _postRepository.CreatePost(postEntity);
+        
+        // await _postRepository.UpdatePost(postEntity) ;
 
         return postId;
     }

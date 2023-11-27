@@ -18,12 +18,11 @@ public class PostEntity
     public string? communityName { get; set; }
     public Guid addressId { get; set; }
     [Required] public int likesCount { get; set; }
-    [Required] public bool hasLike { get; set; }
     [Required] public int commentsCount { get; set; }
 
     //TODO: Check tags
     //public List<Guid> tags { get; set; }
-    public List<TagEntity> tags { get; set; }
+    [Required] public List<TagEntity> tags { get; set; }
     // public List<UserEntity?> Users { get; set; }
 
     // public List<CommentEntity> comments { get; set; }

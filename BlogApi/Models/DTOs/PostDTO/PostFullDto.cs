@@ -14,13 +14,14 @@ public class PostFullDto
     public string image { get; set; }
     [Required] public Guid authorId { get; set; }
     [Required] public string author { get; set; }
-    public string communityId { get; set; }
-    public string communityName { get; set; }
+    public string? communityId { get; set; }
+    public string? communityName { get; set; }
     public Guid addressId { get; set; }
     [Required] public int likes { get; set; }
-    [Required] public bool hasLike { get; set; }
+    // [Required] public bool hasLike { get; set; }
 
     [Required] public int commentsCount { get; set; }
+    // [Required] public int commentsCount { get; set; }
 
     public List<Guid> tags { get; set; }
     //Пофиксить вывод PostFullDto
@@ -41,12 +42,11 @@ public class PostFullDto
         communityName = postEntity.communityName ?? "";
         addressId = postEntity.addressId;
         likes = postEntity.likesCount;
-        hasLike = postEntity.hasLike;
         commentsCount = postEntity.commentsCount;
-        tags = postEntity.tags.ConvertAll(tagEntity => tagEntity.Id);
+        tags = postEntity.tags.Select(tagEntity => tagEntity.Id).ToList();
+        //Почему-то здесь null
 
         // comments = postEntity.comments.ConvertAll(commentEntity => new CommentDto(commentEntity));
-        //TODO: Check tags
     }
 
     public PostFullDto()
