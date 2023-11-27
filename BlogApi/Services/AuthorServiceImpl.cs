@@ -41,7 +41,7 @@ public class AuthorServiceImpl : IAuthorService
 
         await _authorRepository.CreateAuthor(author);
     }
-    
+
     public async Task UpdateAuthor(AuthorEntity author)
     {
         await _authorRepository.UpdateAuthor(author);

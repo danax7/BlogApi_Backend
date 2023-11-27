@@ -18,7 +18,7 @@ namespace BlogApi.Entity
         public Int32 likesCount { get; set; }
         public Int32 postsCount { get; set; }
         public List<PostEntity>? Posts { get; set; }
-        
+
 
         public AuthorEntity(UserEntity user)
         {
@@ -33,7 +33,7 @@ namespace BlogApi.Entity
         public AuthorEntity()
         {
         }
-        
+
         public void AddLike()
         {
             likesCount++;
@@ -43,11 +43,10 @@ namespace BlogApi.Entity
         {
             likesCount--;
         }
-        
+
         public void IncrementPostCount()
         {
             postsCount++;
         }
-        
     }
 }

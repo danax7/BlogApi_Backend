@@ -1,3 +1,4 @@
+using BlogApi.DTO.TagDto;
 using BlogApi.Entity;
 using BlogApi.Exception;
 using BlogApi.Repository.Interface;
@@ -14,19 +15,10 @@ public class TagServiceImpl : ITagService
         _tagRepository = tagRepository;
     }
 
-    public async Task<List<TagEntity>> GetTags()
+    public async Task<List<TagDto>> GetTags()
     {
-        return await _tagRepository.GetTags();
-    }
-
-    public async Task<TagEntity> GetTagById(Guid id)
-    {
-        var tag = await _tagRepository.GetTagById(id);
-        if (tag == null)
-        {
-            throw new NotFoundException("Tag not found");
-        }
-
-        return tag;
+        var tags = await _tagRepository.GetTags();
+        var tagList = tags.Select(tagEntity => new TagDto(tagEntity)).ToList();
+        return tagList;
     }
 }

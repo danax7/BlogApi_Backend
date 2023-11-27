@@ -22,8 +22,7 @@ namespace BlogApi.Controllers
         public async Task<List<TagDto>> GetTags()
         {
             var tags = await _tagService.GetTags();
-            var tagDtos = tags.Select(tagEntity => new TagDto(tagEntity)).ToList();
-            return tagDtos;
+            return tags;
         }
     }
 }

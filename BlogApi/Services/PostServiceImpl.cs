@@ -98,12 +98,13 @@ public class PostServiceImpl : IPostService
         {
             throw new NotFoundException("One or more tags not found");
         }
+
         author.IncrementPostCount();
         await _authorRepository.UpdateAuthor(author);
         postEntity.tags = tags;
-        
+
         var postId = await _postRepository.CreatePost(postEntity);
-        
+
         // await _postRepository.UpdatePost(postEntity) ;
 
         return postId;
@@ -126,7 +127,7 @@ public class PostServiceImpl : IPostService
 
         var author = await _authorRepository.GetAuthorById(post.authorId);
         author.AddLike();
-        
+
         await _authorRepository.UpdateAuthor(author);
         await _postRepository.LikePost(idPost, idUser);
     }
@@ -147,7 +148,7 @@ public class PostServiceImpl : IPostService
 
         var author = await _authorRepository.GetAuthorById(post.authorId);
         author.RemoveLike();
-        
+
         await _authorRepository.UpdateAuthor(author);
         await _postRepository.DeletePostLike(idPost, idUser);
     }

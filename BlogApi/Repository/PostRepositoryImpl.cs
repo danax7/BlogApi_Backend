@@ -154,7 +154,7 @@ public class PostRepositoryImpl : IPostRepository
         post.likesCount--;
         await _context.SaveChangesAsync();
     }
-    
+
     public async Task UpdatePost(PostEntity post)
     {
         _context.Entry(post).State = EntityState.Modified;
