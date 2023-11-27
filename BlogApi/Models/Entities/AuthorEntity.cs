@@ -15,7 +15,6 @@ namespace BlogApi.Entity
         [Required] public string FullName { get; set; }
         [Required] public DateTime BirthDate { get; set; }
         public DateTime Created { get; set; }
-        
         public Int32 likesCount { get; set; }
         public Int32 postsCount { get; set; }
         public List<PostEntity>? Posts { get; set; }
@@ -49,10 +48,6 @@ namespace BlogApi.Entity
         {
             postsCount++;
         }
-
-        public void DecrementPostCount()
-        {
-            postsCount--;
-        }
+        
     }
 }

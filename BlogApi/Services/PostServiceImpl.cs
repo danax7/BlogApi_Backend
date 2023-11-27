@@ -94,9 +94,14 @@ public class PostServiceImpl : IPostService
         };
         Console.WriteLine(postEntity.authorId);
         var tags = await _tagRepository.GetTagsByIds(tagIds);
+        if (tags.Count == 0)
+        {
+            throw new NotFoundException("One or more tags not found");
+        }
         postEntity.tags = tags;
         //TODO: Add tags
-
+        author.IncrementPostCount();
+        await _authorRepository.UpdateAuthor(author);
         var postId = await _postRepository.CreatePost(postEntity);
 
         return postId;
