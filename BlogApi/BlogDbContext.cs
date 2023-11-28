@@ -10,6 +10,7 @@ public class BlogDbContext : DbContext
     public DbSet<UserCommunityEntity> UserCommunities { get; set; }
     public DbSet<PostEntity> Posts { get; set; }
     public DbSet<LikeEntity> Likes { get; set; }
+    public DbSet<CommentEntity> Comments { get; set; }
     public DbSet<TagEntity> Tags { get; set; }
     public DbSet<PostTagsEntity> PostTags { get; set; }
     public DbSet<AccessTokenEntity> BlackTokenList { get; set; }
@@ -53,5 +54,25 @@ public class BlogDbContext : DbContext
 
         modelBuilder.Entity<LikeEntity>()
             .HasKey(l => new { l.UserId, l.PostId });
+        
+        
+        modelBuilder.Entity<PostEntity>()
+            .HasMany(post => post.Comments)
+            .WithOne(comment => comment.Post)
+            .HasForeignKey(comment => comment.PostId)
+            .OnDelete(DeleteBehavior.Cascade); 
+        
+        modelBuilder.Entity<CommentEntity>()
+            .HasOne(comment => comment.User)
+            .WithMany(user => user.Comments)
+            .HasForeignKey(comment => comment.UserId)
+            .OnDelete(DeleteBehavior.Restrict); 
+        
+        modelBuilder.Entity<CommentEntity>()
+            .HasOne(comment => comment.ParentComment)
+            .WithMany()
+            .HasForeignKey(comment => comment.ParentCommentId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
     }
 }

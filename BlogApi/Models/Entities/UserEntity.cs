@@ -25,7 +25,7 @@ public class UserEntity
     public ICollection<UserCommunityEntity> UserCommunities { get; set; }
 
     public AuthorEntity? Author { get; set; }
-
+    public List<CommentEntity> Comments { get; set; }
     // public List<PostEntity?> Posts { get; set; }
 
 
