@@ -36,4 +36,14 @@ public class PostEntity
     {
         likesCount--;
     }
+    
+    public void IncrementCommentCount()
+    {
+        commentsCount++;
+    }
+    
+    public void DecrementCommentCount()
+    {
+        commentsCount--;
+    }
 }

@@ -47,6 +47,20 @@ public class CommentServiceImpl : ICommentService
             createTime = DateTime.Now
         };
 
+        if (comment.ParentCommentId != null)
+        {
+            var parentComment = await _commentRepository.GetCommentById(comment.ParentCommentId.Value);
+            if (parentComment == null)
+            {
+                throw new NotFoundException("Parent comment not found");
+            }
+
+            parentComment.IncrementSubCommentCount();
+        }
+
+        post.IncrementCommentCount();
+        await _postRepository.UpdatePost(post);
+
         await _commentRepository.CreateComment(comment);
     }
 
@@ -71,6 +85,13 @@ public class CommentServiceImpl : ICommentService
     public async Task DeleteComment(Guid id, Guid userId)
     {
         var comment = await _commentRepository.GetCommentById(id);
+        var post = await _postRepository.GetPostById(comment.PostId);
+
+        if (post == null)
+        {
+            throw new NotFoundException("Post not found");
+        }
+
         if (comment == null)
         {
             throw new NotFoundException("Comment not found");
@@ -81,7 +102,21 @@ public class CommentServiceImpl : ICommentService
             throw new ForbiddenException("You are not the author of this comment");
         }
 
+        if (comment.ParentCommentId != null)
+        {
+            var parentComment = await _commentRepository.GetCommentById(comment.ParentCommentId.Value);
+            if (parentComment == null)
+            {
+                throw new NotFoundException("Parent comment not found");
+            }
+            // parentComment.DecrementSubCommentCount();
+        }
+
         comment.deleteDate = DateTime.Now;
+
+        post.DecrementCommentCount();
+        await _postRepository.UpdatePost(post);
+
         await _commentRepository.DeleteComment(comment.id);
     }
 }
