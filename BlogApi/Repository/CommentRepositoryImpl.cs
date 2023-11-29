@@ -22,6 +22,21 @@ namespace BlogApi.Repository
         {
             return null;
         }
+
+        public async Task<List<CommentDto>> GetAllFirstLevelPostCommentsById(Guid postId)
+        {
+            var comments = await _context.Comments
+                .Where(comment => comment.PostId == postId && comment.ParentCommentId == null)
+                .Include(comment => comment.User)
+                .Include(comment => comment.Post)
+                .OrderByDescending(comment => comment.createTime)
+                .Select(comment => new CommentDto(comment))
+                .ToListAsync();
+
+            return comments;
+        }
+
+
         // public async Task<List<CommentDto>> GetCommentTree(Guid postId)
         // {
         //     var comments = await _context.Comments

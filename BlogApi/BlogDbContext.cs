@@ -54,25 +54,24 @@ public class BlogDbContext : DbContext
 
         modelBuilder.Entity<LikeEntity>()
             .HasKey(l => new { l.UserId, l.PostId });
-        
-        
+
+
         modelBuilder.Entity<PostEntity>()
             .HasMany(post => post.Comments)
             .WithOne(comment => comment.Post)
             .HasForeignKey(comment => comment.PostId)
-            .OnDelete(DeleteBehavior.Cascade); 
-        
+            .OnDelete(DeleteBehavior.Cascade);
+
         modelBuilder.Entity<CommentEntity>()
             .HasOne(comment => comment.User)
             .WithMany(user => user.Comments)
             .HasForeignKey(comment => comment.UserId)
-            .OnDelete(DeleteBehavior.Restrict); 
-        
+            .OnDelete(DeleteBehavior.Restrict);
+
         modelBuilder.Entity<CommentEntity>()
             .HasOne(comment => comment.ParentComment)
             .WithMany()
             .HasForeignKey(comment => comment.ParentCommentId)
             .OnDelete(DeleteBehavior.Restrict);
-        
     }
 }

@@ -48,8 +48,10 @@ public class PostRepositoryImpl : IPostRepository
     {
         return _context.Posts
             .Include(post => post.tags)
+            .Include(post => post.Comments)
             .FirstOrDefaultAsync(post => post.id == id);
     }
+
 
     public Task<List<PostEntity>> GetPosts(PostFilterDto postFilterDto, int start, int count)
     {

@@ -18,17 +18,11 @@ public class PostFullDto
     public string? communityName { get; set; }
     public Guid addressId { get; set; }
     [Required] public int likes { get; set; }
-    // [Required] public bool hasLike { get; set; }
-
     [Required] public int commentsCount { get; set; }
-    // [Required] public int commentsCount { get; set; }
-
     public List<TagDto.TagDto> tags { get; set; }
-    //Пофиксить вывод PostFullDto
-    // //TODO: Check comments
-    // [Required] public List<CommentDto> comments { get; set; }
+    [Required] public List<CommentDto> comments { get; set; }
 
-    public PostFullDto(PostEntity postEntity)
+    public PostFullDto(PostEntity postEntity, List<CommentDto?> comments)
     {
         id = postEntity.id;
         createTime = postEntity.createTime;
@@ -44,9 +38,7 @@ public class PostFullDto
         likes = postEntity.likesCount;
         commentsCount = postEntity.commentsCount;
         tags = postEntity.tags.ConvertAll(tagEntity => new TagDto.TagDto(tagEntity));
-
-
-        // comments = postEntity.comments.ConvertAll(commentEntity => new CommentDto(commentEntity));
+        this.comments = comments;
     }
 
     public PostFullDto()

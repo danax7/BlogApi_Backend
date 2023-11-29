@@ -12,7 +12,8 @@ public class CommentServiceImpl : ICommentService
     private readonly ICommentRepository _commentRepository;
     private readonly IUserRepository _userRepository;
 
-    public CommentServiceImpl(IPostRepository postRepository, ICommentRepository commentRepository, IUserRepository userRepository)
+    public CommentServiceImpl(IPostRepository postRepository, ICommentRepository commentRepository,
+        IUserRepository userRepository)
     {
         _postRepository = postRepository;
         _commentRepository = commentRepository;
@@ -45,9 +46,10 @@ public class CommentServiceImpl : ICommentService
             ParentCommentId = commentCreateDto.parentId,
             createTime = DateTime.Now
         };
+
         await _commentRepository.CreateComment(comment);
     }
-    
+
     public async Task UpdateComment(Guid id, Guid userId, UpdateCommentDto commentUpdateDto)
     {
         var comment = await _commentRepository.GetCommentById(id);
@@ -65,7 +67,7 @@ public class CommentServiceImpl : ICommentService
         comment.modifiedDate = DateTime.Now;
         await _commentRepository.UpdateComment(comment);
     }
-    
+
     public async Task DeleteComment(Guid id, Guid userId)
     {
         var comment = await _commentRepository.GetCommentById(id);
@@ -82,5 +84,4 @@ public class CommentServiceImpl : ICommentService
         comment.deleteDate = DateTime.Now;
         await _commentRepository.DeleteComment(comment.id);
     }
-    
 }

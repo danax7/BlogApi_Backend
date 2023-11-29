@@ -14,17 +14,20 @@ public class PostServiceImpl : IPostService
     private readonly ITagRepository _tagRepository;
     private readonly IAuthorRepository _authorRepository;
     private readonly IUserRepository _userRepository;
+    private readonly ICommentRepository _commentRepository;
 
 
     public PostServiceImpl(IPostRepository postRepository,
         ITagRepository tagRepository,
         IAuthorRepository authorRepository,
-        IUserRepository userRepository)
+        IUserRepository userRepository,
+        ICommentRepository commentRepository)
     {
         _postRepository = postRepository;
         _tagRepository = tagRepository;
         _authorRepository = authorRepository;
         _userRepository = userRepository;
+        _commentRepository = commentRepository;
     }
 
     public async Task<PostPagedListDto> GetPosts(PostFilterDto postFilterDto)
@@ -58,12 +61,13 @@ public class PostServiceImpl : IPostService
     public async Task<PostFullDto> GetPostById(Guid id)
     {
         var post = await _postRepository.GetPostById(id);
+        var comments = await _commentRepository.GetAllFirstLevelPostCommentsById(id);
         if (post == null)
         {
             throw new NotFoundException("Post not found");
         }
 
-        return new PostFullDto(post);
+        return new PostFullDto(post, comments);
     }
 
     public async Task<Guid> CreatePost(CreatePostDto createPostDto, List<Guid> tagIds, Guid userId)
