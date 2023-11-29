@@ -37,6 +37,12 @@ public class ExceptionMiddleware
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
             MakeResponse("error", e.Message, context);
         }
+        
+        catch (ForbiddenException e)
+        {
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+            MakeResponse("error", e.Message, context);
+        }
 
         catch (System.Exception e)
         {

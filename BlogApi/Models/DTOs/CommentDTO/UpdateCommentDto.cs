@@ -2,8 +2,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BlogApi.DTO.CommentDTO;
 
-public class CreateCommentDto
+public class UpdateCommentDto
 {
     [Required] [MinLength(1)] public string content { get; set; }
-    public Guid? parentId { get; set; }
+    
 }

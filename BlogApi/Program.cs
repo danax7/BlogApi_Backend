@@ -34,6 +34,9 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddScoped<IPostRepository, PostRepositoryImpl>();
 builder.Services.AddScoped<IPostService, PostServiceImpl>();
 
+builder.Services.AddScoped<ICommentRepository, CommentRepositoryImpl>();
+builder.Services.AddScoped<ICommentService, CommentServiceImpl>();
+
 builder.Services.AddScoped<IUserRepository, UserRepositoryImpl>();
 builder.Services.AddScoped<IUserService, UserServiceImpl>();
 
