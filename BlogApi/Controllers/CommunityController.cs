@@ -27,7 +27,6 @@ namespace BlogApi.Controllers
             return await _communityService.GetCommunityList();
         }
 
-
         [HttpGet("my")]
         [Authorize(Policy = "ValidateToken")]
         public async Task<List<CommunityUserDto>> GetMyCommunityList()
@@ -41,6 +40,15 @@ namespace BlogApi.Controllers
         public async Task<CommunityFullDto> GetCommunity(Guid id)
         {
             return await _communityService.GetCommunity(id);
+        }
+
+        [HttpPost("")]
+        [Authorize(Policy = "ValidateToken")]
+        public async Task<IActionResult> CreateCommunity(CreateCommunityDto communityCreateDto)
+        {
+            var userId = Converter.GetId(HttpContext);
+            await _communityService.CreateCommunity(userId, communityCreateDto);
+            return Ok("Community created successfully");
         }
 
         // [HttpGet("{id}/post")]
@@ -71,8 +79,6 @@ namespace BlogApi.Controllers
         //     // await _communityService.CreatePost(id, postCreateDto);
         //     Ok("Post created successfully");
         // }
-
-
         [HttpGet("{id}/role")]
         [Authorize(Policy = "ValidateToken")]
         public async Task<CommunityRole> GetGreatestUserCommunityRole(Guid communityId)

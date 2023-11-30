@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using BlogApi.DTO.CommunityDto;
 
 namespace BlogApi.Entity;
 
@@ -12,4 +13,18 @@ public class CommunityEntity
     [Required] public Int32 subscribersCount { get; set; }
 
     public ICollection<UserCommunityEntity> UserCommunities { get; set; }
+    
+    
+    public CommunityEntity()
+    {
+    }
+    
+    public CommunityEntity(CreateCommunityDto communityCreateDto)
+    {
+        id = Guid.NewGuid();
+        createTime = DateTime.Now;
+        name = communityCreateDto.name;
+        description = communityCreateDto.description;
+        isClosed = communityCreateDto.isClosed;
+    }
 }

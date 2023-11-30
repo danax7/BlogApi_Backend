@@ -43,6 +43,28 @@ public class CommunityServiceImpl : ICommunityService
         var community = await _communityRepository.GetCommunity(id);
         return new CommunityFullDto(community);
     }
+    
+    public async Task CreateCommunity(Guid userId, CreateCommunityDto communityCreateDto)
+    {
+        var user = await _userRepository.GetUserById(userId);
+        var community = new CommunityEntity     
+        {
+            name = communityCreateDto.name,
+            createTime = DateTime.Now,
+            description = communityCreateDto.description,
+            isClosed = communityCreateDto.isClosed,
+            UserCommunities = new List<UserCommunityEntity>
+            {
+                new UserCommunityEntity
+                {
+                    UserId = user.Id,
+                    Role = CommunityRole.Administrator
+                }
+            }
+        };
+        
+        await _communityRepository.CreateCommunity(community);
+    }
 
     // public async Task<List<PostDto>> GetCommunityPostList(Guid id, PostFilterDto postFilterDto)
     // {
@@ -79,11 +101,26 @@ public class CommunityServiceImpl : ICommunityService
         {
             throw new NotFoundException("User or community not found.");
         }
+        
+        if (community.isClosed)
+        {
+            throw new BadRequestException("Community is closed.");
+        }
+        
+        if (user.UserCommunities.Any(uc => uc.CommunityId == communityId))
+        {
+            throw new BadRequestException("User is already subscribed to the community.");
+        }
 
-        if (!user.UserCommunities.Any(uc => uc.CommunityId == communityId))
+        var userCommunity = user.UserCommunities.FirstOrDefault(uc => uc.CommunityId == communityId);
+        if (userCommunity == null)
         {
             user.UserCommunities.Add(new UserCommunityEntity
-                { UserId = userId, CommunityId = communityId, Role = CommunityRole.Subscriber });
+            {
+                UserId = user.Id,
+                CommunityId = communityId,
+                Role = CommunityRole.Subscriber,
+            });
             await _userRepository.UpdateUser(user);
         }
     }
