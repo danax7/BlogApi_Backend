@@ -36,7 +36,12 @@ public class CommunityServiceImpl : ICommunityService
     public async Task<List<CommunityUserDto>> GetMyCommunityList(Guid userId)
     {
         var communities = await _communityRepository.GetMyCommunityList(userId);
-        return communities.Select(x => new CommunityUserDto(x)).ToList();
+        if (communities == null)
+        {
+            throw new NotFoundException("Communities not found");
+        }
+        var comminityList = communities.Select(x => new CommunityUserDto(x)).ToList();
+        return comminityList;
     }
 
     public async Task<CommunityFullDto> GetCommunity(Guid id)
