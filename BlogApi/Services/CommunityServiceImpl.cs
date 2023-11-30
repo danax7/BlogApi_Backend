@@ -6,6 +6,7 @@ using BlogApi.Repository.Interface;
 using BlogApi.Services.Interface;
 using System.Linq;
 using BlogApi.Exception;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BlogApi.Services;
 
@@ -78,7 +79,7 @@ public class CommunityServiceImpl : ICommunityService
     //     return null;
     //     //TODO: check
     // }
-    public async Task<CommunityRole> GetGreatestUserCommunityRole(Guid userId, Guid communityId)
+    public async Task<ActionResult<string>> GetGreatestUserCommunityRole(Guid userId, Guid communityId)
     {
         var user = await _userRepository.GetUserById(userId);
         var community = await _communityRepository.GetCommunity(communityId);
@@ -94,7 +95,7 @@ public class CommunityServiceImpl : ICommunityService
             throw new NotFoundException("User is not associated with the community.");
         }
 
-        return userCommunity.Role;
+        return Enum.GetName(typeof(CommunityRole), userCommunity.Role);
     }
 
     public async Task Subscribe(Guid userId, Guid communityId)

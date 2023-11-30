@@ -1,6 +1,7 @@
 using BlogApi.DTO.CommunityDto;
 using BlogApi.DTO.PostDTO;
 using BlogApi.Entity.Enums;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BlogApi.Services.Interface;
 
@@ -14,7 +15,7 @@ public interface ICommunityService
 
     //Task<List<PostDto>> GetCommunityPostList(Guid id, PostFilterDto postFilterDto);
     // Task CreatePost(Guid id, CreatePostDto postCreateDto);
-    Task<CommunityRole> GetGreatestUserCommunityRole(Guid userId, Guid communityId);
+    Task<ActionResult<string>> GetGreatestUserCommunityRole(Guid userId, Guid communityId);
     Task Subscribe(Guid userId, Guid communityId);
     Task Unsubscribe(Guid id, Guid communityId);
 }

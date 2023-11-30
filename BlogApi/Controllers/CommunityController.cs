@@ -81,10 +81,10 @@ namespace BlogApi.Controllers
         // }
         [HttpGet("{id}/role")]
         [Authorize(Policy = "ValidateToken")]
-        public async Task<CommunityRole> GetGreatestUserCommunityRole(Guid communityId)
+        public async Task<ActionResult<string>> GetGreatestUserCommunityRole(Guid id)
         {
             var userId = Converter.GetId(HttpContext);
-            return await _communityService.GetGreatestUserCommunityRole(userId, communityId);
+            return await _communityService.GetGreatestUserCommunityRole(userId, id);
         }
 
         [HttpPost("{id}/subscribe")]
