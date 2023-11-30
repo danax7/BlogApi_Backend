@@ -9,6 +9,7 @@ public interface ICommunityRepository
     Task<List<CommunityEntity>> GetCommunityList();
     Task<List<CommunityEntity>> GetMyCommunityList(Guid userId);
     Task<CommunityEntity> GetCommunity(Guid id);
+    Task<List<UserEntity>> GetCommunityAdmins(Guid id);
     Task CreateCommunity(CommunityEntity community);
     // Task<List<PostDto>> GetCommunityPostList(Guid id, PostFilterDto postFilterDto);
     // Task CreatePost(Guid id, CreatePostDto postCreateDto);

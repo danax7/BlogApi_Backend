@@ -19,7 +19,7 @@ public class CommunityFullDto
     {
     }
 
-    public CommunityFullDto(CommunityEntity communityEntity)
+    public CommunityFullDto(CommunityEntity communityEntity, List<UserEntity> admins)
     {
         id = communityEntity.id;
         createTime = communityEntity.createTime;
@@ -27,9 +27,11 @@ public class CommunityFullDto
         description = communityEntity.description;
         isClosed = communityEntity.isClosed;
         subscribersCount = communityEntity.subscribersCount;
-        administrators = communityEntity.UserCommunities
-            .Where(userCommunity => userCommunity.Role == CommunityRole.Administrator)
-            .Select(userCommunity => new UserDto(userCommunity.User))
-            .ToList();
+        administrators = admins.Select(x => new UserDto(x)).ToList();
+        //Тут возникает ошибка, если вывести список администраторов
+        // administrators = communityEntity.UserCommunities
+        //     .Where(userCommunity => userCommunity.Role == CommunityRole.Administrator)
+        //     .Select(userCommunity => new UserDto(userCommunity.User))
+        //     .ToList();
     }
 }

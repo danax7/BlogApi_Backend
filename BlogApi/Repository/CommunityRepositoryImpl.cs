@@ -1,4 +1,5 @@
 using BlogApi.Entity;
+using BlogApi.Entity.Enums;
 using BlogApi.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,20 @@ public class CommunityRepositoryImpl : ICommunityRepository
     public async Task<List<CommunityEntity>> GetCommunityList()
     {
         return await _context.Communities.ToListAsync();
+    }
+    
+    public async Task<List<UserEntity>> GetCommunityAdmins(Guid id)
+    {
+        var userCommunities = await _context.UserCommunities
+            .Where(uc => uc.CommunityId == id && uc.Role == CommunityRole.Administrator)
+            .ToListAsync();
+
+        var userIds = userCommunities.Select(uc => uc.UserId).ToList();
+        var users = await _context.Users
+            .Where(u => userIds.Contains(u.Id))
+            .ToListAsync();
+
+        return users;
     }
 
     public async Task<List<CommunityEntity>> GetMyCommunityList(Guid userId)
