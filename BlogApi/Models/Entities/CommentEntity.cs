@@ -22,16 +22,15 @@ public class CommentEntity
     [Required] public Guid authorId { get; set; }
     [Required] [MinLength(1)] public string author { get; set; }
     public Int32 subCommentsCount { get; set; }
-    
-    
+
+
     public void IncrementSubCommentCount()
     {
         subCommentsCount++;
     }
-    
+
     public void DecrementSubCommentCount()
     {
         subCommentsCount--;
     }
-    
 }

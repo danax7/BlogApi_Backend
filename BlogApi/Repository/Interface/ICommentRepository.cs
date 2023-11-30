@@ -5,7 +5,7 @@ namespace BlogApi.Repository.Interface;
 
 public interface ICommentRepository
 {
-    Task<List<CommentDto>> GetCommentTree(Guid id);
+    Task<List<CommentDto>> GetAllFirstLevelCommentReplies(Guid id);
     Task<List<CommentDto>> GetAllFirstLevelPostCommentsById(Guid postId);
     Task CreateComment(CommentEntity comment);
     Task UpdateComment(CommentEntity comment);

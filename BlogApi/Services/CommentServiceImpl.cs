@@ -20,9 +20,9 @@ public class CommentServiceImpl : ICommentService
         _userRepository = userRepository;
     }
 
-    public async Task<List<CommentDto>> GetCommentTree(Guid id)
+    public async Task<List<CommentDto>> GetAllFirstLevelCommentReplies(Guid id)
     {
-        var comments = await _commentRepository.GetCommentTree(id);
+        var comments = await _commentRepository.GetAllFirstLevelCommentReplies(id);
         return comments;
     }
 
@@ -102,21 +102,31 @@ public class CommentServiceImpl : ICommentService
             throw new ForbiddenException("You are not the author of this comment");
         }
 
-        if (comment.ParentCommentId != null)
+        if (comment.ParentCommentId != null && comment.subCommentsCount == 0)
         {
             var parentComment = await _commentRepository.GetCommentById(comment.ParentCommentId.Value);
             if (parentComment == null)
             {
                 throw new NotFoundException("Parent comment not found");
             }
-            // parentComment.DecrementSubCommentCount();
-        }
 
-        comment.deleteDate = DateTime.Now;
+            parentComment.DecrementSubCommentCount();
+            await _commentRepository.DeleteComment(comment.id);
+        }
+        else if (comment.ParentCommentId == null && comment.subCommentsCount == 0)
+        {
+            await _commentRepository.DeleteComment(comment.id);
+        }
+        else
+        {
+            comment.deleteDate = DateTime.Now;
+            comment.content = "[deleted]";
+            comment.author = "[deleted]";
+            comment.authorId = Guid.Empty;
+            await _commentRepository.UpdateComment(comment);
+        }
 
         post.DecrementCommentCount();
         await _postRepository.UpdatePost(post);
-
-        await _commentRepository.DeleteComment(comment.id);
     }
 }

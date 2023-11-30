@@ -20,7 +20,7 @@ namespace BlogApi.Controllers
         [HttpGet("comment/{id}/tree")]
         public async Task<List<CommentDto>> GetCommentTree(Guid id)
         {
-            return await _commentService.GetCommentTree(id);
+            return await _commentService.GetAllFirstLevelCommentReplies(id);
         }
 
         [Authorize(Policy = "ValidateToken")]

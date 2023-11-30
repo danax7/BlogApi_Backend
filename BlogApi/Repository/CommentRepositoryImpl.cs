@@ -18,10 +18,19 @@ namespace BlogApi.Repository
             _context = context;
         }
 
-        public async Task<List<CommentDto>> GetCommentTree(Guid postId)
+        public async Task<List<CommentDto>> GetAllFirstLevelCommentReplies(Guid comentId)
         {
-            return null;
+            var comments = await _context.Comments
+                .Where(comment => comment.ParentCommentId == comentId)
+                .Include(comment => comment.User)
+                .Include(comment => comment.Post)
+                .OrderByDescending(comment => comment.createTime)
+                .Select(comment => new CommentDto(comment))
+                .ToListAsync();
+
+            return comments;
         }
+
 
         public async Task<List<CommentDto>> GetAllFirstLevelPostCommentsById(Guid postId)
         {
