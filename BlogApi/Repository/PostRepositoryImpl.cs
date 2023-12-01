@@ -26,20 +26,20 @@ public class PostRepositoryImpl : IPostRepository
         //     query = query.Where(post => post.tags.Any(tag => postFilterDto.tags.Contains(tag)));
         // }
 
-        if (postFilterDto.author != null)
-        {
-            query = query.Where(post => postFilterDto.author == post.author);
-        }
-
-        if (postFilterDto.minReadingTime != null)
-        {
-            query = query.Where(post => postFilterDto.minReadingTime <= post.readingTime);
-        }
-
-        if (postFilterDto.maxReadingTime != null)
-        {
-            query = query.Where(post => postFilterDto.maxReadingTime >= post.readingTime);
-        }
+        // if (postFilterDto.author != null)
+        // {
+        //     query = query.Where(post => postFilterDto.author == post.author);
+        // }
+        //
+        // if (postFilterDto.minReadingTime != null)
+        // {
+        //     query = query.Where(post => postFilterDto.minReadingTime <= post.readingTime);
+        // }
+        //
+        // if (postFilterDto.maxReadingTime != null)
+        // {
+        //     query = query.Where(post => postFilterDto.maxReadingTime >= post.readingTime);
+        // }
 
         return query.CountAsync();
     }
@@ -62,20 +62,20 @@ public class PostRepositoryImpl : IPostRepository
         //     query = query.Where(post => post.tags.Any(tag => postFilterDto.tags.Contains(tag)));
         // }
 
-        if (postFilterDto.author != null)
-        {
-            query = query.Where(post => postFilterDto.author == post.author);
-        }
-
-        if (postFilterDto.minReadingTime != null)
-        {
-            query = query.Where(post => postFilterDto.minReadingTime <= post.readingTime);
-        }
-
-        if (postFilterDto.maxReadingTime != null)
-        {
-            query = query.Where(post => postFilterDto.maxReadingTime >= post.readingTime);
-        }
+        // if (postFilterDto.author != null)
+        // {
+        //     query = query.Where(post => postFilterDto.author == post.author);
+        // }
+        //
+        // if (postFilterDto.minReadingTime != null)
+        // {
+        //     query = query.Where(post => postFilterDto.minReadingTime <= post.readingTime);
+        // }
+        //
+        // if (postFilterDto.maxReadingTime != null)
+        // {
+        //     query = query.Where(post => postFilterDto.maxReadingTime >= post.readingTime);
+        // }
 
         // if (postFilterDto.onlyMyCommunities != null)
         // {

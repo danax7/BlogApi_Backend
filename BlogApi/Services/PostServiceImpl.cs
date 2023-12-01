@@ -49,7 +49,7 @@ public class PostServiceImpl : IPostService
             throw new BadRequestException("Page out of range");
         }
 
-        var posts = await _postRepository.GetPosts(postFilterDto, skipCount, count);
+        var posts = await _postRepository.GetPosts(postFilterDto, skipCount, PageInfoEntity.size);
         var postsDto = posts.Select(post => new PostDto(post)).ToArray();
 
         var postPagedListDto = new PostPagedListDto
@@ -78,10 +78,9 @@ public class PostServiceImpl : IPostService
         var user = await _userRepository.GetUserById(userId);
         var author = await _authorRepository.GetAuthorByUserId(userId);
         
-        var communityId = createPostDto.communityId ?? Guid.Empty;
-
-        if (communityId != Guid.Empty || createPostDto.communityName != null)
+        if (createPostDto.communityId != null || createPostDto.communityName != null )
         {
+            var communityId = createPostDto.communityId ?? Guid.Empty;
             var community = await _communityRepository.GetCommunity(communityId);
             createPostDto.communityName = community.name;
         }
@@ -108,8 +107,6 @@ public class PostServiceImpl : IPostService
             description = createPostDto.description,
             readingTime = createPostDto.readTime,
             image = createPostDto.image,
-            communityId = createPostDto.communityId,
-            communityName = createPostDto.communityName,
             authorId = author.Id,
             author = author.FullName,
             tags = tags,
