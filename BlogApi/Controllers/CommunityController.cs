@@ -4,6 +4,7 @@ using BlogApi.DTO.TagDto;
 using BlogApi.Entity;
 using BlogApi.Entity.Enums;
 using BlogApi.Helpers;
+using BlogApi.Service.Interface;
 using BlogApi.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,10 +16,12 @@ namespace BlogApi.Controllers
     public class CommunityController : ControllerBase
     {
         private readonly ICommunityService _communityService;
+        private readonly IPostService _postService;
 
-        public CommunityController(ICommunityService communityService)
+        public CommunityController(ICommunityService communityService, IPostService postService)
         {
             _communityService = communityService;
+            _postService = postService;
         }
 
         [HttpGet("")]
@@ -72,13 +75,21 @@ namespace BlogApi.Controllers
         //     return null;
         // }
 
-        // [HttpPost("{id}/post")]
-        // [Authorize(Policy = "ValidateToken")]
-        // public async Task CreatePost(Guid id, CreatePostDto postCreateDto)
-        // {
-        //     // await _communityService.CreatePost(id, postCreateDto);
-        //     Ok("Post created successfully");
-        // }
+        [HttpPost("{id}/post")]
+        [Authorize(Policy = "ValidateToken")]
+        public async Task<ActionResult> CreatePost(Guid id, [FromBody]CreatePostDto postCreateDto)
+        {
+            //CreatePost(CreatePostDto createPostDto, List<Guid> tagIds, Guid userId)
+            var userId = Converter.GetId(HttpContext);
+            var tagGuids = postCreateDto.tags.Select(Guid.Parse).ToList();
+            if (tagGuids.Count == 0)
+            {
+                return NotFound("Tags not found");
+            }
+            postCreateDto.communityId = id;
+            await _postService.CreatePost(postCreateDto, tagGuids,  userId);
+            return Ok("Post created successfully");
+        }
         [HttpGet("{id}/role")]
         [Authorize(Policy = "ValidateToken")]
         public async Task<ActionResult<string>> GetGreatestUserCommunityRole(Guid id)

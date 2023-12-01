@@ -14,7 +14,7 @@ public class PostDto
     public string image { get; set; }
     [Required] public Guid authorId { get; set; }
     [Required] [MinLength(1)] public string author { get; set; }
-    public string communityId { get; set; }
+    public Guid communityId { get; set; }
     public string communityName { get; set; }
     public Guid addressId { get; set; }
 
@@ -34,7 +34,7 @@ public class PostDto
         image = postEntity.image;
         authorId = postEntity.authorId;
         author = postEntity.author;
-        communityId = postEntity.communityId;
+        communityId = postEntity.communityId ?? Guid.Empty;
         communityName = postEntity.communityName;
         addressId = postEntity.addressId;
         likes = postEntity.likesCount;

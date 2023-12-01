@@ -14,7 +14,7 @@ public class PostEntity
     public string image { get; set; }
     [Required] public Guid authorId { get; set; }
     [Required] public string author { get; set; }
-    public string? communityId { get; set; }
+    public Guid? communityId { get; set; }
     public string? communityName { get; set; }
     public Guid addressId { get; set; }
     [Required] public int likesCount { get; set; }

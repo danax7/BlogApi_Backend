@@ -15,19 +15,22 @@ public class PostServiceImpl : IPostService
     private readonly IAuthorRepository _authorRepository;
     private readonly IUserRepository _userRepository;
     private readonly ICommentRepository _commentRepository;
+    private readonly ICommunityRepository _communityRepository;
 
 
     public PostServiceImpl(IPostRepository postRepository,
         ITagRepository tagRepository,
         IAuthorRepository authorRepository,
         IUserRepository userRepository,
-        ICommentRepository commentRepository)
+        ICommentRepository commentRepository,
+        ICommunityRepository communityRepository)
     {
         _postRepository = postRepository;
         _tagRepository = tagRepository;
         _authorRepository = authorRepository;
         _userRepository = userRepository;
         _commentRepository = commentRepository;
+        _communityRepository = communityRepository;
     }
 
     public async Task<PostPagedListDto> GetPosts(PostFilterDto postFilterDto)
@@ -74,6 +77,14 @@ public class PostServiceImpl : IPostService
     {
         var user = await _userRepository.GetUserById(userId);
         var author = await _authorRepository.GetAuthorByUserId(userId);
+        
+        var communityId = createPostDto.communityId ?? Guid.Empty;
+
+        if (communityId != Guid.Empty || createPostDto.communityName != null)
+        {
+            var community = await _communityRepository.GetCommunity(communityId);
+            createPostDto.communityName = community.name;
+        }
 
         if (author == null)
         {
@@ -84,6 +95,11 @@ public class PostServiceImpl : IPostService
             await _userRepository.UpdateUser(user);
             author = newAuthor;
         }
+        var tags = await _tagRepository.GetTagsByIds(tagIds);
+        if (tags.Count == 0)
+        {
+            throw new NotFoundException("One or more tags not found");
+        }
 
         var postEntity = new PostEntity
         {
@@ -92,17 +108,14 @@ public class PostServiceImpl : IPostService
             description = createPostDto.description,
             readingTime = createPostDto.readTime,
             image = createPostDto.image,
+            communityId = createPostDto.communityId,
+            communityName = createPostDto.communityName,
             authorId = author.Id,
             author = author.FullName,
-            tags = await _tagRepository.GetTagsByIds(tagIds)
+            tags = tags,
         };
-        Console.WriteLine(postEntity.authorId);
-        var tags = await _tagRepository.GetTagsByIds(tagIds);
-        if (tags.Count == 0)
-        {
-            throw new NotFoundException("One or more tags not found");
-        }
-
+        
+        
         author.IncrementPostCount();
         await _authorRepository.UpdateAuthor(author);
         postEntity.tags = tags;
