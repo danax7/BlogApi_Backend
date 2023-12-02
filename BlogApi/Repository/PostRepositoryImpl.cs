@@ -17,7 +17,7 @@ public class PostRepositoryImpl : IPostRepository
         _context = context;
     }
 
-    public Task<Int32> GetPostCount(PostFilterDto postFilterDto)
+    public async Task<Int32> GetPostCount(PostFilterDto postFilterDto, Guid? userId)
     {
         var query = _context.Posts.AsQueryable();
 
@@ -31,6 +31,15 @@ public class PostRepositoryImpl : IPostRepository
             query = query.Where(post => postFilterDto.author == post.author);
         }
         
+        if (postFilterDto.onlyMyCommunities != null && postFilterDto.onlyMyCommunities.Value && userId != null)
+        {
+            var userCommunities = await _context.UserCommunities
+                .Where(uc => uc.UserId == userId)
+                .Select(uc => uc.CommunityId)
+                .ToListAsync();
+
+            query = query.Where(post => userCommunities.Contains(post.communityId ?? Guid.Empty));
+        }
       
         if (postFilterDto.minReadingTime != null)
         {
@@ -42,7 +51,7 @@ public class PostRepositoryImpl : IPostRepository
             query = query.Where(post => postFilterDto.maxReadingTime >= post.readingTime);
         }
 
-        return query.CountAsync();
+        return await query.CountAsync();
     }
 
     public Task<PostEntity?> GetPostById(Guid id)
@@ -54,7 +63,7 @@ public class PostRepositoryImpl : IPostRepository
     }
 
 
-    public Task<List<PostEntity>> GetPosts(PostFilterDto postFilterDto, int start, int count)
+    public async Task<List<PostEntity>> GetPosts(PostFilterDto postFilterDto, int start, int count, Guid? userId)
     {
         var query = _context.Posts.AsQueryable();
 
@@ -62,7 +71,7 @@ public class PostRepositoryImpl : IPostRepository
         // {
         //     query = query.Where(post => post.tags.Any(tag => postFilterDto.tags.Contains(tag)));
         // }
-
+        
         if (postFilterDto.author != null)
         {
             query = query.Where(post => postFilterDto.author == post.author);
@@ -77,20 +86,24 @@ public class PostRepositoryImpl : IPostRepository
         {
             query = query.Where(post => postFilterDto.maxReadingTime >= post.readingTime);
         }
+        
+        if (postFilterDto.onlyMyCommunities != null && postFilterDto.onlyMyCommunities.Value && userId != null)
+        {
+            var userCommunities = await _context.UserCommunities
+                .Where(uc => uc.UserId == userId)
+                .Select(uc => uc.CommunityId)
+                .ToListAsync();
 
-        // if (postFilterDto.onlyMyCommunities != null)
-        // {
-        //     query = query.Where(post => postFilterDto.onlyMyCommunities == post.);
-        // }
-        //
-        //TODO: Check onlyMyCommunities
+            query = query.Where(post => userCommunities.Contains(post.communityId ?? Guid.Empty));
+        }
+        
         if (postFilterDto.sorting != null)
         {
             var sorter = new Sorter();
             query = sorter.ApplySorting(query, postFilterDto.sorting.Value);
         }
 
-        return query.Skip(start).Take(count).ToListAsync();
+        return await query.Skip(start).Take(count).ToListAsync();
     }
 
     public async Task<Guid> CreatePost(PostEntity postEntity)

@@ -33,9 +33,9 @@ public class PostServiceImpl : IPostService
         _communityRepository = communityRepository;
     }
 
-    public async Task<PostPagedListDto> GetPosts(PostFilterDto postFilterDto)
+    public async Task<PostPagedListDto> GetPosts(PostFilterDto postFilterDto, Guid? userId)
     {
-        var count = await _postRepository.GetPostCount(postFilterDto);
+        var count = await _postRepository.GetPostCount(postFilterDto, userId);
         if (count == 0)
         {
             throw new NotFoundException("Posts not found");
@@ -48,8 +48,9 @@ public class PostServiceImpl : IPostService
         {
             throw new BadRequestException("Page out of range");
         }
-
-        var posts = await _postRepository.GetPosts(postFilterDto, skipCount, PageInfoEntity.size);
+        
+        
+        var posts = await _postRepository.GetPosts(postFilterDto, skipCount, PageInfoEntity.size, userId);
         var postsDto = posts.Select(post => new PostDto(post)).ToArray();
 
         var postPagedListDto = new PostPagedListDto
@@ -107,6 +108,8 @@ public class PostServiceImpl : IPostService
             description = createPostDto.description,
             readingTime = createPostDto.readTime,
             image = createPostDto.image,
+            communityName = createPostDto.communityName,
+            communityId = createPostDto.communityId,
             authorId = author.Id,
             author = author.FullName,
             tags = tags,

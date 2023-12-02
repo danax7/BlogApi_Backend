@@ -11,6 +11,7 @@ public interface ICommunityRepository
     Task<CommunityEntity> GetCommunity(Guid id);
     Task<List<UserEntity>> GetCommunityAdmins(Guid id);
     Task CreateCommunity(CommunityEntity community);
+    Task<List<CommunityEntity>> GetCommunitiesByUserId(Guid? userId);
     // Task<List<PostDto>> GetCommunityPostList(Guid id, PostFilterDto postFilterDto);
     // Task CreatePost(Guid id, CreatePostDto postCreateDto);
     // Task<CommunityRole> GetCommunityRoleList(Guid id);

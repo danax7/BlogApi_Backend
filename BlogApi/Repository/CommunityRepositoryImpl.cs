@@ -33,6 +33,15 @@ public class CommunityRepositoryImpl : ICommunityRepository
         return users;
     }
 
+    public async Task<List<CommunityEntity>> GetCommunitiesByUserId(Guid? userId)
+    {
+        return await _context.UserCommunities
+            .Where(uc => uc.UserId == userId)
+            .Select(uc => uc.Community)
+            .ToListAsync();
+    }
+
+
     public async Task<List<CommunityEntity>> GetMyCommunityList(Guid userId)
     {
         var userCommunities = await _context.UserCommunities
@@ -58,32 +67,4 @@ public class CommunityRepositoryImpl : ICommunityRepository
         await _context.SaveChangesAsync();
     }
     
-
-    // public async Task<List<PostEntity>> GetCommunityPostList(Guid id, PostFilterDto postFilterDto)
-    // {
-    //     var posts = await _context.Posts
-    //         .Where(p => p.CommunityId == id)
-    //         .ToListAsync();
-    //
-    //     if (postFilterDto.SortBy == SortBy.Date)
-    //     {
-    //         posts = postFilterDto.SortDirection == SortDirection.Asc
-    //             ? posts.OrderBy(p => p.CreatedAt).ToList()
-    //             : posts.OrderByDescending(p => p.CreatedAt).ToList();
-    //     }
-    //     else if (postFilterDto.SortBy == SortBy.Likes)
-    //     {
-    //         posts = postFilterDto.SortDirection == SortDirection.Asc
-    //             ? posts.OrderBy(p => p.Likes).ToList()
-    //             : posts.OrderByDescending(p => p.Likes).ToList();
-    //     }
-    //     else if (postFilterDto.SortBy == SortBy.Comments)
-    //     {
-    //         posts = postFilterDto.SortDirection == SortDirection.Asc
-    //             ? posts.OrderBy(p => p.Comments).ToList()
-    //             : posts.OrderByDescending(p => p.Comments).ToList();
-    //     }
-    //
-    //     return posts;
-    // }
 }
