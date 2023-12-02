@@ -26,8 +26,8 @@ namespace BlogApi.Controllers
         }
 
         [HttpGet]
-        [Authorize(Policy = "ValidateToken")]
         [AllowAnonymous]
+        [Authorize(Policy = "ValidateToken")]
         public async Task<PostPagedListDto> GetPosts(
             [FromQuery] string[] tags,
             [FromQuery] string? author,
@@ -49,16 +49,15 @@ namespace BlogApi.Controllers
                 page = page,
                 size = size
             };
-            var userId = Converter.GetId(HttpContext);
-            if (onlyMyCommunities && userId != null && userId != Guid.Empty)
-            {
-                return await _postService.GetPosts(postFilterDto, userId);
-            }
-            postFilterDto.onlyMyCommunities = false;
             
-            return await _postService.GetPosts(postFilterDto, null);
-        }
+            var userId = Converter.GetPossiblyNullableTokenId(HttpContext);
+            if (userId == null)
+            {
+                postFilterDto.onlyMyCommunities = false; 
+            }
 
+            return await _postService.GetPosts(postFilterDto, userId);
+        }
 
         [HttpPost]
         [Authorize(Policy = "ValidateToken")]

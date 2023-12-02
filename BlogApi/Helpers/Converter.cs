@@ -10,10 +10,6 @@ namespace BlogApi.Helpers;
 
 public class Converter
 {
-    public static String NormalizeString(String input)
-    {
-        return input.ToLower().Trim();
-    }
 
     public static String GetTokenFromContext(HttpContext httpContext)
     {
@@ -59,5 +55,47 @@ public class Converter
             throw new NotAuthorizedException("Authorization token is not valid");
 
         return match[0].Value;
+    }
+    
+    private static String GetPossiblyNullableTokenFromContext(StringValues? token)
+    {
+        if (string.IsNullOrWhiteSpace(token.Value))
+        {
+            return null;
+        }
+
+        const String tokenPattern = @"\S+\.\S+\.\S+";
+        var match = Regex.Matches(token, tokenPattern);
+
+        if (match.Count == 0)
+        {
+            return null;
+        }
+
+        return match[0].Value;
+    }
+    
+    public static Guid? GetPossiblyNullableTokenId(HttpContext context)
+    {
+        var token = GetPossiblyNullableTokenFromContext(context.Request.Headers["Authorization"]);
+
+        if (string.IsNullOrWhiteSpace(token))
+        {
+            return null;
+        }
+
+        var handler = new JwtSecurityTokenHandler();
+        var jwtSecurityToken = handler.ReadJwtToken(token);
+
+        var claims = jwtSecurityToken.Claims;
+        foreach (var claim in claims)
+        {
+            if (claim.Type == ClaimsIdentity.DefaultNameClaimType)
+            {
+                return Guid.Parse(claim.Value);
+            }
+        }
+
+        return null;
     }
 }
