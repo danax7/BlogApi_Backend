@@ -14,14 +14,14 @@ public class PostDto
     public string image { get; set; }
     [Required] public Guid authorId { get; set; }
     [Required] [MinLength(1)] public string author { get; set; }
-    public Guid communityId { get; set; }
+    public Guid? communityId { get; set; }
     public string communityName { get; set; }
     public Guid addressId { get; set; }
 
     [Required] public int likes { get; set; }
 
     // [Required] [DefaultValue(false)] public bool hasLike { get; set; }
-    // [Required] [DefaultValue(0)] public int commentsCount { get; set; }
+    [Required] [DefaultValue(0)] public int commentsCount { get; set; }
     public List<TagDto.TagDto> tags { get; set; }
 
     public PostDto(PostEntity postEntity)
@@ -34,11 +34,11 @@ public class PostDto
         image = postEntity.image;
         authorId = postEntity.authorId;
         author = postEntity.author;
-        communityId = postEntity.communityId ?? Guid.Empty;
+        communityId = postEntity.communityId;
         communityName = postEntity.communityName;
         addressId = postEntity.addressId;
         likes = postEntity.likesCount;
-        // commentsCount = postEntity.commentsCount;
+        commentsCount = postEntity.commentsCount;
         tags = new List<TagDto.TagDto>();
     }
 
