@@ -109,10 +109,10 @@ public class PostServiceImpl : IPostService
             readingTime = createPostDto.readTime,
             image = createPostDto.image,
             communityName = createPostDto.communityName,
-            communityId = createPostDto.communityId,
             authorId = author.Id,
             author = author.FullName,
             tags = tags,
+            // Community = await _communityRepository.GetCommunity(createPostDto.communityId ?? Guid.Empty)
         };
         
         

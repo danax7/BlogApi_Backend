@@ -1,4 +1,5 @@
 using BlogApi;
+using BlogApi.Context;
 using BlogApi.Middleware;
 using BlogApi.Repository;
 using BlogApi.Repository.Interface;
@@ -70,12 +71,18 @@ var connectionPsql = builder.Configuration.GetConnectionString("Postgres");
 builder.Services.AddDbContext<BlogDbContext>(options => options.UseNpgsql(connectionPsql));
 builder.Services.AddTransient<BlogDbContext>();
 
+builder.Services.AddDbContext<AddressDbContext>(options => options.UseNpgsql(connectionPsql));
+builder.Services.AddTransient<AddressDbContext>();
+
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var app = builder.Build();
 
 using var serviceScope = app.Services.CreateScope();
 var dbContext = serviceScope.ServiceProvider.GetService<BlogDbContext>();
+var addressDbContext = serviceScope.ServiceProvider.GetService<AddressDbContext>();
+
+addressDbContext?.Database.Migrate();
 dbContext?.Database.Migrate();
 
 app.UseExceptionHandlingMiddleware();

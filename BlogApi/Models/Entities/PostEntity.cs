@@ -24,8 +24,9 @@ public class PostEntity
     //public List<Guid> tags { get; set; }
     [Required] public List<TagEntity> tags { get; set; }
     // public List<UserEntity?> Users { get; set; }
-
+    
     public List<CommentEntity> Comments { get; set; }
+    // public CommunityEntity? Community { get; set; }
 
     public void AddLike()
     {

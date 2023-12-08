@@ -71,6 +71,30 @@ public class PostRepositoryImpl : IPostRepository
         // {
         //     query = query.Where(post => post.tags.Any(tag => postFilterDto.tags.Contains(tag)));
         // }
+        //Нужно еще проверить, что пост не находится в приватном сообществе, в котором пользователь не состоит, а если состоит то отображать посты
+        //Если пользователь не состоит в сообществе, то он не может видеть посты из этого сообщества
+        
+        if (postFilterDto.onlyMyCommunities != null && postFilterDto.onlyMyCommunities.Value && userId != null)
+        {
+            var userCommunities = await _context.UserCommunities
+                .Where(uc => uc.UserId == userId)
+                .Select(uc => uc.CommunityId)
+                .ToListAsync();
+
+            // query = query.Where(post => 
+            //     post.communityId == null || // Пост без сообщества считается публичным
+            //     userCommunities.Contains(post.communityId.Value) && !post.Community.isClosed
+            // );
+            
+            //Нужно еще проверить, что пост не находится в приватном сообществе, в котором пользователь не состоит, а если состоит то отображать посты
+            //Если пользователь не состоит в сообществе, то он не может видеть посты из этого сообщества
+            
+            // query = query.Where(post => 
+            //     post.communityId == null || // Пост без сообщества считается публичным
+            //     userCommunities.Contains(post.communityId.Value) && !post.Community.isClosed
+            // );
+        }
+        
         
         if (postFilterDto.author != null)
         {
@@ -94,7 +118,7 @@ public class PostRepositoryImpl : IPostRepository
                 .Select(uc => uc.CommunityId)
                 .ToListAsync();
 
-            query = query.Where(post => userCommunities.Contains(post.communityId ?? Guid.Empty));
+            query = query.Where(post => userCommunities.Contains(post.communityId ?? Guid.Empty ));
         }
         
         if (postFilterDto.sorting != null)
