@@ -48,11 +48,11 @@ namespace BlogApi.Services
             {
                 path = await _context.AsAdmHierarchies.FirstOrDefaultAsync(x => x.Objectid == address.Objectid);
             }
+
             if (addressAsHouse != null)
             {
                 path = await _context.AsAdmHierarchies.FirstOrDefaultAsync(x => x.Objectid == addressAsHouse.Objectid);
             }
-
 
             var pathArray = path.Path.Split('.');
             var addresses = new List<AddressEntity>();
@@ -69,7 +69,6 @@ namespace BlogApi.Services
                     }
                     continue;
                 }
-
 
                 addresses.Add(await MapAddress(addressEntity));
             }
@@ -94,6 +93,26 @@ namespace BlogApi.Services
         {
             var addressObj = await _context.AsAddrObjs.FirstOrDefaultAsync(x => x.Objectid == objectId);
             return addressObj != null ? await MapAddress(addressObj) : null;
+        }
+
+        public async Task<List<AddressEntity>> GetAddressesWithParentId(long? parentId)
+        {
+            if (parentId == null)
+            {
+                parentId = 0;
+            }
+            var addresses = await _context.AsAdmHierarchies.Where(x => x.Parentobjid == parentId).ToListAsync();
+            var result = new List<AddressEntity>();
+            foreach (var address in addresses)
+            {
+                var addressObj = await _context.AsAddrObjs.FirstOrDefaultAsync(x => x.Objectid == address.Objectid);
+                if (addressObj != null)
+                {
+                    result.Add(await MapAddress(addressObj));
+                }
+            }
+            
+            return result;
         }
     }
 }

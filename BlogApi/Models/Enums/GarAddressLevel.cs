@@ -20,7 +20,7 @@ public enum GarAddressLevel
     ElementOfPlanningStructure,
     [Description("Элемент дорожной сети")] ElementOfRoadNetwork,
     [Description("Земельный участок")] Land,
-    [Description("Здание")] Building,
+    [Description("Здание (сооружение)")] Building,
     [Description("Комната")] Room,
     [Description("Комната в комнатах")] RoomInRooms,
 
