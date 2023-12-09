@@ -10,7 +10,7 @@ public class SearchAddressDto
     [Required] public Int64 objectId { get; set; }
     [Required] public Guid objectGuid { get; set; }
     public String text { get; set; }
-    [Required] public GarAddressLevel objectLevel { get; set; }
+    [Required] public string objectLevel { get; set; }
     public String objectLevelText { get; set; }
     
     public SearchAddressDto(AddressEntity addressEntity)
@@ -18,8 +18,8 @@ public class SearchAddressDto
         objectId = addressEntity.objectId;
         objectGuid = addressEntity.objectGuid;
         text = addressEntity.text;
-        objectLevel = addressEntity.objectLevel;
-        objectLevelText = objectLevel.GetDescription();
+        objectLevel = addressEntity.objectLevel.ToString();
+        objectLevelText = addressEntity.objectLevel.GetDescription();
     }
     
     public SearchAddressDto()

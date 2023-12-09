@@ -6,7 +6,6 @@ public class AddressEntity
 {
     public Int64 objectId { get; set; }
     public Guid objectGuid { get; set; }
-    // public Int32 parentId { get; set; }
     public String? text { get; set; }
     public GarAddressLevel objectLevel { get; set; }
     
@@ -18,7 +17,6 @@ public class AddressEntity
     {
         this.objectId = objectId;
         this.objectGuid = objectGuid;
-        // this.parentId = parentId;
         this.text = text;
         this.objectLevel = objectLevel;
     }

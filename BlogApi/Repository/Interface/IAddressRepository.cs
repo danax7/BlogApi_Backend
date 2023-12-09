@@ -5,7 +5,7 @@ namespace BlogApi.Repository.Interface;
 public interface IAddressRepository
 {
     Task<AddressEntity?> GetAddressByGuid(Guid objectGuid);
-    Task<List<AddressEntity>> getAddressChain(Guid objectId);
+    Task<List<AddressEntity>> GetAddressChain(Guid objectId);
     Task<AddressEntity?> GetAddressById(Int32 objectId);
     // Task<Boolean> CheckAddress(Guid id);
     

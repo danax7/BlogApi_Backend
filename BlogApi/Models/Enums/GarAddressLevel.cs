@@ -5,7 +5,7 @@ namespace BlogApi.Entity.Enums;
 public enum GarAddressLevel
 {
     [Description("Страна")] Country,
-    [Description("Регион")] Region,
+    [Description("Субъект РФ")] Region,
 
     [Description("Административный район")]
     AdministrativeArea,

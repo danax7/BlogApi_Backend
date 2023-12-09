@@ -17,14 +17,13 @@ public class AddressServiceImpl : IAddressService
     
     public async Task<List<SearchAddressDto>> GetAddressChain(Guid objectGuid)
     {
-        
         var address = await _addressRepository.GetAddressByGuid(objectGuid);
         if (address == null)
         {
             throw new NotFoundException("Address not found");
         }
-        var path = await _addressRepository.getAddressChain(address.objectGuid);
         
+        var path = await _addressRepository.GetAddressChain(address.objectGuid);
         
         return path.Select(x => new SearchAddressDto(x)).ToList();
     }
