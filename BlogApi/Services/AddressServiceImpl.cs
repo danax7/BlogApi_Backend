@@ -30,12 +30,7 @@ public class AddressServiceImpl : IAddressService
 
     public async Task<List<SearchAddressDto>> Search(Int32? parentObjectId, String? query)
     {
-        var addresses = await _addressRepository.GetAddressesWithParentId(parentObjectId);
-        if (query != null)
-        {
-            addresses = addresses.Where(x => x.text.ToLower().Contains(query)).ToList();
-        }
-
+        var addresses = await _addressRepository.SearchAddressesWithParentId(parentObjectId, query);
         var result = addresses.Select(x => new SearchAddressDto(x)).ToList();
 
         return result;

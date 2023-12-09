@@ -67,6 +67,7 @@ namespace BlogApi.Services
                     {
                         addresses.Add(await MapAddress(addressTemp));
                     }
+
                     continue;
                 }
 
@@ -95,13 +96,22 @@ namespace BlogApi.Services
             return addressObj != null ? await MapAddress(addressObj) : null;
         }
 
-        public async Task<List<AddressEntity>> GetAddressesWithParentId(long? parentId)
+        public async Task<List<AddressEntity>> SearchAddressesWithParentId(long? parentId, string? query)
         {
             if (parentId == null)
             {
                 parentId = 0;
             }
-            var addresses = await _context.AsAdmHierarchies.Where(x => x.Parentobjid == parentId).ToListAsync();
+            var addresses = new List<AsAdmHierarchy> ();
+            if (query == null)
+            {
+                addresses = await _context.AsAdmHierarchies.Where(x => (x.Parentobjid == parentId)).Take(10).ToListAsync();
+            }
+            else
+            {
+                addresses = await _context.AsAdmHierarchies.Where(x => x.Parentobjid == parentId).ToListAsync();
+            }
+            
             var result = new List<AddressEntity>();
             foreach (var address in addresses)
             {
@@ -110,9 +120,21 @@ namespace BlogApi.Services
                 {
                     result.Add(await MapAddress(addressObj));
                 }
+
+                if (addressObj == null)
+                {
+                    var addressTemp = await _context.AsHouses.FirstOrDefaultAsync(x => x.Objectid == address.Objectid);
+                    if (addressTemp != null)
+                    {
+                        result.Add(await MapAddress(addressTemp));
+                    }
+                }
             }
-            
-            return result;
+            if (query == null)
+            {
+                return result.Take(10).ToList();
+            }
+            return result.Where(x => x.text.ToLower().Contains(query)).Take(10).ToList();
         }
     }
 }
