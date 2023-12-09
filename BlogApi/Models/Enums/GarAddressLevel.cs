@@ -4,21 +4,34 @@ namespace BlogApi.Entity.Enums;
 
 public enum GarAddressLevel
 {
-    Region,
+    [Description("Страна")] Country,
+    [Description("Регион")] Region,
+
+    [Description("Административный район")]
     AdministrativeArea,
-    MunicipalArea,
+    [Description("Муниципальный район")] MunicipalArea,
+
+    [Description("Сельско-городская территория")]
     RuralUrbanSettlement,
-    City,
-    Locality,
+    [Description("Город")] City,
+    [Description("Населенный пункт")] Locality,
+
+    [Description("Элемент планировочной структуры")]
     ElementOfPlanningStructure,
-    ElementOfRoadNetwork,
-    Land,
-    Building,
-    Room,
-    RoomInRooms,
+    [Description("Элемент дорожной сети")] ElementOfRoadNetwork,
+    [Description("Земельный участок")] Land,
+    [Description("Здание")] Building,
+    [Description("Комната")] Room,
+    [Description("Комната в комнатах")] RoomInRooms,
+
+    [Description("Автономный уровень региона")]
     AutonomousRegionLevel,
-    IntracityLevel,
+    [Description("Городской уровень")] IntracityLevel,
+
+    [Description("Дополнительные территории")]
     AdditionalTerritoriesLevel,
+
+    [Description("Уровень объектов на дополнительных территориях")]
     LevelOfObjectsInAdditionalTerritories,
-    CarPlace
+    [Description("Парковочное место")] CarPlace
 }

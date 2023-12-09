@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using BlogApi.Entity;
 using BlogApi.Entity.Enums;
+using BlogApi.Helpers;
 
 namespace BlogApi.DTO.AddressDTO;
 
@@ -18,7 +19,7 @@ public class SearchAddressDto
         objectGuid = addressEntity.objectGuid;
         text = addressEntity.text;
         objectLevel = addressEntity.objectLevel;
-        objectLevelText = objectLevel.ToString();
+        objectLevelText = objectLevel.GetDescription();
     }
     
     public SearchAddressDto()

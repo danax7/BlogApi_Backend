@@ -1,5 +1,6 @@
 using BlogApi.DTO.AddressDTO;
 using BlogApi.Entity;
+using BlogApi.Exception;
 using BlogApi.Repository.Interface;
 using BlogApi.Services.Interface;
 
@@ -16,18 +17,16 @@ public class AddressServiceImpl : IAddressService
     
     public async Task<List<SearchAddressDto>> GetAddressChain(Guid objectGuid)
     {
-        var addresses = new List<AddressEntity>();
+        
         var address = await _addressRepository.GetAddressByGuid(objectGuid);
-        while (address != null)
+        if (address == null)
         {
-            addresses.Add(address);
-            address = await _addressRepository.GetAddressById(address.parentId);
+            throw new NotFoundException("Address not found");
         }
-
-        addresses.Reverse();
-
-        var result = addresses.Select(x => new SearchAddressDto(x)).ToList();
-        return result;
+        var path = await _addressRepository.getAddressChain(address.objectGuid);
+        
+        
+        return path.Select(x => new SearchAddressDto(x)).ToList();
     }
     
     public async Task<List<SearchAddressDto>> Search(Int32? parentObjectId, String query)

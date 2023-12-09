@@ -55,6 +55,9 @@ builder.Services.AddScoped<ITagService, TagServiceImpl>();
 builder.Services.AddScoped<ICommunityRepository, CommunityRepositoryImpl>();
 builder.Services.AddScoped<ICommunityService, CommunityServiceImpl>();
 
+builder.Services.AddScoped<IAddressRepository, AddressRepositoryImpl>();
+builder.Services.AddScoped<IAddressService, AddressServiceImpl>();
+
 
 builder.Services.AddScoped<IAuthorizationHandler, ValidateAccessTokenRequirementHandler>();
 
