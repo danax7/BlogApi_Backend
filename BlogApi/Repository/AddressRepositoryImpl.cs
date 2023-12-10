@@ -1,6 +1,7 @@
 using BlogApi.Context;
 using BlogApi.Entity;
 using BlogApi.Entity.Enums;
+using BlogApi.Helpers;
 using BlogApi.Migrations;
 using BlogApi.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +27,21 @@ namespace BlogApi.Services
 
         private static AddressEntity MapAddress(AsHouse addressObj)
         {
-            var text = $"{addressObj.Addnum1} {addressObj.Housenum}";
+            var addtype1 = "";
+            var addtype2 = "";
+            if ( addressObj.Addtype1 != null)
+            {
+                 var addtype11 = (GarHouseAddtype)Enum.Parse(typeof(GarHouseAddtype), addressObj.Addtype1.ToString());
+                 addtype1 = addtype11.GetDescription();
+            }
+            
+            if (addressObj.Addtype2 != null)
+            {
+                 var addtype22 = (GarHouseAddtype)Enum.Parse(typeof(GarHouseAddtype), addressObj.Addtype2.ToString());
+                 addtype2 = addtype22.GetDescription();
+            }
+            
+            var text = $"{addressObj.Housenum} {addtype1} {addressObj.Addnum1} {addtype2} {addressObj.Addnum2}".TrimEnd();
             var addressLevel = (GarAddressLevel)Enum.Parse(typeof(GarBuildingLevel), "10");
 
             return new AddressEntity(addressObj.Objectid, addressObj.Objectguid, text, addressLevel);
@@ -36,7 +51,6 @@ namespace BlogApi.Services
         {
             var address = await _context.AsAddrObjs.FirstOrDefaultAsync(x => x.Objectguid == objectGuid);
             var addressAsHouse = await _context.AsHouses.FirstOrDefaultAsync(x => x.Objectguid == objectGuid);
-            //Сделать еше обработку для домов с 4/2 и т.д.
 
             if (address == null && addressAsHouse == null)
             {
@@ -84,7 +98,6 @@ namespace BlogApi.Services
             if (addressAsHouse != null)
             {
                 return MapAddress(addressAsHouse);
-                //Сделать еше обработку для домов с 4/2 и т.д.
             }
 
             return addressObj != null ? MapAddress(addressObj) : null;
