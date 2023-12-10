@@ -26,7 +26,7 @@ public class PostEntity
     // public List<UserEntity?> Users { get; set; }
     
     public List<CommentEntity> Comments { get; set; }
-    // public CommunityEntity? Community { get; set; }
+    public CommunityEntity? Community { get; set; }
 
     public void AddLike()
     {

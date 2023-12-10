@@ -29,12 +29,12 @@ public class CommentServiceImpl : ICommentService
     public async Task CreateComment(Guid id, Guid userId, CreateCommentDto commentCreateDto)
     {
         var post = await _postRepository.GetPostById(id);
-        var user = await _userRepository.GetUserById(userId);
         if (post == null)
         {
             throw new NotFoundException("Post not found");
         }
-
+        
+        var user = await _userRepository.GetUserById(userId);
         var comment = new CommentEntity
         {
             id = Guid.NewGuid(),
@@ -85,16 +85,16 @@ public class CommentServiceImpl : ICommentService
     public async Task DeleteComment(Guid id, Guid userId)
     {
         var comment = await _commentRepository.GetCommentById(id);
-        var post = await _postRepository.GetPostById(comment.PostId);
-
-        if (post == null)
-        {
-            throw new NotFoundException("Post not found");
-        }
-
+        
         if (comment == null)
         {
             throw new NotFoundException("Comment not found");
+        }
+        
+        var post = await _postRepository.GetPostById(comment.PostId);
+        if (post == null)
+        {
+            throw new NotFoundException("Post not found");
         }
 
         if (comment.UserId != userId)

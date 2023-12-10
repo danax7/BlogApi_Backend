@@ -75,7 +75,6 @@ public class PostRepositoryImpl : IPostRepository
         //     .Include(post => post.Community)  // Include the related Community entity
         //     .AsQueryable();
         
-        query = query.Where(post => post.communityId == null );
         
         
         if (postFilterDto.author != null)
@@ -115,11 +114,12 @@ public class PostRepositoryImpl : IPostRepository
     public async Task<Guid> CreatePost(PostEntity postEntity)
     {
         _context.Posts.Add(postEntity);
-
+        
         foreach (var tag in postEntity.tags)
         {
             _context.Attach(tag);
             _context.PostTags.Add(new PostTagsEntity(postEntity.id, tag.Id));
+            //TODO: Убрать здесь
         }
 
         await _context.SaveChangesAsync();
