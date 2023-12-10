@@ -16,7 +16,7 @@ namespace BlogApi.Services
             _context = context;
         }
 
-        private async Task<AddressEntity> MapAddress(AsAddrObj addressObj)
+        private static AddressEntity MapAddress(AsAddrObj addressObj)
         {
             var text = $"{addressObj.Typename} {addressObj.Name}";
             var addressLevel = (GarAddressLevel)Enum.Parse(typeof(GarAddressLevel), addressObj.Level);
@@ -24,7 +24,7 @@ namespace BlogApi.Services
             return new AddressEntity(addressObj.Objectid, addressObj.Objectguid, text, addressLevel);
         }
 
-        private async Task<AddressEntity> MapAddress(AsHouse addressObj)
+        private static AddressEntity MapAddress(AsHouse addressObj)
         {
             var text = $"{addressObj.Addnum1} {addressObj.Housenum}";
             var addressLevel = (GarAddressLevel)Enum.Parse(typeof(GarBuildingLevel), "10");
@@ -65,13 +65,13 @@ namespace BlogApi.Services
                     var addressTemp = await _context.AsHouses.FirstOrDefaultAsync(x => x.Objectid == Int32.Parse(id));
                     if (addressTemp != null)
                     {
-                        addresses.Add(await MapAddress(addressTemp));
+                        addresses.Add(MapAddress(addressTemp));
                     }
 
                     continue;
                 }
 
-                addresses.Add(await MapAddress(addressEntity));
+                addresses.Add(MapAddress(addressEntity));
             }
 
             return addresses;
@@ -83,17 +83,17 @@ namespace BlogApi.Services
             var addressAsHouse = await _context.AsHouses.FirstOrDefaultAsync(x => x.Objectguid == objectGuid);
             if (addressAsHouse != null)
             {
-                return await MapAddress(addressAsHouse);
+                return MapAddress(addressAsHouse);
                 //Сделать еше обработку для домов с 4/2 и т.д.
             }
 
-            return addressObj != null ? await MapAddress(addressObj) : null;
+            return addressObj != null ? MapAddress(addressObj) : null;
         }
 
         public async Task<AddressEntity?> GetAddressById(Int32 objectId)
         {
             var addressObj = await _context.AsAddrObjs.FirstOrDefaultAsync(x => x.Objectid == objectId);
-            return addressObj != null ? await MapAddress(addressObj) : null;
+            return addressObj != null ? MapAddress(addressObj) : null;
         }
 
         public async Task<List<AddressEntity>> SearchAddressesWithParentId(long? parentId, string? query)
@@ -102,39 +102,30 @@ namespace BlogApi.Services
             {
                 parentId = 0;
             }
-            var addresses = new List<AsAdmHierarchy> ();
-            if (query == null)
-            {
-                addresses = await _context.AsAdmHierarchies.Where(x => (x.Parentobjid == parentId)).Take(10).ToListAsync();
-            }
-            else
-            {
-                addresses = await _context.AsAdmHierarchies.Where(x => x.Parentobjid == parentId).ToListAsync();
-            }
-            
-            var result = new List<AddressEntity>();
-            foreach (var address in addresses)
-            {
-                var addressObj = await _context.AsAddrObjs.FirstOrDefaultAsync(x => x.Objectid == address.Objectid);
-                if (addressObj != null)
-                {
-                    result.Add(await MapAddress(addressObj));
-                }
 
-                if (addressObj == null)
-                {
-                    var addressTemp = await _context.AsHouses.FirstOrDefaultAsync(x => x.Objectid == address.Objectid);
-                    if (addressTemp != null)
-                    {
-                        result.Add(await MapAddress(addressTemp));
-                    }
-                }
-            }
-            if (query == null)
-            {
-                return result.Take(10).ToList();
-            }
-            return result.Where(x => x.text.ToLower().Contains(query)).Take(10).ToList();
+            var addressIds = await _context.AsAdmHierarchies
+                .Where(x => x.Parentobjid == parentId)
+                .Select(x => x.Objectid)
+                .ToListAsync();
+
+            var addrObjsQuery = await _context.AsAddrObjs
+                .Where(addrObj => addressIds.Contains(addrObj.Objectid))
+                .Select(addrObj => MapAddress(addrObj))
+                .ToListAsync();
+
+            var housesQuery = await _context.AsHouses
+                .Where(house => addressIds.Contains(house.Objectid))
+                .Select(house => MapAddress(house))
+                .ToListAsync();
+
+            var result = addrObjsQuery
+                .Concat(housesQuery)
+                .Where(x => x.text.ToLower().Contains(query ?? ""))
+                .Take(20)
+                .ToList();
+
+            return result;
         }
+
     }
 }
