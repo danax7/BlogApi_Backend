@@ -41,7 +41,22 @@ public class PostRepositoryImpl : IPostRepository
 
             query = query.Where(post => userCommunities.Contains(post.communityId ?? Guid.Empty));
         }
-      
+        // if (userId != null)
+        // {
+        //     // Если пользователь авторизован, проверяем его подписки на сообщества
+        //     var userCommunities = await _context.UserCommunities
+        //         .Where(uc => uc.UserId == userId)
+        //         .Select(uc => uc.CommunityId)
+        //         .ToListAsync();
+        //
+        //     query = query.Where(post => userCommunities.Contains(post.communityId ?? Guid.Empty) || !post.Community.isClosed);
+        // }
+        
+        if (userId == null)
+        {
+            // Если пользователь не авторизован, отображаем только посты из открытых сообществ
+            query = query.Where(post => post.Community.isClosed == false || post.communityId == null);
+        }
         if (postFilterDto.minReadingTime != null)
         {
             query = query.Where(post => postFilterDto.minReadingTime <= post.readingTime);
@@ -76,6 +91,22 @@ public class PostRepositoryImpl : IPostRepository
         //     .AsQueryable();
         
         
+        // if (userId != null)
+        // {
+        //     // Если пользователь авторизован, проверяем его подписки на сообщества
+        //     var userCommunities = await _context.UserCommunities
+        //         .Where(uc => uc.UserId == userId)
+        //         .Select(uc => uc.CommunityId)
+        //         .ToListAsync();
+        //
+        //     query = query.Where(post => userCommunities.Contains(post.communityId ?? Guid.Empty) || !post.Community.isClosed);
+        // }
+        //
+        if (userId == null)
+        {
+            // Если пользователь не авторизован, отображаем только посты из открытых сообществ
+            query = query.Where(post => post.Community.isClosed == false || post.communityId == null);
+        }
         
         if (postFilterDto.author != null)
         {
