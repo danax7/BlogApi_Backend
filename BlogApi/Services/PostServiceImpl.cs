@@ -51,8 +51,15 @@ public class PostServiceImpl : IPostService
         
         
         var posts = await _postRepository.GetPosts(postFilterDto, skipCount, PageInfoEntity.size, userId);
-        var postsDto = posts.Select(post => new PostDto(post)).ToArray();
+        //var postsDto = posts.Select(post => new PostDto(post)).ToArray();
 
+        var postsDto = posts.Select(post =>
+        {
+            var postDto = new PostDto(post);
+            postDto.hasLike = post.Likes.Any(like => like.UserId == userId);
+            return postDto;
+        }).ToArray();
+        
         var postPagedListDto = new PostPagedListDto
         {
             posts = postsDto,

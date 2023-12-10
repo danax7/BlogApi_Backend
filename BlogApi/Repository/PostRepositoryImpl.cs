@@ -81,7 +81,7 @@ public class PostRepositoryImpl : IPostRepository
 
     public async Task<List<PostEntity>> GetPosts(PostFilterDto postFilterDto, int start, int count, Guid? userId)
     {
-        var query = _context.Posts.Include(post => post.tags).AsQueryable();
+        var query = _context.Posts.Include(post => post.tags).Include(post => post.Likes).AsQueryable();
         
         //TODO: Проверить, что пост не находится в приватном сообществе, в котором пользователь не состоит, а если состоит то отображать посты
         //Вывод постов тольео из открытых сообществ и из приватных сообществ, в которых пользователь состоит
