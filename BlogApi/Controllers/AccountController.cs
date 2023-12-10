@@ -51,7 +51,6 @@ namespace BlogApi.Controllers
         public async Task<UserDto> GetProfile()
         {
             var userId = Converter.GetId(HttpContext);
-            Console.WriteLine("USER ID" + userId);
             return await _userService.GetUserProfile(userId);
         }
 

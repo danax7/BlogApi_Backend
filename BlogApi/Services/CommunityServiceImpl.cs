@@ -113,10 +113,10 @@ public class CommunityServiceImpl : ICommunityService
             throw new NotFoundException("User or community not found.");
         }
         
-        if (community.isClosed)
-        {
-            throw new BadRequestException("Community is closed.");
-        }
+        // if (community.isClosed)
+        // {
+        //     throw new BadRequestException("Community is closed.");
+        // }
         
         if (user.UserCommunities.Any(uc => uc.CommunityId == communityId))
         {

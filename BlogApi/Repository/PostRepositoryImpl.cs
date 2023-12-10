@@ -4,6 +4,7 @@ using BlogApi.Exception;
 using BlogApi.Helpers;
 using BlogApi.Helpers.Sorter;
 using BlogApi.Repository.Interface;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlogApi.Repository;
@@ -66,34 +67,15 @@ public class PostRepositoryImpl : IPostRepository
     public async Task<List<PostEntity>> GetPosts(PostFilterDto postFilterDto, int start, int count, Guid? userId)
     {
         var query = _context.Posts.AsQueryable();
-
-        // if (postFilterDto.tags != null && postFilterDto.tags.Any())
-        // {
-        //     query = query.Where(post => post.tags.Any(tag => postFilterDto.tags.Contains(tag)));
-        // }
-        //Нужно еще проверить, что пост не находится в приватном сообществе, в котором пользователь не состоит, а если состоит то отображать посты
-        //Если пользователь не состоит в сообществе, то он не может видеть посты из этого сообщества
         
-        if (postFilterDto.onlyMyCommunities != null && postFilterDto.onlyMyCommunities.Value && userId != null)
-        {
-            var userCommunities = await _context.UserCommunities
-                .Where(uc => uc.UserId == userId)
-                .Select(uc => uc.CommunityId)
-                .ToListAsync();
-
-            // query = query.Where(post => 
-            //     post.communityId == null || // Пост без сообщества считается публичным
-            //     userCommunities.Contains(post.communityId.Value) && !post.Community.isClosed
-            // );
-            
-            //Нужно еще проверить, что пост не находится в приватном сообществе, в котором пользователь не состоит, а если состоит то отображать посты
-            //Если пользователь не состоит в сообществе, то он не может видеть посты из этого сообщества
-            
-            // query = query.Where(post => 
-            //     post.communityId == null || // Пост без сообщества считается публичным
-            //     userCommunities.Contains(post.communityId.Value) && !post.Community.isClosed
-            // );
-        }
+        //TODO: Проверить, что пост не находится в приватном сообществе, в котором пользователь не состоит, а если состоит то отображать посты
+        //Вывод постов тольео из открытых сообществ и из приватных сообществ, в которых пользователь состоит
+        
+        // query = _context.Posts
+        //     .Include(post => post.Community)  // Include the related Community entity
+        //     .AsQueryable();
+        
+        query = query.Where(post => post.communityId == null );
         
         
         if (postFilterDto.author != null)
@@ -163,7 +145,6 @@ public class PostRepositoryImpl : IPostRepository
         {
             throw new BadRequestException("Post already liked");
         }
-
 
         _context.Likes.Add(new LikeEntity(userId, postId));
         post.likesCount++;

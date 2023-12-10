@@ -130,7 +130,7 @@ namespace BlogApi.Services
                 .Where(house => addressIds.Contains(house.Objectid))
                 .Select(house => MapAddress(house))
                 .ToListAsync();
-
+                
             var result = addrObjsQuery
                 .Concat(housesQuery)
                 .Where(x => x.text.ToLower().Contains(query ?? ""))
