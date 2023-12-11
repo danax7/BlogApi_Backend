@@ -108,6 +108,14 @@ namespace BlogApi.Services
             var addressObj = await _context.AsAddrObjs.FirstOrDefaultAsync(x => x.Objectid == objectId);
             return addressObj != null ? MapAddress(addressObj) : null;
         }
+        
+        public async Task<bool> CheckAddress(Guid id)
+        {
+            var address= await _context.AsAddrObjs.AnyAsync(x => x.Objectguid == id);
+            var addressAsHouse = await _context.AsHouses.AnyAsync(x => x.Objectguid == id);
+            return address || addressAsHouse;
+            //TODO:CheckAddress
+        }
 
         public async Task<List<AddressEntity>> SearchAddressesWithParentId(long? parentId, string? query)
         {

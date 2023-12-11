@@ -11,7 +11,7 @@ namespace BlogApi.DTO.PostDTO
         public Guid? communityId { get; set; }
         public string? communityName { get; set; }
         public string image { get; set; }
-        public string addressId { get; set; }
+        public Guid? addressId { get; set; }
 
         // [Required] [MaxLength(1)] public List<string> tags { get; set; }
         [Required] [MinLength(1)] public List<string> tags { get; set; }

@@ -16,6 +16,7 @@ public class PostServiceImpl : IPostService
     private readonly IUserRepository _userRepository;
     private readonly ICommentRepository _commentRepository;
     private readonly ICommunityRepository _communityRepository;
+    private readonly IAddressRepository _addressRepository;
 
 
     public PostServiceImpl(IPostRepository postRepository,
@@ -23,7 +24,9 @@ public class PostServiceImpl : IPostService
         IAuthorRepository authorRepository,
         IUserRepository userRepository,
         ICommentRepository commentRepository,
-        ICommunityRepository communityRepository)
+        ICommunityRepository communityRepository,
+        IAddressRepository addressRepository
+        )
     {
         _postRepository = postRepository;
         _tagRepository = tagRepository;
@@ -31,6 +34,7 @@ public class PostServiceImpl : IPostService
         _userRepository = userRepository;
         _commentRepository = commentRepository;
         _communityRepository = communityRepository;
+        _addressRepository = addressRepository;
     }
 
     public async Task<PostPagedListDto> GetPosts(PostFilterDto postFilterDto, Guid? userId)
@@ -86,7 +90,17 @@ public class PostServiceImpl : IPostService
         var user = await _userRepository.GetUserById(userId);
         var author = await _authorRepository.GetAuthorByUserId(userId);
         
-        //Проверить, что если пользователь создает пост в сообществе, то он должен быть админом этого сообщества
+        if (createPostDto.addressId != null)
+        {
+            var isAddressValid = await _addressRepository.CheckAddress(createPostDto.addressId.Value);
+            if (!isAddressValid)
+            {
+                throw new NotFoundException("Address not found");
+            }
+        }
+        
+        
+        //TODO:Проверить, что если пользователь создает пост в сообществе, то он должен быть админом этого сообщества
         if (createPostDto.communityId != null || createPostDto.communityName != null )
         {
             var communityId = createPostDto.communityId ?? Guid.Empty;
@@ -95,6 +109,7 @@ public class PostServiceImpl : IPostService
             createPostDto.communityName = community.name;
         }
 
+        
         if (author == null)
         {
             var newAuthor = new AuthorEntity(user);
@@ -122,6 +137,7 @@ public class PostServiceImpl : IPostService
             authorId = author.Id,
             author = author.FullName,
             tags = tags,
+            addressId = createPostDto.addressId,
             // Community = await _communityRepository.GetCommunity(createPostDto.communityId ?? Guid.Empty)
         };
         
