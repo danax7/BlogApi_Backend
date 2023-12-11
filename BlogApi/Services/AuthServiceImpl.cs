@@ -4,6 +4,7 @@ using System.Security.Claims;
 using BlogApi.DTO;
 using BlogApi.DTO.AuthDTO;
 using BlogApi.Entity;
+using BlogApi.Exception;
 using BlogApi.Helpers;
 using BlogApi.Repository.Interface;
 using BlogApi.Services.Interface;
@@ -17,17 +18,23 @@ public class AuthServiceImpl : IAuthService
     private readonly IUserService _userService;
     private readonly ITokenService _tokenService;
     private readonly ITokenRepository _tokenRepository;
+    private readonly IUserRepository _userRepository;
 
 
-    public AuthServiceImpl(IUserService userService, ITokenService tokenService, ITokenRepository tokenRepository)
+    public AuthServiceImpl(IUserService userService, ITokenService tokenService, ITokenRepository tokenRepository, IUserRepository userRepository)
     {
         _userService = userService;
+        _userRepository = userRepository;
         _tokenService = tokenService;
         _tokenRepository = tokenRepository;
     }
 
     public async Task<TokenDto> RegisterUser(UserRegisterDto userRegisterDto)
     {
+        if (await _userRepository.GetUserByEmail(userRegisterDto.email) != null)
+        {
+            throw new BadRequestException("User with such Email already exists");
+        }
         var newUser = new UserEntity(userRegisterDto);
         await _userService.CreateUser(userRegisterDto);
 

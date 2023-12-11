@@ -65,11 +65,6 @@ namespace BlogApi.Controllers
         {
             var userId = Converter.GetId(HttpContext);
             var tagGuids = createPostDto.tags.Select(Guid.Parse).ToList();
-            if (tagGuids.Count == 0)
-            {
-                return NotFound("Tags not found");
-            }
-
             var postId = await _postService.CreatePost(createPostDto, tagGuids, userId);
 
             return Ok(postId);

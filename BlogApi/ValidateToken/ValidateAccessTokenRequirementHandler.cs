@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using BlogApi.Exception;
 using BlogApi.Helpers;
 using BlogApi.Repository.Interface;
@@ -30,7 +31,17 @@ public class ValidateAccessTokenRequirementHandler : AuthorizationHandler<Valida
             {
                 throw new NotAuthorizedException("Not authorized");
             }
-
+            
+            //TODO:Валидация времени жизни токена
+            // var handler = new JwtSecurityTokenHandler();
+            // var jsonToken = handler.ReadToken(token) as JwtSecurityToken;
+            //
+            // if (jsonToken != null && jsonToken.ValidTo < DateTime.UtcNow)
+            // {
+            //     throw new NotAuthorizedException("Token has expired");
+            // }
+            
+            
             context.Succeed(requirement);
         }
         else
