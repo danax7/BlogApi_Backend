@@ -5,7 +5,7 @@ namespace BlogApi.DTO.PostDTO;
 
 public class PostFilterDto
 {
-    public string[]? tags { get; set; }
+    public Guid[]? tags { get; set; }
     public string? author { get; set; }
     public Int32? minReadingTime { get; set; }
     public Int32? maxReadingTime { get; set; }

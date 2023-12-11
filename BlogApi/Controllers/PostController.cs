@@ -29,12 +29,12 @@ namespace BlogApi.Controllers
         [AllowAnonymous]
         [Authorize(Policy = "ValidateToken")]
         public async Task<PostPagedListDto> GetPosts(
-            [FromQuery] string[] tags,
+            [FromQuery] Guid[] tags,
             [FromQuery] string? author,
             [FromQuery] int? minReadingTime,
             [FromQuery] int? maxReadingTime,
             [FromQuery] SortType sorting,
-            [FromQuery] bool onlyMyCommunities = false,
+            [FromQuery] bool onlyMyCommunities,
             [FromQuery] int page = 1,
             [FromQuery] int size = 5)
         {

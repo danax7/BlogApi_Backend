@@ -22,11 +22,10 @@ public class PostRepositoryImpl : IPostRepository
     {
         var query = _context.Posts.Include(post => post.tags).AsQueryable();
 
-        // if (postFilterDto.tags != null && postFilterDto.tags.Any())
-        // {
-        //     query = query.Where(post => post.tags.Any(tag => postFilterDto.tags.Contains(tag)));
-        // }
-
+        if (postFilterDto.tags != null && postFilterDto.tags.Any())
+        {
+            query = query.Where(post => post.tags.Any(tag => postFilterDto.tags.Contains(tag.Id)));
+        }
         if (postFilterDto.author != null)
         {
             query = query.Where(post => postFilterDto.author == post.author);
@@ -93,7 +92,17 @@ public class PostRepositoryImpl : IPostRepository
 
     public async Task<List<PostEntity>> GetPosts(PostFilterDto postFilterDto, int start, int count, Guid? userId)
     {
-        var query = _context.Posts.Include(post => post.tags).Include(post => post.Likes).AsQueryable();
+        var query = _context.Posts
+            .Include(post => post.tags)
+            .Include(post => post.Likes).AsQueryable();
+        
+        //TODO Check this
+        //Сортировка по тегам
+        if (postFilterDto.tags != null && postFilterDto.tags.Any())
+        {
+            query = query.Where(post => post.tags.Any(tag => postFilterDto.tags.Contains(tag.Id)));
+        }
+        
         
         //TODO: Проверить, что пост не находится в приватном сообществе, в котором пользователь не состоит, а если состоит то отображать посты
     
