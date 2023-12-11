@@ -32,7 +32,7 @@ public class PostRepositoryImpl : IPostRepository
             query = query.Where(post => postFilterDto.author == post.author);
         }
         
-        if (postFilterDto.onlyMyCommunities != null && postFilterDto.onlyMyCommunities.Value && userId != null)
+        if (postFilterDto.onlyMyCommunities != null && postFilterDto.onlyMyCommunities.Value && postFilterDto.onlyMyCommunities == true && userId != null)
         {
             var userCommunities = await _context.UserCommunities
                 .Where(uc => uc.UserId == userId)
@@ -41,22 +41,26 @@ public class PostRepositoryImpl : IPostRepository
 
             query = query.Where(post => userCommunities.Contains(post.communityId ?? Guid.Empty));
         }
-        // if (userId != null)
-        // {
-        //     // Если пользователь авторизован, проверяем его подписки на сообщества
-        //     var userCommunities = await _context.UserCommunities
-        //         .Where(uc => uc.UserId == userId)
-        //         .Select(uc => uc.CommunityId)
-        //         .ToListAsync();
-        //
-        //     query = query.Where(post => userCommunities.Contains(post.communityId ?? Guid.Empty) || !post.Community.isClosed);
-        // }
         
+        //TODO Check this
         if (userId == null)
         {
-            // Если пользователь не авторизован, отображаем только посты из открытых сообществ
+            // User is not authenticated, show posts from open communities and posts not associated with any community
             query = query.Where(post => post.Community.isClosed == false || post.communityId == null);
         }
+        else
+        {
+            // User is authenticated, show posts from open communities, posts not associated with any community,
+            // and posts from closed communities to which the user is subscribed
+            var userCommunities = await _context.UserCommunities
+                .Where(uc => uc.UserId == userId)
+                .Select(uc => uc.CommunityId)
+                .ToListAsync();
+
+            query = query.Where(post =>
+                post.Community.isClosed == false || post.communityId == null || userCommunities.Contains(post.communityId ?? Guid.Empty));
+        }
+        
         if (postFilterDto.minReadingTime != null)
         {
             query = query.Where(post => postFilterDto.minReadingTime <= post.readingTime);
@@ -66,7 +70,15 @@ public class PostRepositoryImpl : IPostRepository
         {
             query = query.Where(post => postFilterDto.maxReadingTime >= post.readingTime);
         }
+        if (postFilterDto.onlyMyCommunities != null && postFilterDto.onlyMyCommunities.Value && postFilterDto.onlyMyCommunities == true && userId != null)
+        {
+            var userCommunities = await _context.UserCommunities
+                .Where(uc => uc.UserId == userId)
+                .Select(uc => uc.CommunityId)
+                .ToListAsync();
 
+            query = query.Where(post => userCommunities.Contains(post.communityId ?? Guid.Empty ));
+        }
         return await query.CountAsync();
     }
 
@@ -84,28 +96,25 @@ public class PostRepositoryImpl : IPostRepository
         var query = _context.Posts.Include(post => post.tags).Include(post => post.Likes).AsQueryable();
         
         //TODO: Проверить, что пост не находится в приватном сообществе, в котором пользователь не состоит, а если состоит то отображать посты
-        //Вывод постов тольео из открытых сообществ и из приватных сообществ, в которых пользователь состоит
-        
-        // query = _context.Posts
-        //     .Include(post => post.Community)  // Include the related Community entity
-        //     .AsQueryable();
-        
-        
-        // if (userId != null)
-        // {
-        //     // Если пользователь авторизован, проверяем его подписки на сообщества
-        //     var userCommunities = await _context.UserCommunities
-        //         .Where(uc => uc.UserId == userId)
-        //         .Select(uc => uc.CommunityId)
-        //         .ToListAsync();
-        //
-        //     query = query.Where(post => userCommunities.Contains(post.communityId ?? Guid.Empty) || !post.Community.isClosed);
-        // }
-        //
+    
+        // Если пользователь не авторизован, отображаем только посты из открытых сообществ
         if (userId == null)
         {
-            // Если пользователь не авторизован, отображаем только посты из открытых сообществ
+            // User is not authenticated, show posts from open communities and posts not associated with any community
             query = query.Where(post => post.Community.isClosed == false || post.communityId == null);
+        }
+        
+        else
+        {
+            // User is authenticated, show posts from open communities, posts not associated with any community,
+            // and posts from closed communities to which the user is subscribed
+            var userCommunities = await _context.UserCommunities
+                .Where(uc => uc.UserId == userId)
+                .Select(uc => uc.CommunityId)
+                .ToListAsync();
+
+            query = query.Where(post =>
+                post.Community.isClosed == false || post.communityId == null || userCommunities.Contains(post.communityId ?? Guid.Empty));
         }
         
         if (postFilterDto.author != null)
