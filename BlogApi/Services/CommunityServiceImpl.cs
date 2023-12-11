@@ -113,11 +113,6 @@ public class CommunityServiceImpl : ICommunityService
             throw new NotFoundException("User or community not found.");
         }
         
-        // if (community.isClosed)
-        // {
-        //     throw new BadRequestException("Community is closed.");
-        // }
-        
         if (user.UserCommunities.Any(uc => uc.CommunityId == communityId))
         {
             throw new BadRequestException("User is already subscribed to the community.");
@@ -133,7 +128,9 @@ public class CommunityServiceImpl : ICommunityService
                 Role = CommunityRole.Subscriber,
             });
             await _userRepository.UpdateUser(user);
+            community.IncrementSubscribersCount();//TODO: check
         }
+        
     }
 
     public async Task Unsubscribe(Guid userId, Guid communityId)
@@ -151,6 +148,7 @@ public class CommunityServiceImpl : ICommunityService
         {
             user.UserCommunities.Remove(userCommunity);
             await _userRepository.UpdateUser(user);
+            community.DecrementSubscribersCount();
         }
     }
 }

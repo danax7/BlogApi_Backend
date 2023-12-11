@@ -19,6 +19,15 @@ public class CommunityEntity
     {
     }
     
+    public void IncrementSubscribersCount()
+    {
+        subscribersCount++;
+    }
+    
+    public void DecrementSubscribersCount()
+    {
+        subscribersCount--;
+    }
     public CommunityEntity(CreateCommunityDto communityCreateDto)
     {
         id = Guid.NewGuid();
