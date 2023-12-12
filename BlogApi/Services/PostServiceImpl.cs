@@ -1,10 +1,12 @@
 using BlogApi.DTO;
 using BlogApi.DTO.PostDTO;
 using BlogApi.Entity;
+using BlogApi.Entity.Enums;
 using BlogApi.Exception;
 using BlogApi.Helpers;
 using BlogApi.Repository.Interface;
 using BlogApi.Service.Interface;
+using BlogApi.Services.Interface;
 
 namespace BlogApi.Service;
 
@@ -17,6 +19,7 @@ public class PostServiceImpl : IPostService
     private readonly ICommentRepository _commentRepository;
     private readonly ICommunityRepository _communityRepository;
     private readonly IAddressRepository _addressRepository;
+    private readonly ICommunityService _communityService;
 
 
     public PostServiceImpl(IPostRepository postRepository,
@@ -25,7 +28,8 @@ public class PostServiceImpl : IPostService
         IUserRepository userRepository,
         ICommentRepository commentRepository,
         ICommunityRepository communityRepository,
-        IAddressRepository addressRepository
+        IAddressRepository addressRepository,
+        ICommunityService communityService
     )
     {
         _postRepository = postRepository;
@@ -35,6 +39,7 @@ public class PostServiceImpl : IPostService
         _commentRepository = commentRepository;
         _communityRepository = communityRepository;
         _addressRepository = addressRepository;
+        _communityService = communityService;
     }
 
     public async Task<PostPagedListDto> GetPosts(PostFilterDto postFilterDto, Guid? userId)
@@ -98,17 +103,21 @@ public class PostServiceImpl : IPostService
                 throw new NotFoundException("Address not found");
             }
         }
-
-
-        //TODO:Проверить, что если пользователь создает пост в сообществе, то он должен быть админом этого сообщества
-        if (createPostDto.communityId != null || createPostDto.communityName != null)
+        
+        //TODO:Проверить, что если пользователь создает пост в закрытом сообществе, то он должен быть админом этого сообщества
+        if (createPostDto.communityId != null)
         {
             var communityId = createPostDto.communityId ?? Guid.Empty;
-            var community = await _communityRepository.GetCommunity(communityId);
+            
+            var userRoleInCommunity = await _communityService.GetGreatestUserCommunityRole(userId, communityId);
+            if (userRoleInCommunity.ToString() != "Administrator")
+            {
+                throw new ForbiddenException("User does not have permission to create a post in this community");
+            }
 
+            var community = await _communityRepository.GetCommunity(communityId);
             createPostDto.communityName = community.name;
         }
-
 
         if (author == null)
         {
@@ -139,7 +148,6 @@ public class PostServiceImpl : IPostService
             author = author.FullName,
             tags = tags,
             addressId = createPostDto.addressId,
-            // Community = await _communityRepository.GetCommunity(createPostDto.communityId ?? Guid.Empty)
         };
 
 
