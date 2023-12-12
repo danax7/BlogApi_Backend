@@ -66,4 +66,10 @@ public class CommunityRepositoryImpl : ICommunityRepository
         await _context.Communities.AddAsync(community);
         await _context.SaveChangesAsync();
     }
+
+    public async Task UpdateCommunity(CommunityEntity community)
+    {
+        _context.Communities.Update(community);
+        await _context.SaveChangesAsync();
+    }
 }

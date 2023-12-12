@@ -79,13 +79,6 @@ public class CommunityServiceImpl : ICommunityService
         await _communityRepository.CreateCommunity(community);
     }
 
-    // public async Task<List<PostDto>> GetCommunityPostList(Guid id, PostFilterDto postFilterDto)
-    // {
-    //     // var posts = await _postRepository.GetCommunityPostList(id, postFilterDto);
-    //     // return posts.Select(x => new PostDto(x)).ToList();
-    //     return null;
-    //     //TODO: check
-    // }
     public async Task<ActionResult<string>> GetGreatestUserCommunityRole(Guid userId, Guid communityId)
     {
         var user = await _userRepository.GetUserById(userId);
@@ -119,6 +112,7 @@ public class CommunityServiceImpl : ICommunityService
         {
             throw new BadRequestException("User is already subscribed to the community.");
         }
+        //TODO: check
 
         var userCommunity = user.UserCommunities.FirstOrDefault(uc => uc.CommunityId == communityId);
         if (userCommunity == null)
@@ -129,8 +123,9 @@ public class CommunityServiceImpl : ICommunityService
                 CommunityId = communityId,
                 Role = CommunityRole.Subscriber,
             });
+            community.IncrementSubscribersCount();
+            await _communityRepository.UpdateCommunity(community);
             await _userRepository.UpdateUser(user);
-            community.IncrementSubscribersCount(); //TODO: check
         }
     }
 
@@ -153,8 +148,9 @@ public class CommunityServiceImpl : ICommunityService
         if (userCommunity != null && userCommunity.Role == CommunityRole.Subscriber)
         {
             user.UserCommunities.Remove(userCommunity);
-            await _userRepository.UpdateUser(user);
             community.DecrementSubscribersCount();
+            await _communityRepository.UpdateCommunity(community);
+            await _userRepository.UpdateUser(user);
         }
     }
 }

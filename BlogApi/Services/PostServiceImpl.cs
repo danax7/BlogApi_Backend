@@ -103,19 +103,20 @@ public class PostServiceImpl : IPostService
                 throw new NotFoundException("Address not found");
             }
         }
-        
+
         //TODO:Проверить, что если пользователь создает пост в закрытом сообществе, то он должен быть админом этого сообщества
         if (createPostDto.communityId != null)
         {
             var communityId = createPostDto.communityId ?? Guid.Empty;
-            
+            var community = await _communityRepository.GetCommunity(communityId);
+
             var userRoleInCommunity = await _communityService.GetGreatestUserCommunityRole(userId, communityId);
-            if (userRoleInCommunity.ToString() != "Administrator")
+            if (userRoleInCommunity.ToString() != "Administrator" && community.isClosed)
             {
                 throw new ForbiddenException("User does not have permission to create a post in this community");
             }
 
-            var community = await _communityRepository.GetCommunity(communityId);
+
             createPostDto.communityName = community.name;
         }
 
