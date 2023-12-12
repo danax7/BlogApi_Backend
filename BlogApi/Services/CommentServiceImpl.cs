@@ -28,12 +28,13 @@ public class CommentServiceImpl : ICommentService
 
     public async Task CreateComment(Guid id, Guid userId, CreateCommentDto commentCreateDto)
     {
+        //TODO: Проверить, что человек оставляет пост в сообществе, в котором состоит
         var post = await _postRepository.GetPostById(id);
         if (post == null)
         {
             throw new NotFoundException("Post not found");
         }
-        
+
         var user = await _userRepository.GetUserById(userId);
         var comment = new CommentEntity
         {
@@ -85,12 +86,12 @@ public class CommentServiceImpl : ICommentService
     public async Task DeleteComment(Guid id, Guid userId)
     {
         var comment = await _commentRepository.GetCommentById(id);
-        
+
         if (comment == null)
         {
             throw new NotFoundException("Comment not found");
         }
-        
+
         var post = await _postRepository.GetPostById(comment.PostId);
         if (post == null)
         {

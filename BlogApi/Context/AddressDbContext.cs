@@ -23,7 +23,7 @@ public partial class AddressDbContext : DbContext
     public virtual DbSet<AsHouse> AsHouses { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https: //go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseNpgsql("host=localhost;port=5432;database=Blog;username=postgres;password=admin");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -32,7 +32,8 @@ public partial class AddressDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK_Addr_Objs");
 
-            entity.ToTable("as_addr_obj", "fias", tb => tb.HasComment("Сведения классификатора адресообразующих элементов"));
+            entity.ToTable("as_addr_obj", "fias",
+                tb => tb.HasComment("Сведения классификатора адресообразующих элементов"));
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
@@ -86,7 +87,8 @@ public partial class AddressDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK_Adm_Hier");
 
-            entity.ToTable("as_adm_hierarchy", "fias", tb => tb.HasComment("Сведения по иерархии в административном делении"));
+            entity.ToTable("as_adm_hierarchy", "fias",
+                tb => tb.HasComment("Сведения по иерархии в административном делении"));
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
@@ -146,7 +148,8 @@ public partial class AddressDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK_Houses");
 
-            entity.ToTable("as_houses", "fias", tb => tb.HasComment("Сведения по номерам домов улиц городов и населенных пунктов"));
+            entity.ToTable("as_houses", "fias",
+                tb => tb.HasComment("Сведения по номерам домов улиц городов и населенных пунктов"));
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()

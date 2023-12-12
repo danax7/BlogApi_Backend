@@ -31,7 +31,7 @@ public class ValidateAccessTokenRequirementHandler : AuthorizationHandler<Valida
             {
                 throw new NotAuthorizedException("Not authorized");
             }
-            
+
             //TODO:Валидация времени жизни токена
             // var handler = new JwtSecurityTokenHandler();
             // var jsonToken = handler.ReadToken(token) as JwtSecurityToken;
@@ -40,8 +40,8 @@ public class ValidateAccessTokenRequirementHandler : AuthorizationHandler<Valida
             // {
             //     throw new NotAuthorizedException("Token has expired");
             // }
-            
-            
+
+
             context.Succeed(requirement);
         }
         else

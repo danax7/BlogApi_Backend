@@ -13,21 +13,22 @@ public class CommunityEntity
     [Required] public Int32 subscribersCount { get; set; }
 
     public ICollection<UserCommunityEntity> UserCommunities { get; set; }
-    
-    
+
+
     public CommunityEntity()
     {
     }
-    
+
     public void IncrementSubscribersCount()
     {
         subscribersCount++;
     }
-    
+
     public void DecrementSubscribersCount()
     {
         subscribersCount--;
     }
+
     public CommunityEntity(CreateCommunityDto communityCreateDto)
     {
         id = Guid.NewGuid();

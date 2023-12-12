@@ -49,11 +49,11 @@ namespace BlogApi.Controllers
                 page = page,
                 size = size
             };
-            
+
             var userId = Converter.GetPossiblyNullableTokenId(HttpContext);
             if (userId == null)
             {
-                postFilterDto.onlyMyCommunities = false; 
+                postFilterDto.onlyMyCommunities = false;
             }
 
             return await _postService.GetPosts(postFilterDto, userId);

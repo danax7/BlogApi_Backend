@@ -29,19 +29,20 @@ namespace BlogApi.Services
         {
             var addtype1 = "";
             var addtype2 = "";
-            if ( addressObj.Addtype1 != null)
+            if (addressObj.Addtype1 != null)
             {
-                 var addtype11 = (GarHouseAddtype)Enum.Parse(typeof(GarHouseAddtype), addressObj.Addtype1.ToString());
-                 addtype1 = addtype11.GetDescription();
+                var addtype11 = (GarHouseAddtype)Enum.Parse(typeof(GarHouseAddtype), addressObj.Addtype1.ToString());
+                addtype1 = addtype11.GetDescription();
             }
-            
+
             if (addressObj.Addtype2 != null)
             {
-                 var addtype22 = (GarHouseAddtype)Enum.Parse(typeof(GarHouseAddtype), addressObj.Addtype2.ToString());
-                 addtype2 = addtype22.GetDescription();
+                var addtype22 = (GarHouseAddtype)Enum.Parse(typeof(GarHouseAddtype), addressObj.Addtype2.ToString());
+                addtype2 = addtype22.GetDescription();
             }
-            
-            var text = $"{addressObj.Housenum} {addtype1} {addressObj.Addnum1} {addtype2} {addressObj.Addnum2}".TrimEnd();
+
+            var text =
+                $"{addressObj.Housenum} {addtype1} {addressObj.Addnum1} {addtype2} {addressObj.Addnum2}".TrimEnd();
             var addressLevel = (GarAddressLevel)Enum.Parse(typeof(GarBuildingLevel), "10");
 
             return new AddressEntity(addressObj.Objectid, addressObj.Objectguid, text, addressLevel);
@@ -108,10 +109,10 @@ namespace BlogApi.Services
             var addressObj = await _context.AsAddrObjs.FirstOrDefaultAsync(x => x.Objectid == objectId);
             return addressObj != null ? MapAddress(addressObj) : null;
         }
-        
+
         public async Task<bool> CheckAddress(Guid id)
         {
-            var address= await _context.AsAddrObjs.AnyAsync(x => x.Objectguid == id);
+            var address = await _context.AsAddrObjs.AnyAsync(x => x.Objectguid == id);
             var addressAsHouse = await _context.AsHouses.AnyAsync(x => x.Objectguid == id);
             return address || addressAsHouse;
             //TODO:CheckAddress
@@ -138,7 +139,7 @@ namespace BlogApi.Services
                 .Where(house => addressIds.Contains(house.Objectid))
                 .Select(house => MapAddress(house))
                 .ToListAsync();
-                
+
             var result = addrObjsQuery
                 .Concat(housesQuery)
                 .Where(x => x.text.ToLower().Contains(query ?? ""))
@@ -147,6 +148,5 @@ namespace BlogApi.Services
 
             return result;
         }
-
     }
 }

@@ -27,7 +27,6 @@ public class UserServiceImpl : IUserService
 
     public async Task<ClaimsIdentity> GetIdentity(LoginCredentialsDto userLoginDto)
     {
-        Console.WriteLine(userLoginDto.email, userLoginDto.password);
         var user = await _userRepository.GetUserByEmailAndPassword(userLoginDto.email, userLoginDto.password);
 
         if (user == null)

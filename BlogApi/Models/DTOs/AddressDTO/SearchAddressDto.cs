@@ -12,7 +12,7 @@ public class SearchAddressDto
     public String text { get; set; }
     [Required] public string objectLevel { get; set; }
     public String objectLevelText { get; set; }
-    
+
     public SearchAddressDto(AddressEntity addressEntity)
     {
         objectId = addressEntity.objectId;
@@ -21,7 +21,7 @@ public class SearchAddressDto
         objectLevel = addressEntity.objectLevel.ToString();
         objectLevelText = addressEntity.objectLevel.GetDescription();
     }
-    
+
     public SearchAddressDto()
     {
     }

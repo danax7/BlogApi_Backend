@@ -29,10 +29,10 @@ public class BlogDbContext : DbContext
         //     .HasMany(p => p.tags)
         //     .WithMany(t => t.posts)
         //     .UsingEntity(j => j.ToTable("PostTag"));
-        
+
         // modelBuilder.Entity<AccessTokenEntity>()
         //     .ToTable("BlackTokenList");
-        
+
         modelBuilder.Entity<UserCommunityEntity>()
             .HasKey(uc => new { uc.UserId, uc.CommunityId });
 

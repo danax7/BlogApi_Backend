@@ -21,7 +21,8 @@ public class AuthServiceImpl : IAuthService
     private readonly IUserRepository _userRepository;
 
 
-    public AuthServiceImpl(IUserService userService, ITokenService tokenService, ITokenRepository tokenRepository, IUserRepository userRepository)
+    public AuthServiceImpl(IUserService userService, ITokenService tokenService, ITokenRepository tokenRepository,
+        IUserRepository userRepository)
     {
         _userService = userService;
         _userRepository = userRepository;
@@ -35,6 +36,7 @@ public class AuthServiceImpl : IAuthService
         {
             throw new BadRequestException("User with such Email already exists");
         }
+
         var newUser = new UserEntity(userRegisterDto);
         await _userService.CreateUser(userRegisterDto);
 

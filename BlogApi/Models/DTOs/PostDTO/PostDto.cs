@@ -21,6 +21,7 @@ public class PostDto
     [Required] public int likes { get; set; }
 
     [Required] [DefaultValue(false)] public bool hasLike { get; set; }
+
     //TODO:Сделать лайки
     [Required] [DefaultValue(0)] public int commentsCount { get; set; }
     public List<TagDto.TagDto> tags { get; set; }

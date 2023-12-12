@@ -23,9 +23,10 @@ public class PostEntity
     //TODO: Check tags
     //public List<Guid> tags { get; set; }
     [Required] public List<TagEntity> tags { get; set; }
+
     // public List<UserEntity?> Users { get; set; }
     public List<LikeEntity> Likes { get; set; }
-    
+
     public List<CommentEntity> Comments { get; set; }
     public CommunityEntity? Community { get; set; }
 

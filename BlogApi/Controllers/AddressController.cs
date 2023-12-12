@@ -20,11 +20,10 @@ public class AddressController : ControllerBase
     {
         return await _addressService.Search(parentObjectId, query);
     }
-    
+
     [HttpGet("chain")]
     public async Task<List<SearchAddressDto>> GetAddressChain([FromQuery] Guid objectGuid)
     {
         return await _addressService.GetAddressChain(objectGuid);
     }
-    
 }

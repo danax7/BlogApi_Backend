@@ -26,7 +26,7 @@ public class PostServiceImpl : IPostService
         ICommentRepository commentRepository,
         ICommunityRepository communityRepository,
         IAddressRepository addressRepository
-        )
+    )
     {
         _postRepository = postRepository;
         _tagRepository = tagRepository;
@@ -52,8 +52,8 @@ public class PostServiceImpl : IPostService
         {
             throw new BadRequestException("Page out of range");
         }
-        
-        
+
+
         var posts = await _postRepository.GetPosts(postFilterDto, skipCount, PageInfoEntity.size, userId);
         //var postsDto = posts.Select(post => new PostDto(post)).ToArray();
 
@@ -63,7 +63,7 @@ public class PostServiceImpl : IPostService
             postDto.hasLike = post.Likes.Any(like => like.UserId == userId);
             return postDto;
         }).ToArray();
-        
+
         var postPagedListDto = new PostPagedListDto
         {
             posts = postsDto,
@@ -89,7 +89,7 @@ public class PostServiceImpl : IPostService
     {
         var user = await _userRepository.GetUserById(userId);
         var author = await _authorRepository.GetAuthorByUserId(userId);
-        
+
         if (createPostDto.addressId != null)
         {
             var isAddressValid = await _addressRepository.CheckAddress(createPostDto.addressId.Value);
@@ -98,18 +98,18 @@ public class PostServiceImpl : IPostService
                 throw new NotFoundException("Address not found");
             }
         }
-        
-        
+
+
         //TODO:Проверить, что если пользователь создает пост в сообществе, то он должен быть админом этого сообщества
-        if (createPostDto.communityId != null || createPostDto.communityName != null )
+        if (createPostDto.communityId != null || createPostDto.communityName != null)
         {
             var communityId = createPostDto.communityId ?? Guid.Empty;
             var community = await _communityRepository.GetCommunity(communityId);
-            
+
             createPostDto.communityName = community.name;
         }
 
-        
+
         if (author == null)
         {
             var newAuthor = new AuthorEntity(user);
@@ -119,6 +119,7 @@ public class PostServiceImpl : IPostService
             await _userRepository.UpdateUser(user);
             author = newAuthor;
         }
+
         var tags = await _tagRepository.GetTagsByIds(tagIds);
         if (tags.Count == 0)
         {
@@ -140,8 +141,8 @@ public class PostServiceImpl : IPostService
             addressId = createPostDto.addressId,
             // Community = await _communityRepository.GetCommunity(createPostDto.communityId ?? Guid.Empty)
         };
-        
-        
+
+
         author.IncrementPostCount();
         await _authorRepository.UpdateAuthor(author);
         postEntity.tags = tags;

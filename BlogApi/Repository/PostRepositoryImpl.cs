@@ -26,12 +26,14 @@ public class PostRepositoryImpl : IPostRepository
         {
             query = query.Where(post => post.tags.Any(tag => postFilterDto.tags.Contains(tag.Id)));
         }
+
         if (postFilterDto.author != null)
         {
             query = query.Where(post => postFilterDto.author == post.author);
         }
-        
-        if (postFilterDto.onlyMyCommunities != null && postFilterDto.onlyMyCommunities.Value && postFilterDto.onlyMyCommunities == true && userId != null)
+
+        if (postFilterDto.onlyMyCommunities != null && postFilterDto.onlyMyCommunities.Value &&
+            postFilterDto.onlyMyCommunities == true && userId != null)
         {
             var userCommunities = await _context.UserCommunities
                 .Where(uc => uc.UserId == userId)
@@ -40,7 +42,7 @@ public class PostRepositoryImpl : IPostRepository
 
             query = query.Where(post => userCommunities.Contains(post.communityId ?? Guid.Empty));
         }
-        
+
         //TODO Check this
         if (userId == null)
         {
@@ -57,27 +59,31 @@ public class PostRepositoryImpl : IPostRepository
                 .ToListAsync();
 
             query = query.Where(post =>
-                post.Community.isClosed == false || post.communityId == null || userCommunities.Contains(post.communityId ?? Guid.Empty));
+                post.Community.isClosed == false || post.communityId == null ||
+                userCommunities.Contains(post.communityId ?? Guid.Empty));
         }
-        
+
         if (postFilterDto.minReadingTime != null)
         {
             query = query.Where(post => postFilterDto.minReadingTime <= post.readingTime);
         }
-        
+
         if (postFilterDto.maxReadingTime != null)
         {
             query = query.Where(post => postFilterDto.maxReadingTime >= post.readingTime);
         }
-        if (postFilterDto.onlyMyCommunities != null && postFilterDto.onlyMyCommunities.Value && postFilterDto.onlyMyCommunities == true && userId != null)
+
+        if (postFilterDto.onlyMyCommunities != null && postFilterDto.onlyMyCommunities.Value &&
+            postFilterDto.onlyMyCommunities == true && userId != null)
         {
             var userCommunities = await _context.UserCommunities
                 .Where(uc => uc.UserId == userId)
                 .Select(uc => uc.CommunityId)
                 .ToListAsync();
 
-            query = query.Where(post => userCommunities.Contains(post.communityId ?? Guid.Empty ));
+            query = query.Where(post => userCommunities.Contains(post.communityId ?? Guid.Empty));
         }
+
         return await query.CountAsync();
     }
 
@@ -95,24 +101,24 @@ public class PostRepositoryImpl : IPostRepository
         var query = _context.Posts
             .Include(post => post.tags)
             .Include(post => post.Likes).AsQueryable();
-        
+
         //TODO Check this
         //Сортировка по тегам
         if (postFilterDto.tags != null && postFilterDto.tags.Any())
         {
             query = query.Where(post => post.tags.Any(tag => postFilterDto.tags.Contains(tag.Id)));
         }
-        
-        
+
+
         //TODO: Проверить, что пост не находится в приватном сообществе, в котором пользователь не состоит, а если состоит то отображать посты
-    
+
         // Если пользователь не авторизован, отображаем только посты из открытых сообществ
         if (userId == null)
         {
             // User is not authenticated, show posts from open communities and posts not associated with any community
             query = query.Where(post => post.Community.isClosed == false || post.communityId == null);
         }
-        
+
         else
         {
             // User is authenticated, show posts from open communities, posts not associated with any community,
@@ -123,24 +129,25 @@ public class PostRepositoryImpl : IPostRepository
                 .ToListAsync();
 
             query = query.Where(post =>
-                post.Community.isClosed == false || post.communityId == null || userCommunities.Contains(post.communityId ?? Guid.Empty));
+                post.Community.isClosed == false || post.communityId == null ||
+                userCommunities.Contains(post.communityId ?? Guid.Empty));
         }
-        
+
         if (postFilterDto.author != null)
         {
             query = query.Where(post => postFilterDto.author == post.author);
         }
-        
+
         if (postFilterDto.minReadingTime != null)
         {
             query = query.Where(post => postFilterDto.minReadingTime <= post.readingTime);
         }
-        
+
         if (postFilterDto.maxReadingTime != null)
         {
             query = query.Where(post => postFilterDto.maxReadingTime >= post.readingTime);
         }
-        
+
         if (postFilterDto.onlyMyCommunities != null && postFilterDto.onlyMyCommunities.Value && userId != null)
         {
             var userCommunities = await _context.UserCommunities
@@ -148,9 +155,9 @@ public class PostRepositoryImpl : IPostRepository
                 .Select(uc => uc.CommunityId)
                 .ToListAsync();
 
-            query = query.Where(post => userCommunities.Contains(post.communityId ?? Guid.Empty ));
+            query = query.Where(post => userCommunities.Contains(post.communityId ?? Guid.Empty));
         }
-        
+
         if (postFilterDto.sorting != null)
         {
             var sorter = new Sorter();
@@ -163,7 +170,7 @@ public class PostRepositoryImpl : IPostRepository
     public async Task<Guid> CreatePost(PostEntity postEntity)
     {
         _context.Posts.Add(postEntity);
-        
+
         foreach (var tag in postEntity.tags)
         {
             _context.Attach(tag);

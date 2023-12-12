@@ -40,6 +40,7 @@ public class CommunityServiceImpl : ICommunityService
         {
             throw new NotFoundException("Communities not found");
         }
+
         var comminityList = communities.Select(x => new CommunityUserDto(x)).ToList();
         return comminityList;
     }
@@ -51,14 +52,15 @@ public class CommunityServiceImpl : ICommunityService
         {
             throw new NotFoundException("Community not found.");
         }
+
         var admins = await _communityRepository.GetCommunityAdmins(id);
         return new CommunityFullDto(community, admins);
     }
-    
+
     public async Task CreateCommunity(Guid userId, CreateCommunityDto communityCreateDto)
     {
         var user = await _userRepository.GetUserById(userId);
-        var community = new CommunityEntity     
+        var community = new CommunityEntity
         {
             name = communityCreateDto.name,
             createTime = DateTime.Now,
@@ -73,7 +75,7 @@ public class CommunityServiceImpl : ICommunityService
                 }
             }
         };
-        
+
         await _communityRepository.CreateCommunity(community);
     }
 
@@ -112,7 +114,7 @@ public class CommunityServiceImpl : ICommunityService
         {
             throw new NotFoundException("User or community not found.");
         }
-        
+
         if (user.UserCommunities.Any(uc => uc.CommunityId == communityId))
         {
             throw new BadRequestException("User is already subscribed to the community.");
@@ -128,9 +130,8 @@ public class CommunityServiceImpl : ICommunityService
                 Role = CommunityRole.Subscriber,
             });
             await _userRepository.UpdateUser(user);
-            community.IncrementSubscribersCount();//TODO: check
+            community.IncrementSubscribersCount(); //TODO: check
         }
-        
     }
 
     public async Task Unsubscribe(Guid userId, Guid communityId)
@@ -144,7 +145,12 @@ public class CommunityServiceImpl : ICommunityService
         }
 
         var userCommunity = user.UserCommunities.FirstOrDefault(uc => uc.CommunityId == communityId);
-        if (userCommunity != null)
+        if (userCommunity.Role == CommunityRole.Administrator)
+        {
+            throw new BadRequestException("Administrator cannot unsubscribe from the community.");
+        }
+
+        if (userCommunity != null && userCommunity.Role == CommunityRole.Subscriber)
         {
             user.UserCommunities.Remove(userCommunity);
             await _userRepository.UpdateUser(user);

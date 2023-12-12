@@ -10,7 +10,6 @@ namespace BlogApi.Helpers;
 
 public class Converter
 {
-
     public static String GetTokenFromContext(HttpContext httpContext)
     {
         var headerDictionary = httpContext.Request.Headers;
@@ -56,7 +55,7 @@ public class Converter
 
         return match[0].Value;
     }
-    
+
     private static String GetPossiblyNullableTokenFromContext(StringValues? token)
     {
         if (string.IsNullOrWhiteSpace(token.Value))
@@ -74,7 +73,7 @@ public class Converter
 
         return match[0].Value;
     }
-    
+
     public static Guid? GetPossiblyNullableTokenId(HttpContext context)
     {
         var token = GetPossiblyNullableTokenFromContext(context.Request.Headers["Authorization"]);

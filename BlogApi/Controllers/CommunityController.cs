@@ -35,7 +35,6 @@ namespace BlogApi.Controllers
         public async Task<List<CommunityUserDto>> GetMyCommunityList()
         {
             var userId = Converter.GetId(HttpContext);
-            Console.WriteLine(userId);
             return await _communityService.GetMyCommunityList(userId);
         }
 
@@ -77,7 +76,7 @@ namespace BlogApi.Controllers
 
         [HttpPost("{id}/post")]
         [Authorize(Policy = "ValidateToken")]
-        public async Task<ActionResult> CreatePost(Guid id, [FromBody]CreatePostDto postCreateDto)
+        public async Task<ActionResult> CreatePost(Guid id, [FromBody] CreatePostDto postCreateDto)
         {
             //CreatePost(CreatePostDto createPostDto, List<Guid> tagIds, Guid userId)
             var userId = Converter.GetId(HttpContext);
@@ -86,10 +85,12 @@ namespace BlogApi.Controllers
             {
                 return NotFound("Tags not found");
             }
+
             postCreateDto.communityId = id;
-            await _postService.CreatePost(postCreateDto, tagGuids,  userId);
+            await _postService.CreatePost(postCreateDto, tagGuids, userId);
             return Ok("Post created successfully");
         }
+
         [HttpGet("{id}/role")]
         [Authorize(Policy = "ValidateToken")]
         public async Task<ActionResult<string>> GetGreatestUserCommunityRole(Guid id)

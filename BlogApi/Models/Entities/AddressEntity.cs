@@ -8,11 +8,11 @@ public class AddressEntity
     public Guid objectGuid { get; set; }
     public String? text { get; set; }
     public GarAddressLevel objectLevel { get; set; }
-    
+
     public AddressEntity()
     {
     }
-    
+
     public AddressEntity(Int64 objectId, Guid objectGuid, String? text, GarAddressLevel objectLevel)
     {
         this.objectId = objectId;

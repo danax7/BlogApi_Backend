@@ -18,7 +18,7 @@ public class CommunityRepositoryImpl : ICommunityRepository
     {
         return await _context.Communities.ToListAsync();
     }
-    
+
     public async Task<List<UserEntity>> GetCommunityAdmins(Guid id)
     {
         var userCommunities = await _context.UserCommunities
@@ -60,11 +60,10 @@ public class CommunityRepositoryImpl : ICommunityRepository
     {
         return await _context.Communities.FirstOrDefaultAsync(c => c.id == Id);
     }
-    
+
     public async Task CreateCommunity(CommunityEntity community)
     {
         await _context.Communities.AddAsync(community);
         await _context.SaveChangesAsync();
     }
-    
 }
