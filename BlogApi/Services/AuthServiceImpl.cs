@@ -53,7 +53,6 @@ public class AuthServiceImpl : IAuthService
     public async Task<TokenDto> LoginUser(LoginCredentialsDto userLoginDto)
     {
         var identity = await _userService.GetIdentity(userLoginDto);
-        //
         var now = DateTime.UtcNow;
 
         var accessJwt = new JwtSecurityToken(

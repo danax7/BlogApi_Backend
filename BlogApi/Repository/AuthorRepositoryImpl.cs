@@ -34,11 +34,6 @@ public class AuthorRepositoryImpl : IAuthorRepository
     public async Task<AuthorEntity> GetAuthorByUserId(Guid userId)
     {
         var author = await _context.Authors.FirstOrDefaultAsync(author => author.UserId == userId);
-        // if (author == null)
-        // {
-        //     throw new NotFoundException("Author not found");
-        // }
-
         return author;
     }
 

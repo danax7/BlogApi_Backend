@@ -12,9 +12,8 @@ public class CommunityFullDto
     public string description { get; set; }
     [Required] public bool isClosed { get; set; }
     [Required] public Int32 subscribersCount { get; set; }
-    [Required] public List<UserDto> administrators { get; set; }
-
-
+    [Required] public List<UserAdminDto> administrators { get; set; }
+    
     public CommunityFullDto()
     {
     }
@@ -27,11 +26,7 @@ public class CommunityFullDto
         description = communityEntity.description;
         isClosed = communityEntity.isClosed;
         subscribersCount = communityEntity.subscribersCount;
-        administrators = admins.Select(x => new UserDto(x)).ToList();
-        //Тут возникает ошибка, если вывести список администраторов
-        // administrators = communityEntity.UserCommunities
-        //     .Where(userCommunity => userCommunity.Role == CommunityRole.Administrator)
-        //     .Select(userCommunity => new UserDto(userCommunity.User))
-        //     .ToList();
+        administrators = admins.Select(x => new UserAdminDto(x)).ToList();
+
     }
 }

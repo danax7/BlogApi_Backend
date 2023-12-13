@@ -114,7 +114,6 @@ public class PostRepositoryImpl : IPostRepository
         }
 
         //TODO Check this
-        //Сортировка по тегам
         if (postFilterDto.tags != null && postFilterDto.tags.Any())
         {
             query = query.Where(post => post.tags.Any(tag => postFilterDto.tags.Contains(tag.Id)));
@@ -122,8 +121,6 @@ public class PostRepositoryImpl : IPostRepository
 
 
         //TODO: Проверить, что пост не находится в приватном сообществе, в котором пользователь не состоит, а если состоит то отображать посты
-
-        // Если пользователь не авторизован, отображаем только посты из открытых сообществ
         if (userId == null)
         {
             // User is not authenticated, show posts from open communities and posts not associated with any community

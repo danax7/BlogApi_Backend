@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using BlogApi.Entity.Enums;
+using BlogApi.Validate;
 
 namespace BlogApi.DTO;
 
@@ -13,7 +14,7 @@ public class UserRegisterDto
     [Required]
     public String email { get; set; }
 
-    //TODO: Add Validation for birthDate
+    [DateValidation(ErrorMessage = "Date must be less than today")]
     public DateTime birthDate { get; set; }
     [Required] public Gender gender { get; set; }
 

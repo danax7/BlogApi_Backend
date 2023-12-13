@@ -73,11 +73,8 @@ public class PostServiceImpl : IPostService
         {
             throw new BadRequestException("Page out of range");
         }
-
-
+        
         var posts = await _postRepository.GetPosts(postFilterDto, skipCount, PageInfoEntity.size, userId);
-        //var postsDto = posts.Select(post => new PostDto(post)).ToArray();
-
         var postsDto = posts.Select(post =>
         {
             var postDto = new PostDto(post);
@@ -131,8 +128,7 @@ public class PostServiceImpl : IPostService
             {
                 throw new ForbiddenException("User does not have permission to create a post in this community");
             }
-
-
+            
             createPostDto.communityName = community.name;
         }
 
@@ -166,16 +162,12 @@ public class PostServiceImpl : IPostService
             tags = tags,
             addressId = createPostDto.addressId,
         };
-
-
+        
         author.IncrementPostCount();
         await _authorRepository.UpdateAuthor(author);
         postEntity.tags = tags;
 
         var postId = await _postRepository.CreatePost(postEntity);
-
-        // await _postRepository.UpdatePost(postEntity) ;
-
         return postId;
     }
 
