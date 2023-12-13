@@ -53,32 +53,39 @@ namespace BlogApi.Controllers
             return Ok("Community created successfully");
         }
 
-        // [HttpGet("{id}/post")]
-        // [Authorize(Policy = "ValidateToken")]
-        // public async Task<List<PostDto>> GetCommunityPostList(
-        //     Guid id,
-        //     [FromQuery] TagEntity[] tags,
-        //     [FromQuery] SortType sorting,
-        //     [FromQuery] int page = 1,
-        //     [FromQuery] int size = 5)
-        // {
-        //     var postFilterDto = new PostFilterDto
-        //     {
-        //         tags = tags,
-        //         sorting = sorting,
-        //         page = page,
-        //         size = size,
-        //     };
-        //
-        //     //return await _communityService.GetCommunityPostList(id, postFilterDto);
-        //     return null;
-        // }
+        //TODO:check
+        [HttpGet("{id}/post")]
+        [AllowAnonymous]
+        [Authorize(Policy = "ValidateToken")]
+        public async Task<PostPagedListDto> GetPosts(
+            [FromRoute] Guid id,
+            [FromQuery] Guid[] tags,
+            [FromQuery] SortType sorting,
+            [FromQuery] int page = 1,
+            [FromQuery] int size = 5)
+        {
+            var postFilterDto = new PostFilterDto
+            {
+                tags = tags,
+                sorting = sorting,
+                page = page,
+                size = size,
+                communityId = id
+            };
+
+            var userId = Converter.GetPossiblyNullableTokenId(HttpContext);
+            if (userId == null)
+            {
+                postFilterDto.onlyMyCommunities = false;
+            }
+
+            return await _postService.GetPosts(postFilterDto, userId);
+        }
 
         [HttpPost("{id}/post")]
         [Authorize(Policy = "ValidateToken")]
         public async Task<ActionResult> CreatePost(Guid id, [FromBody] CreatePostDto postCreateDto)
         {
-            //CreatePost(CreatePostDto createPostDto, List<Guid> tagIds, Guid userId)
             var userId = Converter.GetId(HttpContext);
             var tagGuids = postCreateDto.tags.Select(Guid.Parse).ToList();
             if (tagGuids.Count == 0)

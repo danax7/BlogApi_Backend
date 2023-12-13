@@ -11,6 +11,7 @@ public class PostFilterDto
     public Int32? maxReadingTime { get; set; }
     public SortType? sorting { get; set; }
     public bool? onlyMyCommunities { get; set; }
+    public Guid? communityId { get; set; }
     public int page { get; set; }
 
     public int size { get; set; }

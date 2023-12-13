@@ -44,6 +44,22 @@ public class PostServiceImpl : IPostService
 
     public async Task<PostPagedListDto> GetPosts(PostFilterDto postFilterDto, Guid? userId)
     {
+        if (postFilterDto.communityId != null)
+        {
+            var communityId = postFilterDto.communityId ?? Guid.Empty;
+            var community = await _communityRepository.GetCommunity(communityId);
+            if (community == null)
+            {
+                throw new NotFoundException("Community not found");
+            }
+            var userRoleInCommunity = await _communityService.GetGreatestUserCommunityRole(userId ?? Guid.Empty, communityId);
+            if (community.isClosed && (userRoleInCommunity.ToString() != "Administrator" || userRoleInCommunity.ToString() != "Subscriber"))
+            {
+                throw new ForbiddenException("User does not have permission to view posts in this community");
+            }
+          
+        }
+        
         var count = await _postRepository.GetPostCount(postFilterDto, userId);
         if (count == 0)
         {

@@ -21,6 +21,11 @@ public class PostRepositoryImpl : IPostRepository
     public async Task<Int32> GetPostCount(PostFilterDto postFilterDto, Guid? userId)
     {
         var query = _context.Posts.Include(post => post.tags).AsQueryable();
+        
+        if (postFilterDto.communityId != null)
+        {
+            query = query.Where(post => post.communityId == postFilterDto.communityId);
+        }
 
         if (postFilterDto.tags != null && postFilterDto.tags.Any())
         {
@@ -101,6 +106,11 @@ public class PostRepositoryImpl : IPostRepository
         var query = _context.Posts
             .Include(post => post.tags)
             .Include(post => post.Likes).AsQueryable();
+
+        if (postFilterDto.communityId != null)
+        {
+            query = query.Where(post => post.communityId == postFilterDto.communityId);
+        }
 
         //TODO Check this
         //Сортировка по тегам
