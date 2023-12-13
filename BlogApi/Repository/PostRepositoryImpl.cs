@@ -97,6 +97,7 @@ public class PostRepositoryImpl : IPostRepository
         return _context.Posts
             .Include(post => post.tags)
             .Include(post => post.Comments)
+            .Include(post => post.Community)
             .FirstOrDefaultAsync(post => post.id == id);
     }
 

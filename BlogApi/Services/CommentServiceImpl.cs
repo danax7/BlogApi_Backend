@@ -11,13 +11,18 @@ public class CommentServiceImpl : ICommentService
     private readonly IPostRepository _postRepository;
     private readonly ICommentRepository _commentRepository;
     private readonly IUserRepository _userRepository;
+    private readonly ICommunityService _communityService;
 
-    public CommentServiceImpl(IPostRepository postRepository, ICommentRepository commentRepository,
-        IUserRepository userRepository)
+    public CommentServiceImpl(
+        IPostRepository postRepository, 
+        ICommentRepository commentRepository,
+        IUserRepository userRepository,
+        ICommunityService communityService)
     {
         _postRepository = postRepository;
         _commentRepository = commentRepository;
         _userRepository = userRepository;
+        _communityService = communityService;
     }
 
     public async Task<List<CommentDto>> GetAllFirstLevelCommentReplies(Guid id)
@@ -28,7 +33,6 @@ public class CommentServiceImpl : ICommentService
 
     public async Task CreateComment(Guid id, Guid userId, CreateCommentDto commentCreateDto)
     {
-        //TODO: Проверить, что человек оставляет пост в сообществе, в котором состоит
         var post = await _postRepository.GetPostById(id);
         if (post == null)
         {
@@ -36,6 +40,21 @@ public class CommentServiceImpl : ICommentService
         }
 
         var user = await _userRepository.GetUserById(userId);
+        if (user == null)
+        {
+            throw new NotFoundException("User not found");
+        }
+        //TODO: Провееерить, что пользователь оставляет комментарий в сообществе, в котором состоит, если сообщество закрытое
+
+        if (post.communityId != null && post.Community.isClosed)
+        {
+            var userRoleInCommunity = await _communityService.GetGreatestUserCommunityRole(userId, post.communityId.Value);
+            if (userRoleInCommunity == null)
+            {
+                throw new ForbiddenException("You are not a member of this community");
+            }
+        }
+        
         var comment = new CommentEntity
         {
             id = Guid.NewGuid(),
