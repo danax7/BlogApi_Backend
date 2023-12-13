@@ -46,8 +46,8 @@ public class UserEntity
         FullName = userEditDto.fullName;
         BirthDate = userEditDto.birthDate;
         Gender = userEditDto.gender;
+        Email = userEditDto.email;
         PhoneNumber = userEditDto.phoneNumber;
-
         return this;
     }
 
