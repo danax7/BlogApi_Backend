@@ -44,7 +44,6 @@ public class CommentServiceImpl : ICommentService
         {
             throw new NotFoundException("User not found");
         }
-        //TODO: Провееерить, что пользователь оставляет комментарий в сообществе, в котором состоит, если сообщество закрытое
 
         if (post.communityId != null && post.Community.isClosed)
         {
@@ -121,7 +120,7 @@ public class CommentServiceImpl : ICommentService
         {
             throw new ForbiddenException("You are not the author of this comment");
         }
-
+        
         if (comment.ParentCommentId != null && comment.subCommentsCount == 0)
         {
             var parentComment = await _commentRepository.GetCommentById(comment.ParentCommentId.Value);
@@ -132,6 +131,22 @@ public class CommentServiceImpl : ICommentService
 
             parentComment.DecrementSubCommentCount();
             await _commentRepository.DeleteComment(comment.id);
+            
+            //Удаление удаленного родителя, если у него нет дочерних комментариев
+            if (parentComment.subCommentsCount == 0 && parentComment.content == "[deleted]")
+            {
+                await _commentRepository.DeleteComment(parentComment.id);
+            }
+            else
+            {
+                parentComment.deleteDate = DateTime.Now;
+                parentComment.modifiedDate = DateTime.Now;
+                parentComment.content = "[deleted]";
+                parentComment.author = "[deleted]";
+                parentComment.authorId = Guid.Empty;
+                await _commentRepository.UpdateComment(parentComment);
+            }
+            ////////////////////////////////
         }
         else if (comment.ParentCommentId == null && comment.subCommentsCount == 0)
         {
@@ -140,6 +155,7 @@ public class CommentServiceImpl : ICommentService
         else
         {
             comment.deleteDate = DateTime.Now;
+            comment.modifiedDate = DateTime.Now;
             comment.content = "[deleted]";
             comment.author = "[deleted]";
             comment.authorId = Guid.Empty;

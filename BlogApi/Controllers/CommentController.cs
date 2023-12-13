@@ -34,10 +34,11 @@ namespace BlogApi.Controllers
 
         [Authorize(Policy = "ValidateToken")]
         [HttpPut("comment/{id}")]
-        public async Task EditComment(Guid id, UpdateCommentDto commentUpdateDto)
+        public async Task<ActionResult> EditComment(Guid id, UpdateCommentDto commentUpdateDto)
         {
             var userId = Converter.GetId(HttpContext);
             await _commentService.UpdateComment(id, userId, commentUpdateDto);
+            return Ok("Comment edited successfully");
         }
 
         [Authorize(Policy = "ValidateToken")]
