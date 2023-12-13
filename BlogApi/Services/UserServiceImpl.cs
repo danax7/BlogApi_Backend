@@ -63,15 +63,15 @@ public class UserServiceImpl : IUserService
     public async Task UpdateUserProfile(Guid userId, UserEditDto userEditDto)
     {
         var user = await _userRepository.GetUserById(userId);
-        if (await _userRepository.GetUserByEmail(userEditDto.email) != null)
-        {
-            throw new BadRequestException("User with such Email already exists");
-        }
         if (user == null)
         {
             throw new NotFoundException($"User with id {userId} not found");
         }
-
+        if (await _userRepository.GetUserByEmail(userEditDto.email) != null && user.Email != userEditDto.email)
+        {
+            throw new BadRequestException("User with such Email already exists");
+        }
+        
         user.UpdateUser(userEditDto);
 
         await _userRepository.UpdateUser(user);
