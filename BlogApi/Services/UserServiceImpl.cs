@@ -11,11 +11,13 @@ namespace BlogApi.Services.Interface;
 public class UserServiceImpl : IUserService
 {
     private readonly IUserRepository _userRepository;
+    private readonly IAuthorRepository _authorRepository;
 
-
-    public UserServiceImpl(IUserRepository userRepository, ITokenRepository tokenRepository)
+    public UserServiceImpl(IUserRepository userRepository, IAuthorRepository authorRepository)
     {
         _userRepository = userRepository;
+        _authorRepository = authorRepository;
+        
     }
 
     public async Task CreateUser(UserRegisterDto userRegisterDto)
@@ -73,7 +75,13 @@ public class UserServiceImpl : IUserService
         }
         
         user.UpdateUser(userEditDto);
-
         await _userRepository.UpdateUser(user);
+        
+        if (user.Author != null)
+        {
+            var author = await _authorRepository.GetAuthorByUserId(userId); 
+            author.UpdateAuthor(userEditDto);
+            await _authorRepository.UpdateAuthor(author);
+        }
     }
 }

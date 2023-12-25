@@ -45,7 +45,8 @@ public class AuthorRepositoryImpl : IAuthorRepository
 
     public async Task UpdateAuthor(AuthorEntity author)
     {
-        _context.Entry(author).State = EntityState.Modified;
+        _context.Authors.Update(author);
+        //_context.Entry(author).State = EntityState.Modified;
         await _context.SaveChangesAsync();
     }
 }

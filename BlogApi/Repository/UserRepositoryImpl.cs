@@ -32,7 +32,10 @@ public class UserRepositoryImpl : IUserRepository
 
     public Task<UserEntity?> GetUserById(Guid userId)
     {
-        return _blogContext.Users.Include(user => user.UserCommunities).FirstOrDefaultAsync(user => user.Id == userId);
+        return _blogContext.Users
+            .Include(user => user.UserCommunities)
+            .Include(user => user.Author)
+            .FirstOrDefaultAsync(user => user.Id == userId);
     }
 
     public Task UpdateUser(UserEntity userEntity)

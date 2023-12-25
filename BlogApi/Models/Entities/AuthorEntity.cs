@@ -19,7 +19,9 @@ namespace BlogApi.Entity
         public Int32 postsCount { get; set; }
         public List<PostEntity>? Posts { get; set; }
 
-
+        public AuthorEntity()
+        {
+        }
         public AuthorEntity(UserEntity user)
         {
             Id = Guid.NewGuid();
@@ -29,9 +31,12 @@ namespace BlogApi.Entity
             BirthDate = user.BirthDate;
             Created = DateTime.Now;
         }
-
-        public AuthorEntity()
+        
+        public AuthorEntity UpdateAuthor(UserEditDto userEditDto)
         {
+            FullName = userEditDto.fullName;
+            BirthDate = userEditDto.birthDate;
+            return this;
         }
 
         public void AddLike()
