@@ -158,7 +158,6 @@ public class PostServiceImpl : IPostService
             communityId = createPostDto.communityId,
             communityName = createPostDto.communityName,
             authorId = author.Id,
-            author = author.FullName,
             tags = tags,
             addressId = createPostDto.addressId,
         };

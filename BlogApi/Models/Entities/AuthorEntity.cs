@@ -12,7 +12,7 @@ namespace BlogApi.Entity
         [Required] public Guid Id { get; set; }
         [ForeignKey("User")] [Required] public Guid UserId { get; set; }
         public UserEntity User { get; set; }
-        [Required] public string FullName { get; set; }
+        [Required][MaxLength(100)]public string FullName { get; set; }
         [Required] public DateTime BirthDate { get; set; }
         public DateTime Created { get; set; }
         public Int32 likesCount { get; set; }

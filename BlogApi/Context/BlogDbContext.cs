@@ -57,8 +57,7 @@ public class BlogDbContext : DbContext
 
         modelBuilder.Entity<LikeEntity>()
             .HasKey(l => new { l.UserId, l.PostId });
-
-
+        
         modelBuilder.Entity<PostEntity>()
             .HasMany(post => post.Comments)
             .WithOne(comment => comment.Post)

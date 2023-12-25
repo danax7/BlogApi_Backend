@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using BlogApi.DTO.CommentDTO;
 using BlogApi.DTO.TagDto;
 
@@ -11,9 +12,11 @@ public class PostEntity
     [Required] public string title { get; set; }
     [Required] public string description { get; set; }
     [Required] public int readingTime { get; set; }
+    public AuthorEntity Author { get; set; }
     public string image { get; set; }
+    [ForeignKey("Author")]
     [Required] public Guid authorId { get; set; }
-    [Required] public string author { get; set; }
+    //[Required] public string author { get; set; }
     public Guid? communityId { get; set; }
     public string? communityName { get; set; }
     public Guid? addressId { get; set; }
