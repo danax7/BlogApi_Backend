@@ -20,7 +20,10 @@ public class PostRepositoryImpl : IPostRepository
 
     public async Task<Int32> GetPostCount(PostFilterDto postFilterDto, Guid? userId)
     {
-        var query = _context.Posts.Include(post => post.tags).AsQueryable();
+        var query = _context.Posts
+            .Include(post => post.tags)
+            .Include(post => post.Author)
+            .AsQueryable();
         
         if (postFilterDto.communityId != null)
         {
@@ -34,7 +37,7 @@ public class PostRepositoryImpl : IPostRepository
 
         if (postFilterDto.author != null)
         {
-            query = query.Where(post => postFilterDto.author == post.author);
+            query = query.Where(post => postFilterDto.author == post.Author.FullName);
         }
 
         if (postFilterDto.onlyMyCommunities != null && postFilterDto.onlyMyCommunities.Value &&
@@ -98,14 +101,15 @@ public class PostRepositoryImpl : IPostRepository
             .Include(post => post.tags)
             .Include(post => post.Comments)
             .Include(post => post.Community)
+            .Include(post => post.Author)
             .FirstOrDefaultAsync(post => post.id == id);
     }
-
 
     public async Task<List<PostEntity>> GetPosts(PostFilterDto postFilterDto, int start, int count, Guid? userId)
     {
         var query = _context.Posts
             .Include(post => post.tags)
+            .Include(post => post.Author)
             .Include(post => post.Likes).AsQueryable();
 
         if (postFilterDto.communityId != null)
@@ -143,7 +147,7 @@ public class PostRepositoryImpl : IPostRepository
 
         if (postFilterDto.author != null)
         {
-            query = query.Where(post => postFilterDto.author == post.author);
+            query = query.Where(post => postFilterDto.author == post.Author.FullName);
         }
 
         if (postFilterDto.minReadingTime != null)

@@ -35,7 +35,7 @@ public class PostDto
         readingTime = postEntity.readingTime;
         image = postEntity.image;
         authorId = postEntity.authorId;
-        author = postEntity.author;
+        author = postEntity.Author.FullName;
         communityId = postEntity.communityId;
         communityName = postEntity.communityName ?? "";
         addressId = postEntity.addressId;

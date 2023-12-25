@@ -31,7 +31,7 @@ public class PostFullDto
         readingTime = postEntity.readingTime;
         image = postEntity.image;
         authorId = postEntity.authorId;
-        author = postEntity.author;
+        author = postEntity.Author.FullName;
         communityId = postEntity.communityId ?? Guid.Empty;
         communityName = postEntity.communityName ?? "";
         addressId = postEntity.addressId;

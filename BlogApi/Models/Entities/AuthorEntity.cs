@@ -12,14 +12,16 @@ namespace BlogApi.Entity
         [Required] public Guid Id { get; set; }
         [ForeignKey("User")] [Required] public Guid UserId { get; set; }
         public UserEntity User { get; set; }
-        [Required] public string FullName { get; set; }
+        [Required][MaxLength(100)]public string FullName { get; set; }
         [Required] public DateTime BirthDate { get; set; }
         public DateTime Created { get; set; }
         public Int32 likesCount { get; set; }
         public Int32 postsCount { get; set; }
         public List<PostEntity>? Posts { get; set; }
 
-
+        public AuthorEntity()
+        {
+        }
         public AuthorEntity(UserEntity user)
         {
             Id = Guid.NewGuid();
@@ -29,9 +31,12 @@ namespace BlogApi.Entity
             BirthDate = user.BirthDate;
             Created = DateTime.Now;
         }
-
-        public AuthorEntity()
+        
+        public AuthorEntity UpdateAuthor(UserEditDto userEditDto)
         {
+            FullName = userEditDto.fullName;
+            BirthDate = userEditDto.birthDate;
+            return this;
         }
 
         public void AddLike()

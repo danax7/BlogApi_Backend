@@ -3,6 +3,7 @@ using System;
 using BlogApi;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BlogApi.Migrations
 {
     [DbContext(typeof(BlogDbContext))]
-    partial class BlogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231224180110_ForeignKeyForPost")]
+    partial class ForeignKeyForPost
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -172,8 +175,15 @@ namespace BlogApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("AuthorEntityId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid?>("addressId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("author")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<Guid>("authorId")
                         .HasColumnType("uuid");
@@ -210,7 +220,7 @@ namespace BlogApi.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("authorId");
+                    b.HasIndex("AuthorEntityId");
 
                     b.HasIndex("communityId");
 
@@ -375,17 +385,13 @@ namespace BlogApi.Migrations
 
             modelBuilder.Entity("BlogApi.Entity.PostEntity", b =>
                 {
-                    b.HasOne("BlogApi.Entity.AuthorEntity", "Author")
+                    b.HasOne("BlogApi.Entity.AuthorEntity", null)
                         .WithMany("Posts")
-                        .HasForeignKey("authorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AuthorEntityId");
 
                     b.HasOne("BlogApi.Entity.CommunityEntity", "Community")
                         .WithMany()
                         .HasForeignKey("communityId");
-
-                    b.Navigation("Author");
 
                     b.Navigation("Community");
                 });
